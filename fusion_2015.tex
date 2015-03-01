@@ -265,10 +265,7 @@
 %
 % paper title
 % can use linebreaks \\ within to get better formatting as desired
-\title{Application of Dynamic Decision Networks for Scenario-based Reasoning} % choose your own 
-%title 
-%and we can discuss it before submitting
-
+\title{Scenario-based Reasoning through Dynamic Decision Networks for Countering Maritime Drug Trafficking} % choose your own 
 
 % author names and affiliations
 % use a multiple column layout for up to three different
@@ -284,6 +281,12 @@ Email: patrick.deoude@d-cis.nl}
 Thales Research and Technology\\
 Delft, The Netherlands\\
 Email: tom.pepels@d-cis.nl}
+\and
+\IEEEauthorblockN{Rik Claessens}
+\IEEEauthorblockA{D-CIS Lab\\
+Thales Research and Technology\\
+Delft, The Netherlands\\
+Email: rik.claessens@d-cis.nl}
 }
 
 % make the title area
@@ -324,9 +327,19 @@ The abstract comes here.
 % \end{itemize}
 
 
-Decision making in contemporary complex domains, such as large-scale crisis management, Search \& Rescue, national security, maritime surveillance etc., can pose an enormous cognitive load on the decision maker. Decision makers often need to construct and manage multiple {\em scenarios} regarding the situation description in order to deal with uncertainties that are encountered in these domains. A scenario is a projected or imagined sequence of events describing what could possibly happen (or have happened). By keeping track of the possible scenarios that are compatible with the known information the decision maker can maintain multiple states of situation awareness that are required to be able to make the right decision. The set of possible scenarios may become significantly large in complex real-world applications (typically involving numerous factors and uncertainties). On the other hand, human cognitive limitations pose restrictions on the number of scenarios that decision makers can effectively handle at any given time. Therefore, to be able to effectively manage a (possibly large) set of scenarios, and to ultimately decide on the information to be presented to the decision makers, ranking of scenarios must be addressed.
+Decision making in contemporary complex domains, such as large-scale crisis management, Search \& Rescue operations, border security, anti-drug operations etc., can pose an enormous cognitive challenge on the decision maker. Decision makers often need to construct and manage multiple {\em scenarios} regarding the situation description in order to deal with uncertainties that are encountered in these domains. A scenario is a projected or imagined sequence of events describing what could possibly happen (or have happened). By keeping track of the possible scenarios that are compatible with the known information the decision maker can maintain multiple states of situation awareness that are required to be able to make the right decision at the right moment in time. However, the set of possible scenarios may become significantly large in complex real-world applications (typically involving numerous factors and uncertainties), while human cognitive limitations pose restrictions on the number of scenarios that decision makers can effectively handle at any given time. Therefore, to be able to effectively manage a (possibly large) set of scenarios, and to ultimately decide on the information to be presented to the decision makers, automated managing of scenarios must be addressed.
 
-In \cite{conrado14if} a method was discussed to manage the set of possible scenarios using Bayesian networks (BNs) \cite{pearl88book, jensen07book}. With the help of BN an estimate of the likelihood of the scenario to unfold can be computed given the evidence that is available at the time. With these likelihoods the set of scenarios can be ranked form most to least likely scenario, which enables the decision maker to focus on the set of most likely scenarios. The method described there did not model the actual decisions that a decision maker could make. In this paper the model is extended by describing the structure of the decision process as well. This allows the model to give advice about the actual decisions the decision maker wants to consider. The extended model is called an {\em influence diagram} or {\em decision graph} \cite{jensen07book} and includes next to the chance nodes also decision and utility nodes. Influence diagrams also supports assessment of risk by, for example, computing the worst case scenario\footnote{The worst-case scenario is not necessarily the most likely scenario} considering the utilities in the model.
+A scenario can be considered a narration concerning various events that have materialized (or going to materialize) over time. These events are often causally dependent on each other and can be captured as variables in a causal model \cite{pearl00book}. In \cite{conrado14if} we have shown that these causal models support {\em scoping of states} of scenario variables. Moreover, such causal models can be captured through Bayesian networks (BNs) \cite{pearl88book, jensen07book} to provide a convenient framework to manage a large set of scenarios through: (i) pruning of insignificant scenarios, (ii) updating the scenarios based on new observations and (iii) computing the likelihood of a scenario given the latest information to establish an ordering on the set of relevant scenarios. Additionally, BNs allows what-if exploration where, for example, the likelihood of certain (future) events are computed based on various assumptions about the occurrence of other events of the scenario.
+
+While BNs provide an effective way to manage scenarios it does not allow the actual decisions taken by the decision maker to be modeled. Neither do they provide advise on which decision the decision maker should take. In this paper the model is extended by describing the structure of the decision process as well. This allows the model to give advice about the actual decisions the decision maker wants to consider. The extended model is called a {\em decision network} \cite{russell02bn} (also influence diagram or decision graph \cite{jensen07book}) and includes next to the chance nodes also decision and utility nodes. Influence diagrams also supports assessment of risk by, for example, computing the worst case scenario\footnote{The worst-case scenario is not necessarily the most likely scenario} considering the utilities in the model.
+
+
+
+% In \cite{conrado14if} a method was discussed to manage the set of possible scenarios using Bayesian networks (BNs) \cite{pearl88book, jensen07book}. With the help of BN an estimate of the likelihood of the scenario to unfold can be computed given the evidence that is available at the time. With these likelihoods the set of scenarios can be ranked form most to least likely scenario, which enables the decision maker to focus on the set of most likely scenarios. The method described there did not model the actual decisions that a decision maker could make. In this paper 
+
+
+
+%
 
 
 %TODO add related work about the use of influence diagrams and secenario based reasoning
@@ -346,52 +359,52 @@ In \cite{conrado14if} a method was discussed to manage the set of possible scena
 % When making decisions in complex contemporary applications, e.g. intelligence operations and large-scale crisis management, decision makers often need to construct and manage multiple hypotheses regarding the situation description in order to deal with uncertainties. Hypotheses about a situation's description are commonly referred to as {\em scenarios}. A scenario can be defined as a projected or imagined sequence of events describing what could possibly happen (or have happened). Scenarios can be used to deal with uncertainty by allowing the exploration of diverse descriptions of a given situation (and its possible developments) that are compatible with known information at any given time. Scenarios can thus offer multiple states of situation awareness and help overcome cognitive biases, and as such should ideally explore the whole set of plausible and relevant states of the world. Owing to human cognitive limitations, however, keeping track of all relevant information can become a challenge, even when only a few scenarios are considered.
 
 
-
-\begin{figure}
-\begin{center}
- \includegraphics[width=.4\textwidth]{causal-model.eps}\label{fig:causal-model}
- \caption{Causal model of the smuggler scenario}
- % decision-graph.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=-0 -0 424 277
-\end{center}
-\end{figure}
+%TODO add overview of the paper
 
 
 
-\section{Smuggler Scenario}
+
+
+\section{Causal Models}
 
 %TODO explain the scenario
 
 Maritime drug trafficking is an ongoing problem in the Caribbean sea. Very fast and small vessels, so called go-fasts, are used to transport contraband from Columbia's and Venezuela's coast to Jamaica, Haiti and Dominican Republic to be further transported into North-America. The popularity of a go-fast to be used as a drug trafficking vehicle is due to the go-fast's size, speed and low radar and optical signatures. This makes go-fasts hard to detect and difficult to intercept by often slower coast guard vehicles. Nevertheless, the U.S. coast guard deploys their own go-fasts and helicopters equipped with anti-materiel rifles (AMR) to disable the engine of a running go-fast. 
 
-Before a drug trafficker's go-fast can be intercepted the location of the go-fast needs to be determined and, consequently, the location where to intercept the smuggler needs to be selected. Location of the smuggler's location can be determined by radar ($RO$) in case of calm sea or at close range or by visual observation ($VO$). The intercept area ($IA$) is influenced by the location of the go-fast and the coast guard patrol ship or helicopter, but also intelligence on the use of a refueling station (LR) along the smuggler's route. Based on the distance to be traveled ($DT$) and the amount of fuel ($AF$) that is loaded onto the go-fast the smugglers need to refuel along the route ($RA$). In Figure~\ref{fig:causal-model} the causal model is depicted that describes the causal influences between these variables. The variables are listed in Table~\ref{tab:scenario-variables}.
+The main challenge of anti-drug trafficking organizations, such as the coast guard, is to locate the smuggler's go-fast in order to intercept it. There are several type of observations that can be used. Location of the smuggler's go-fast can be determined by radar ($RO$) in case of calm sea or at close range or by visual observation ($VO$). A more recent type of observation is through the use of sonar mounted on buoys in the ocean ($SO$) that can register the typical engine sound of go-fast. Unfortunately, these type of observation might not be available. For radar and sonar the coverage is often limited and, therefore, not always available. Visual observations is only possible if an observer is close enough to report about it. With the knowledge of the location of the smuggler's go-fast allows us the reason about the possible intercept areas. This area can be a location where the smuggler's go-fast currently is or a more strategic position that is believed to be visited by the smugglers at some point in the future. These strategic positions are inferred from Intel collected during the anti-drug operations, for example. There might be Intel that the smugglers need to refuel at some refueling location along their route ($RA$). This belief is based on Intel about the amount of fuel loaded on board prior to departure ($AF$), the possible destination ($D$) and the possible locations where refueling is possible ($LR$). If there is strong belief that the smugglers are going to refuel at a certain location then that location is a possible intercept area. In Figure~\ref{fig:causal-model} the causal model is depicted that describes the causal influences between these variables. All the variables are listed in Table~\ref{tab:scenario-variables}.
 
 
+\begin{figure}
+\begin{center}
+ \includegraphics[width=.4\textwidth]{causal-model.eps}
+ \caption{Causal model of the smuggler scenario}\label{fig:causal-model}
+ % decision-graph.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=-0 -0 424 277
+\end{center}
+\end{figure}
 
 
 \begin{table}[!ht]
  \centering
- \caption{Overview of scenario variables from the causal graphs in Figure 2, as well as their semantics.}
+ \caption{Overview of scenario variables from the causal model shown Figure~\ref{fig:causal-model}, as well as their semantics.}
  \begin{tabular}[!ht]{rp{5cm}}
 \toprule
  Variable & Semantics \\
 \cmidrule(r){1-1}
 \cmidrule(l){2-2}
-$AmountFuel$ ($F$) &
-The initial amount of fuel in the smugglers' boat to be used to travel from origin to destination. \\
+$LocationSmuggler$ ($LS$) &
+The location of the smuggler's go-fast. \\
 $Destination$ ($D$) &
 Destination to which the smugglers travel. \\
-$LocationRefuel$ ($L_R$) &
+$LocationRefuel$ ($LR$) &
 Locations of stationary refuel ships in the concerned area of the sea. \\
 $Weather$ ($W$) &
 Weather conditions (for the concerned area and time) relevant for the smugglers' traveling. \\
-$RefuelingAction$ ($A$) &
+$RefuelingAction$ ($RA$) &
 Occurrence (or not) of a refueling action by the smugglers, as well as its position. \\
-$LocationPatrol$ ($L_P$) &
-Locations of available patrol ships in the concerned area of the sea. \\
-$InterceptArea$ ($I$) &
-Area where the patrol ships can intercept the smugglers' boat. \\
-$RefuelingReport$ ($R$) &
-Occurrence (or not) of a report, made by refueling ship at location $R_1$, on the refueling action by a boat matching the smugglers' boat description. \\
+$InterceptVehicle$ ($IV$) &
+Location of an available intercept vehicle. This could either be coast guard's go-fast or helicopter etc. \\
+$InterceptArea$ ($IA$) &
+Area where the intercept vehicles can intercept the smugglers' go-fast. \\
 \bottomrule
 \end{tabular}
 %\caption{Overview of scenario variables from the causal graphs in Figure~\ref{fig:causal-graph1} and \ref{fig:causal-graph2}, as well as their semantics.}\label{tab:cpt-example}
@@ -402,15 +415,15 @@ Occurrence (or not) of a report, made by refueling ship at location $R_1$, on th
 % Timely response in Search and Rescue (SAR) operations is most critical in the first few hours after the emergency has taken place. Generally after the initial hours of the incident the chances of finding possible survivors is significantly reduced. Before the actual rescue operation can commence the main challenge is to locate the incident site. In order to locate the incident site the available resources, such as helicopter, planes, ships, search crew, dogs, etc. must deployed as fast as possible at the right location to minimize the localization time. In order to determine initial search location observation that can be used to infer the the possible incident location can be used.
 
 
-\section{Influence Diagrams}\label{sec:influence-diagrams}
+\section{Decision Network}\label{sec:influence-diagrams}
 
-An {\em influence diagram (ID)} \cite{howard84rpada,jensen07book} is a concise graphical and mathematical representation of a decision problem. These representations are basically a generalization of Bayesian networks \cite{pearl88book, jensen07book}. IDs combine the representation of a probabilistic inference problem together with a decision problem and supports solving both problems using a single model. In Figure~\ref{fig:decision-graph} an example of a ID is shown with a single decision (square node) and utility node (diamond node) together with several chance nodes (oval nodes). Since an ID is a generalization of a BN we start discussing BNs first.
+A {\em decision network (DN)} (also influence diagram or decision graph \cite{russell02bn,howard84rpada,jensen07book}) is a concise graphical and mathematical representation of an inference and decision problem. In order to evaluate the different decisions modeled in a DN the impact of the decision's consequences need to be measured. The consequence of a decision is measured through a utility node. For example, we need to drive to work either via route A or route B in the shortest amount of time. Clearly in this case the utility is based on the amount of time required to travel to work and the route that results in the lowest amount of time gets a higher associated utility value. In Figure~\ref{fig:decision-graph} an example of a DN is shown with a single decision variable (square node) and utility variable (diamond node) together with several random variables (oval nodes). Since a DN is generalization of a BN we start discussing BNs first.
 
  
 \begin{figure}
 \begin{center}
- \includegraphics[width=.4\textwidth]{decision-graph.eps}
- \caption{Influence diagram of the causal model shown in Figure~\ref{fig:causal-model}.\label{fig:decision-graph}}
+ \includegraphics[width=.4\textwidth]{decision-network.eps}
+ \caption{Decision network based on the causal model shown in Figure~\ref{fig:causal-model}.\label{fig:decision-graph}}
  % decision-graph.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=-0 -0 424 277
 \end{center}
 \end{figure}
@@ -464,6 +477,8 @@ An {\em influence diagram (ID)} \cite{howard84rpada,jensen07book} is a concise g
 % \caption{Bayesian network of the causal model shown in Figure~\ref{fig:causal-graph1} (a) and Figure~\ref{fig:causal-graph2} (b), as well as a CPT of the discrete conditional probability distribution $P(A|D,F)$ (c).}
 % \end{figure}
 
+{\red needs to be reworked - Patrick}
+
 
 A Bayesian network (BN) is a probabilistic graphical model that efficiently represents a joint probability distribution (JPD) over a set of random variables \cite{jensen01book,pearl88book}. A BN is represented through a Directed Acyclic Graph (DAG), where each node in the DAG corresponds to a random variable of the JPD. For example, the causal graphs shown in Figure~ 2 can be captured by the DAGs shown in Figure 5a and~\ref{fig:bn-example}, where scenario variables (solid circles in Figure 2) are represented as random variables (nodes), and each possible scenario variable state corresponds to a random variable state. 
 Note that, the range of states for the scenario variables (and therefore the range of states for the random variables) is not determined a priori but as the estimation processes take place, as explained in section II, on scoping of states.
@@ -514,7 +529,9 @@ Also in the second phase of the example (whose BN is shown in Figure~\ref{fig:bn
 
 \subsection{Decision network}
 
-The BN described in the previous section can be extended into the influence diagram shown in Figure~\ref{fig:decision-graph} where a decision node $D$ and a utility node $U$ are added. A decision node represents possible actions the decision maker can take. In this case the actions are the different directions the patrol ship can travel, such as North, East, South-west, etc. The utility node, on the other hand, represents the utility function where the parents of the utility node, i.e. $\{LS,LP,IA\}$, are the arguments of this function:
+{\red needs to be reworked - Patrick}
+
+The BN described in the previous section can be extended into the decision network shown in Figure~\ref{fig:decision-graph} where a decision node $D$ and a utility node $U$ are added. A decision node represents possible actions the decision maker can take. In this case the actions are the different directions the patrol ship can travel, such as North, East, South-west, etc. The utility node, on the other hand, represents the utility function where the parents of the utility node, i.e. $\{LS,LP,IA\}$, are the arguments of this function:
 
 \[
  U(LS,LP,IA) = -\alpha d(LS,LP) - (1-\alpha) d(IA,LP),
@@ -529,86 +546,41 @@ where $d(X,Y)$ is the distance between $X$ and $Y$ and $\alpha$ is a value betwe
 
 %proposing decisions for automated planning of UAVs
 
+{\red Explain the basics of DDN - Patrick}
 
-
-In the Figure~\ref{fig:decision-graph} a static influence diagram was shown. However, intercepting a smuggler's go-fast is very dynamic environment where the location of the go-fast and the patrol ship are constantly changing. In these environment sequential decision making is required in order to successfully intercept the go-fast. In Figure~\ref{fig:dynamic-decision-graph} a {\em dynamic decision graph (DDG)} is shown based on the influence diagram shown in Figure~\ref{fig:decision-graph}. The DDG
-
-
-
-\section{State Representation}
+In the Figure~\ref{fig:decision-graph} a static influence diagram was shown. However, intercepting a smuggler's go-fast is very dynamic environment where the location of the go-fast and the patrol ship are constantly changing. In these environment sequential decision making is required in order to successfully intercept the go-fast. In Figure~\ref{fig:dynamic-decision-graph} a {\em dynamic decision network (DDN)} is shown based on the influence diagram shown in Figure~\ref{fig:decision-graph}. The DDG \ldots
 
 
 
+\subsection{State Representation}
+
+{\red How do we represent the states - Tom}
+
+
+\subsection{Estimation the Position of Smugglers}
+
+
+{\red how do we estimate the position of the smugglers based on the observations: use of particle filter - Rik}
+
+
+\subsection{Solving a Dynamic Decision Network}
+
+
+{\red how do we solve a DDN: value iteration, policy iteration, etc.? - Tom \& Patrick}
 
 % \subsection{Representation of the Search Area}
 
 
-
-% In order to determine the impact location of the air craft we have to reconstruct the last segment of suspected flight path. For example, consider the situation depicted in Figure~\ref{fig:gmrf} where there are two observations at different points in time, namely a last ACARS message with a given location $(x_1, y_1)$ at time $t_1$ and a last primary radar contact at location $(x_2, y_2)$ at time $t_2$. Since $t_2 > t_1$ we can roughly infer the direction of travel depicted as the dashed line in Figure~\ref{fig:gmrf}\footnote{Here we assume that the aircraft was traveling in a straight line, which for a commercial passenger airliner is a plausible assumption}. In this case it is logically to assume that the impact location is south east of location $(x_2, y_2)$ on the dashed line representing the suspected flight path.
-% 
-% 
-% \begin{figure}[!t]
-% \centering
-% \includegraphics[width=.5\textwidth]{gaussian-mrf2.eps}
-% \caption{Gaussian Markov Random Field}
-% \label{fig:gmrf}
-% \end{figure}
-% 
-% 
-% \begin{figure}[!t]
-% \centering
-% \scalebox{0.7}{
-% $\psmatrix[mnode=circle,colsep=0.5cm,rowsep=0.7cm,arrowsize=5pt]
-% [name=T11] TP_{1,1} & [name=T12] TP_{1,2} & [name=T13] TP_{1,3} & [mnode=none] \ldots \\
-% [name=T21] TP_{2,1} & [name=T22] TP_{2,2} & [name=T23] TP_{2,3} & [mnode=none] \ldots \\
-% [name=T31] TP_{3,1} & [name=T32] TP_{3,2} & [name=T33] TP_{3,3} & [mnode=none] \ldots \\
-% [mnode=none] \vdots & [mnode=none] \vdots & [mnode=none] \vdots & [mnode=none] \ddots \\
-% \endpsmatrix$
-% \ncline{-}{T11}{T12}
-% \ncline{-}{T11}{T21}
-% \ncline{-}{T12}{T13}
-% \ncline{-}{T12}{T22}
-% \ncline{-}{T13}{T23}
-% \ncline{-}{T21}{T22}
-% \ncline{-}{T22}{T23}
-% \ncline{-}{T31}{T32}
-% \ncline{-}{T32}{T33}
-% \ncline{-}{T21}{T31}
-% \ncline{-}{T22}{T32}
-% \ncline{-}{T23}{T33}}
-% \caption{A Markov Random Field (MRF) representing the target presence $TP_{i,j}$ for cell $(i,j)$ shown in Figure~\ref{fig:mrf}.}
-% \end{figure}
-% 
-% \subsection{Inter cell Dependencies}
-% 
-% The MRF shown in Figure~\ref{fig:mrf} models the presence dependencies of the aircraft between different cells. The model shows for each cell the presence of the aircraft $TP_{i,j}$ and how they are dependent on neighboring cells. To parameterize this dependence we will have to specify the Gibbs potential $\phi(TP_{i,j}, TP_{i,j+1})$ for example. The parameterizing of the MRF is dependent on suspected flight path. This flight path can be visualized by a line crossing various cells say from west to east. Given this flight path we want that neighboring cells east and west of a cell for which we obtained an observation get a higher likelihood for presence than the neighboring cell lying north and south away from the suspected flight path. In order to facilitate the paramaterization of we can overlay the grid with a Gaussian distribution that is centered at the location of the last known observation
-% 
-% 
-% The suspected flight path can be estimated from the last two observation about the location of the aircraft and the recorded time of the observations. For example, consider the situation depicted in Figure~\ref{fig:gmrf} where there are two observations at different points in time, namely a last ACARS message with a given location $(x_1, y_1)$ at time $t_1$ and a last primary radar contact at location $(x_2, y_2)$ at time $t_2$. Since $t_2 > t_1$ we can roughly infer the direction of travel depicted as the dashed line in Figure~\ref{fig:gmrf}\footnote{Here we assume that the aircraft was traveling in a straight line, which for a commercial passenger airliner is a plausible assumption}. In this case it is logically to assume that the impact location is south east of location $(x_2, y_2)$ on the dashed line representing the suspected flight path.
-% 
-% 
-% 
-% 
-% To account for the dependence on the presence of the target in neighboring cells we consider Gaussian Random Markov Fields (GMRF) \cite{koller09book}.
-% 
-% 
-% 
+\subsection{Decision Making with Multiple Intercept Vehicles}
 
 
-%parameterizing the MRF
-
-
-
-\section{Solving the Influence Diagram}
-
-To be written\ldots
-
+{\red some thoughts on how to handle these kind of problems - Tom \& Patrick}
 
 
 
 \section{Conclusion}
 
-To be written\ldots
+{\red to be written - Patrick}
 
 \begin{itemize}
 \item Summarise what we discussed in the paper
@@ -682,4 +654,57 @@ To be written\ldots
 % that's all folks
 \end{document}
 
+
+% In order to determine the impact location of the air craft we have to reconstruct the last segment of suspected flight path. For example, consider the situation depicted in Figure~\ref{fig:gmrf} where there are two observations at different points in time, namely a last ACARS message with a given location $(x_1, y_1)$ at time $t_1$ and a last primary radar contact at location $(x_2, y_2)$ at time $t_2$. Since $t_2 > t_1$ we can roughly infer the direction of travel depicted as the dashed line in Figure~\ref{fig:gmrf}\footnote{Here we assume that the aircraft was traveling in a straight line, which for a commercial passenger airliner is a plausible assumption}. In this case it is logically to assume that the impact location is south east of location $(x_2, y_2)$ on the dashed line representing the suspected flight path.
+% 
+% 
+% \begin{figure}[!t]
+% \centering
+% \includegraphics[width=.5\textwidth]{gaussian-mrf2.eps}
+% \caption{Gaussian Markov Random Field}
+% \label{fig:gmrf}
+% \end{figure}
+% 
+% 
+% \begin{figure}[!t]
+% \centering
+% \scalebox{0.7}{
+% $\psmatrix[mnode=circle,colsep=0.5cm,rowsep=0.7cm,arrowsize=5pt]
+% [name=T11] TP_{1,1} & [name=T12] TP_{1,2} & [name=T13] TP_{1,3} & [mnode=none] \ldots \\
+% [name=T21] TP_{2,1} & [name=T22] TP_{2,2} & [name=T23] TP_{2,3} & [mnode=none] \ldots \\
+% [name=T31] TP_{3,1} & [name=T32] TP_{3,2} & [name=T33] TP_{3,3} & [mnode=none] \ldots \\
+% [mnode=none] \vdots & [mnode=none] \vdots & [mnode=none] \vdots & [mnode=none] \ddots \\
+% \endpsmatrix$
+% \ncline{-}{T11}{T12}
+% \ncline{-}{T11}{T21}
+% \ncline{-}{T12}{T13}
+% \ncline{-}{T12}{T22}
+% \ncline{-}{T13}{T23}
+% \ncline{-}{T21}{T22}
+% \ncline{-}{T22}{T23}
+% \ncline{-}{T31}{T32}
+% \ncline{-}{T32}{T33}
+% \ncline{-}{T21}{T31}
+% \ncline{-}{T22}{T32}
+% \ncline{-}{T23}{T33}}
+% \caption{A Markov Random Field (MRF) representing the target presence $TP_{i,j}$ for cell $(i,j)$ shown in Figure~\ref{fig:mrf}.}
+% \end{figure}
+% 
+% \subsection{Inter cell Dependencies}
+% 
+% The MRF shown in Figure~\ref{fig:mrf} models the presence dependencies of the aircraft between different cells. The model shows for each cell the presence of the aircraft $TP_{i,j}$ and how they are dependent on neighboring cells. To parameterize this dependence we will have to specify the Gibbs potential $\phi(TP_{i,j}, TP_{i,j+1})$ for example. The parameterizing of the MRF is dependent on suspected flight path. This flight path can be visualized by a line crossing various cells say from west to east. Given this flight path we want that neighboring cells east and west of a cell for which we obtained an observation get a higher likelihood for presence than the neighboring cell lying north and south away from the suspected flight path. In order to facilitate the paramaterization of we can overlay the grid with a Gaussian distribution that is centered at the location of the last known observation
+% 
+% 
+% The suspected flight path can be estimated from the last two observation about the location of the aircraft and the recorded time of the observations. For example, consider the situation depicted in Figure~\ref{fig:gmrf} where there are two observations at different points in time, namely a last ACARS message with a given location $(x_1, y_1)$ at time $t_1$ and a last primary radar contact at location $(x_2, y_2)$ at time $t_2$. Since $t_2 > t_1$ we can roughly infer the direction of travel depicted as the dashed line in Figure~\ref{fig:gmrf}\footnote{Here we assume that the aircraft was traveling in a straight line, which for a commercial passenger airliner is a plausible assumption}. In this case it is logically to assume that the impact location is south east of location $(x_2, y_2)$ on the dashed line representing the suspected flight path.
+% 
+% 
+% 
+% 
+% To account for the dependence on the presence of the target in neighboring cells we consider Gaussian Random Markov Fields (GMRF) \cite{koller09book}.
+% 
+% 
+% 
+
+
+%parameterizing the MRF
 
