@@ -14,7 +14,6 @@
 \usepackage{amssymb}
 \usepackage{amsmath}
 %\usepackage{url}
-% \usepackage{graphicx}
 \usepackage{graphicx}
 %\usepackage{graphics}
 \usepackage{pstricks,pst-node,pst-tree}
@@ -546,42 +545,35 @@ where $d(X,Y)$ is the distance between $X$ and $Y$ and $\alpha$ is a value betwe
 % In order to evaluate the different decisions modeled in a DN the impact of the decision's consequences need to be measured. The consequence of a decision is measured through a utility node. For example, we need to drive to work either via route A or route B in the shortest amount of time. Clearly in this case the utility is based on the amount of time required to travel to work and the route that results in the lowest amount of time gets a higher associated utility value. In Figure~\ref{fig:decision-graph} an example of a DN is shown with a single decision variable (square node) and utility variable (diamond node) together with several random variables (oval nodes). Since a DN is generalization of a BN we start discussing BNs first.
 
 
-\section{Dynamic Decision Networks}
-
-
-%proposing decisions for automated planning of UAVs
+\subsection{Dynamic Decision Networks}
 
 {\red Explain the basics of DDN - Patrick}
-
 In the Figure~\ref{fig:decision-graph} a static influence diagram was shown. However, intercepting a smuggler's go-fast is very dynamic environment where the location of the go-fast and the patrol ship are constantly changing. In these environment sequential decision making is required in order to successfully intercept the go-fast. In Figure~\ref{fig:dynamic-decision-graph} a {\em dynamic decision network (DDN)} is shown based on the influence diagram shown in Figure~\ref{fig:decision-graph}. The DDG \ldots
 
+\subsection{Partially Observable Markov Decision Process}
 
+{\red Explain definition of POMDP as a seq. decis. making proc. - Tom}
+
+
+% Making decisions based on a POMDP defined in the previous section
+
+\section{Scenario-Based Decision-Making}
+
+\subsection{Monte-Carlo Tree Search}
+
+{\red Method to find decisions based on repeated sampling of the state-space. requires: Discrete action model and state space, and a method of defining the current belief of the smuggler's location. - Tom}
 
 \subsection{State Representation}
 
-{\red How do we represent the states - Tom}
+{\red How do we represent the possible states - Tom}
 
+\subsection{State Estimation}
 
-\subsection{Estimation the Position of Smugglers}
+{\red how do we estimate the position of the smugglers based on the observations: use of particle filter + scenario context - Rik}
 
+\subsection{Multi-Agent Decision Making}
 
-{\red how do we estimate the position of the smugglers based on the observations: use of particle filter - Rik}
-
-
-\subsection{Solving a Dynamic Decision Network}
-
-
-{\red how do we solve a DDN: value iteration, policy iteration, etc.? - Tom \& Patrick}
-
-% \subsection{Representation of the Search Area}
-
-
-\subsection{Decision Making with Multiple Intercept Vehicles}
-
-
-{\red some thoughts on how to handle these kind of problems - Tom \& Patrick}
-
-
+{\red some thoughts on how to handle these kind of problems (i.e. MPOMDP or DEC-POMDP) - Tom \& Patrick}
 
 \section{Conclusion}
 
