@@ -1,0 +1,287 @@
+\documentclass[conference]{IEEEtran}
+
+\usepackage{graphicx, epstopdf, booktabs, cite, amsmath, stfloats, pstricks}
+\usepackage[caption=false,font=footnotesize]{subfig}
+\usepackage{mymacros}
+
+\graphicspath{img/}
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+\begin{document}
+
+\title{Scenario-based Reasoning through Dynamic Decision Networks for Countering Maritime Drug Trafficking}
+
+\author{\IEEEauthorblockN{Patrick de Oude}  
+\IEEEauthorblockA{D-CIS Lab\\
+Thales Research and Technology\\
+Delft, The Netherlands\\
+Email: patrick.deoude@d-cis.nl}
+\and
+\IEEEauthorblockN{Tom Pepels}
+\IEEEauthorblockA{D-CIS Lab\\
+Thales Research and Technology\\
+Delft, The Netherlands\\
+Email: tom.pepels@d-cis.nl}
+\and
+\IEEEauthorblockN{Rik Claessens}
+\IEEEauthorblockA{D-CIS Lab\\
+Thales Research and Technology\\
+Delft, The Netherlands\\
+Email: rik.claessens@d-cis.nl}
+}
+
+
+\maketitle
+
+% As a general rule, do not put math, special symbols or citations in the abstract
+\begin{abstract}
+The abstract goes here.
+\end{abstract}
+
+\IEEEpeerreviewmaketitle
+
+\section{Introduction}
+
+Decision making in contemporary complex domains, such as large-scale crisis management, Search \& Rescue operations, border security, anti-drug operations etc., can pose an enormous cognitive challenge on the decision maker. Decision makers often need to construct and manage multiple {\em scenarios} regarding the situation description in order to deal with uncertainties that are encountered in these domains. A scenario is a projected or imagined sequence of events describing what could possibly happen (or have happened). By keeping track of the possible scenarios that are compatible with the known information the decision maker can maintain multiple states of situation awareness that are required to be able to make the right decision at the right moment in time. However, the set of possible scenarios may become significantly large in complex real-world applications (typically involving numerous factors and uncertainties), while human cognitive limitations pose restrictions on the number of scenarios that decision makers can effectively handle at any given time. Therefore, to be able to effectively manage a (possibly large) set of scenarios, and to ultimately decide on the information to be presented to the decision makers, automated managing of scenarios must be addressed.
+
+A scenario can be considered a narration concerning various events that have materialized (or going to materialize) over time. These events are often causally dependent on each other and can be captured as variables in a causal model \cite{pearl00book}. In \cite{conrado14if} we have shown that these causal models support {\em scoping of states} of scenario variables. Moreover, such causal models can be captured through Bayesian networks (BNs) \cite{pearl88book, jensen07book} to provide a convenient framework to manage a large set of scenarios through: (i) pruning of insignificant scenarios, (ii) updating the scenarios based on new observations and (iii) computing the likelihood of a scenario given the latest information to establish an ordering on the set of relevant scenarios. Additionally, BNs allows what-if exploration where, for example, the likelihood of certain (future) events are computed based on various assumptions about the occurrence of other events of the scenario.
+
+While BNs provide an effective way to manage scenarios it does not allow the actual decisions taken by the decision maker to be modeled. Neither do they provide advise on which decision the decision maker should take. In this paper the model is extended by describing the structure of the decision process as well. This allows the model to give advice about the actual decisions the decision maker wants to consider. The extended model is called a {\em decision network} \cite{russell02bn} (also influence diagram or decision graph \cite{jensen07book}) and includes next to the chance nodes also decision and utility nodes. Influence diagrams also supports assessment of risk by, for example, computing the worst case scenario\footnote{The worst-case scenario is not necessarily the most likely scenario} considering the utilities in the model.
+
+% In \cite{conrado14if} a method was discussed to manage the set of possible scenarios using Bayesian networks (BNs) \cite{pearl88book, jensen07book}. With the help of BN an estimate of the likelihood of the scenario to unfold can be computed given the evidence that is available at the time. With these likelihoods the set of scenarios can be ranked form most to least likely scenario, which enables the decision maker to focus on the set of most likely scenarios. The method described there did not model the actual decisions that a decision maker could make. In this paper 
+
+%TODO add related work about the use of influence diagrams and secenario based reasoning
+
+% In the BNIn this paper we are going to extend the framework discussed in \cite{conrado14if} with the actual decision
+
+% The models consist only of chance nodes which do not support assessment of risk since this would require utilities to be part of the model. For example, to compute the worst case scenario, which is not necessarily the most likely, information is required about the impact of the scenario. To support risk assessment the framework discussed in \cite{conrado14if} is extended with decision and utility nodes.
+
+% t When time progresses, new evidence might be obtained and the likelihood of the scenarios can be updated.
+
+% When making decisions in complex contemporary applications, e.g. intelligence operations and large-scale crisis management, decision makers often need to construct and manage multiple hypotheses regarding the situation description in order to deal with uncertainties. Hypotheses about a situation's description are commonly referred to as {\em scenarios}. A scenario can be defined as a projected or imagined sequence of events describing what could possibly happen (or have happened). Scenarios can be used to deal with uncertainty by allowing the exploration of diverse descriptions of a given situation (and its possible developments) that are compatible with known information at any given time. Scenarios can thus offer multiple states of situation awareness and help overcome cognitive biases, and as such should ideally explore the whole set of plausible and relevant states of the world. Owing to human cognitive limitations, however, keeping track of all relevant information can become a challenge, even when only a few scenarios are considered.
+
+%TODO add overview of the paper
+\section{Causal Models}
+
+%TODO explain the scenario
+
+Maritime drug trafficking is an ongoing problem in the Caribbean sea. Very fast and small vessels, so called go-fasts, are used to transport contraband from Columbia's and Venezuela's coast to Jamaica, Haiti and Dominican Republic to be further transported into North-America. The popularity of a go-fast to be used as a drug trafficking vehicle is due to the go-fast's size, speed and low radar and optical signatures. This makes go-fasts hard to detect and difficult to intercept by often slower coast guard vehicles. Nevertheless, the U.S. coast guard deploys their own go-fasts and helicopters equipped with anti-materiel rifles (AMR) to disable the engine of a running go-fast. 
+
+The main challenge of anti-drug trafficking organizations, such as the coast guard, is to locate the smuggler's go-fast in order to intercept it. There are several type of observations that can be used. Location of the smuggler's go-fast can be determined by radar ($RO$) in case of calm sea or at close range or by visual observation ($VO$). A more recent type of observation is through the use of sonar mounted on buoys in the ocean ($SO$) that can register the typical engine sound of go-fast. Unfortunately, these type of observation might not be available. For radar and sonar the coverage is often limited and, therefore, not always available. Visual observations is only possible if an observer is close enough to report about it. With the knowledge of the location of the smuggler's go-fast allows us the reason about the possible intercept areas. This area can be a location where the smuggler's go-fast currently is or a more strategic position that is believed to be visited by the smugglers at some point in the future. These strategic positions are inferred from Intel collected during the anti-drug operations, for example. There might be Intel that the smugglers need to refuel at some refueling location along their route ($RA$). This belief is based on Intel about the amount of fuel loaded on board prior to departure ($AF$), the possible destination ($D$) and the possible locations where refueling is possible ($LR$). If there is strong belief that the smugglers are going to refuel at a certain location then that location is a possible intercept area. In Figure~\ref{fig:causal-model} the causal model is depicted that describes the causal influences between these variables. All the variables are listed in Table~\ref{tab:scenario-variables}.
+
+
+\begin{figure}
+\begin{center}
+ \includegraphics[width=.4\textwidth]{img/causal-model.eps}
+ \caption{Causal model of the smuggler scenario}\label{fig:causal-model}
+ % decision-graph.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=-0 -0 424 277
+\end{center}
+\end{figure}
+
+
+\begin{table}[!ht]
+ \centering
+ \caption{Overview of scenario variables from the causal model shown Figure~\ref{fig:causal-model}, as well as their semantics.}
+ \begin{tabular}[!ht]{rp{5cm}}
+\toprule
+ Variable & Semantics \\
+\cmidrule(r){1-1}
+\cmidrule(l){2-2}
+$LocationSmuggler$ ($LS$) &
+The location of the smuggler's go-fast. \\
+$Destination$ ($D$) &
+Destination to which the smugglers travel. \\
+$LocationRefuel$ ($LR$) &
+Locations of stationary refuel ships in the concerned area of the sea. \\
+$Weather$ ($W$) &
+Weather conditions (for the concerned area and time) relevant for the smugglers' traveling. \\
+$RefuelingAction$ ($RA$) &
+Occurrence (or not) of a refueling action by the smugglers, as well as its position. \\
+$InterceptVehicle$ ($IV$) &
+Location of an available intercept vehicle. This could either be coast guard's go-fast or helicopter etc. \\
+$InterceptArea$ ($IA$) &
+Area where the intercept vehicles can intercept the smugglers' go-fast. \\
+\bottomrule
+\end{tabular}
+%\caption{Overview of scenario variables from the causal graphs in Figure~\ref{fig:causal-graph1} and \ref{fig:causal-graph2}, as well as their semantics.}\label{tab:cpt-example}
+\label{tab:scenario-variables}
+\end{table}
+
+
+% Timely response in Search and Rescue (SAR) operations is most critical in the first few hours after the emergency has taken place. Generally after the initial hours of the incident the chances of finding possible survivors is significantly reduced. Before the actual rescue operation can commence the main challenge is to locate the incident site. In order to locate the incident site the available resources, such as helicopter, planes, ships, search crew, dogs, etc. must deployed as fast as possible at the right location to minimize the localization time. In order to determine initial search location observation that can be used to infer the the possible incident location can be used.
+
+\section{Decision Network}
+\label{sec:influence-diagrams}
+
+In \cite{conrado14if} we used BNs to represent a symmetric scenario tree capturing all possible scenarios given the modeled scenario variables. The decision maker can use this BN to manage the set of scenario using probabilistic inference to do pruning, ranking and what-if exploration. Based on this information the decision maker decides on which course of action is best by making a decision. This decision results in an action or a set of actions that influences further development of the scenario. For example, sailing my intercept vehicle in the wrong direction moving away from the smugglers results in fewer or none possible intercept areas. In this paper we extend the scenario reasoning framework discussed in \cite{conrado14if} to include the decision maker's decisions explicitly. The models that allows us to model decisions into the BN are called decision network. A {\em decision network (DN)} (also influence diagram or decision graph \cite{russell02bn,howard84rpada,jensen07book}) is a concise graphical and mathematical representation of a decision problem. DNs are a generalization of BNs so we therefore start discussing BNs first.
+
+
+\begin{figure}
+\begin{center}
+ \includegraphics[width=.4\textwidth]{img/decision-network.eps}
+ \caption{Decision network based on the causal model shown in Figure~\ref{fig:causal-model}.\label{fig:decision-graph}}
+ % decision-graph.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=-0 -0 424 277
+\end{center}
+\end{figure}
+
+
+\subsection{Bayesian networks}\label{sec:bayesian-networks}
+
+% \begin{figure}
+%  \centering
+% \subfloat[\label{fig:bn-example}]{\scalebox{.7}{
+% $
+% \psmatrix[colsep=.7cm,rowsep=.7cm,mnode=circle]
+%  & [name=W] W  \\
+% [name=D] D & & [name=I] I\; \\
+%  & [name=A] A \\
+% [name=F] F 
+% \psset{arrowscale=2}
+% \psset{nodesep=1pt}
+% \ncline{->}{W}{I}
+% \ncline{->}{D}{I}
+% \ncline{->}{D}{A}
+% \ncline{->}{F}{A}
+% \ncline{->}{A}{I}
+% \endpsmatrix$}}\qquad
+% \subfloat[\label{fig:bn-example2}]{\scalebox{.7}{
+% $
+% \psmatrix[colsep=.7cm,rowsep=.7cm,mnode=circle]
+%  & [name=W] W  \\
+% [name=D] D & & [name=I] I\; \\
+%  & [name=A] A \\
+% [name=F] F & & [name=R] R
+% \psset{arrowscale=2}
+% \psset{nodesep=1pt}
+% \ncline{->}{W}{I}
+% \ncline{->}{D}{I}
+% \ncline{->}{D}{A}
+% \ncline{->}{F}{A}
+% \ncline{->}{A}{I}
+% \ncline{->}{A}{R}
+% \endpsmatrix$}}\\[10pt]
+% \subfloat[\label{fig:cpt-example}]{
+%  \begin{tabular}{r|ccc|c|c} 
+% $D$	& \multicolumn{3}{c|}{X} & Y &  Z \\ 
+%  \diagbox{$A$}{$F$} & Small & Medium & Large & & \\
+% \hline
+%  No & 0.1 & 1 & 1 & \ldots & \ldots \\
+%  Yes at 1 & 0.9 & 0 & 0 & \ldots & \ldots \\ 
+%  Yes at 2 & 0 & 0 & 0 & \ldots & \ldots \\ 
+%  Yes at 3 & 0 & 0 & 0 & \ldots & \ldots \\ 
+%  \end{tabular}}
+% \caption{Bayesian network of the causal model shown in Figure~\ref{fig:causal-graph1} (a) and Figure~\ref{fig:causal-graph2} (b), as well as a CPT of the discrete conditional probability distribution $P(A|D,F)$ (c).}
+% \end{figure}
+
+{\red needs to be reworked - Patrick}
+
+A Bayesian network (BN) is a probabilistic graphical model that efficiently represents a joint probability distribution (JPD) over a set of random variables \cite{jensen01book,pearl88book}. A BN is represented through a Directed Acyclic Graph (DAG), where each node in the DAG corresponds to a random variable of the JPD. For example, the causal graphs shown in Figure~ 2 can be captured by the DAGs shown in Figure 5a and~\ref{fig:bn-example}, where scenario variables (solid circles in Figure 2) are represented as random variables (nodes), and each possible scenario variable state corresponds to a random variable state. 
+Note that, the range of states for the scenario variables (and therefore the range of states for the random variables) is not determined a priori but as the estimation processes take place, as explained in section II, on scoping of states.
+For each node given its parents in the DAG, a conditional probability distribution (CPD) needs to be specified. For instance, the CPD $P(A|D,F)$ must be specified for the variable $RefuelingAction$ ($A$). Discrete CPDs can be represented through conditional probability tables (CPTs).  Since the variables $D$, $F$ and $A$ are discrete, the CPD $P(A|D,F)$ can be represented through the CPT shown in Figure~\ref{fig:cpt-example}. This CPT expresses that, given destination X and a small amount of fuel on board, the chance that a refueling action takes place (at location 1) is $0.9$, i.e. $P$($A$~=~Yes~at~1$|$$D$~=~X,~$F$~=~Small) = 0.9. For larger amounts of fuel (and the same destination X), it is estimated that no refueling action takes place. Moreover, there is no chance that the refueling action takes place at locations 2 and 3, as these locations are farther than X itself. This example shows that incompatibility of state combinations can simplify the specification of CPTs for scenario variables, as the probabilities of such combinations are zero.
+
+Before the introduction of BNs, probabilistic inferences were performed directly on a JPD defined over several variables. This, however, limited such operations only to JPDs defined over a small set of variables due to the combinatorial complexity. A Bayesian network, on the other hand, exploits conditional independencies between the random variables. Consequently, the JPD can be factorized into CPDs for each variable in the model. 
+For example, considering the BN shown in Figure 5a, the JPD $P(\VV)$ (where $\VV$\footnote{In this section, a single random variable is presented as an uppercase letter and its states as lowercase letters. A set of random variables and of states are shown as bold uppercase and bold lowercase letters, respectively.} = $\{W, D, F, A, I\}$) factorizes into a set of CPDs, i.e.
+
+
+\begin{eqnarray}
+P(\VV) = \prod_i P(X_i|\Pa(X_i)),  \label{eq:chain-rule}
+\end{eqnarray}
+
+\noindent
+where $\Pa(X_i)$ denotes the parents of node $X_i$. For the BN in Figure 5a, the JPD is therefore
+
+\begin{eqnarray}
+ P(W,D,F,A,I) &=& P(W)P(D)P(F)P(A|D,F) \nonumber \\
+  & & \cdot P(I|W,D,A). \nonumber
+\end{eqnarray}
+
+
+With the help of the chain rule in Equation~(\ref{eq:chain-rule}), a JPD can be represented through its factorization of CPDs, which requires significant fewer parameters compared to the number of parameters in the JPD. Moreover, by exploiting the conditional independencies between the random variables, efficient exact inference methods can be used, e.g. the junction tree algorithm \cite{cowell99bn}.
+
+The likelihood of scenarios can be computed with the help of Equation~(\ref{eq:chain-rule}), given a BN of the causal model that shows the cause-effect relations between the scenario variables. For instance, for the scenario corresponding to the uppermost complete branch of the scenario tree in Figure~\ref{fig:scenario-tree}, i.e. $W$~=~bad, $D$~=~X, $F$~=~Small, $A$~=~Yes at 1, $I$~=~4, the likelihood can be computed as
+
+\begin{eqnarray}
+ P(W=\text{bad}, D=\text{X}, F=\text{Small}, A=\text{Yes at 1}, I=\text{4}) &=& \nonumber \\
+ P(W=\text{bad})P(D=\text{X})P(F=\text{Small}) & & \nonumber \\ 
+ \cdot P(A=\text{Yes at 1}|D=\text{X},F=\text{Small}) \nonumber \\
+ \cdot P(I=\text{4}|W=\text{bad},D=\text{X},A=\text{Yes at 1}). \nonumber
+\end{eqnarray}
+
+  
+Moreover, one of the main strengths of BNs is the possibility to perform predictive or diagnostic inference based on a given set of evidence denoted by $\E$. For example, in the second phase of the example the weather is observed, i.e. $\E = \{W = \text{bad}\}$. With this observation, the likelihood of the scenarios can be updated by computing $P(\vv|\E)$, where $\vv$ is a configuration of random variables states corresponding to a given scenario. Note that all scenarios with $W = \text{good}$ will get zero probability due to the observation. Assigning zero probabilities to scenarios after an observation update corresponds to pruning of scenarios based on evidence.
+
+Also in the second phase of the example (whose BN is shown in Figure~\ref{fig:bn-example}), a new variable $R$ is added to the model to capture the received refuel report. The model needs to be updated by specifying the CPD $P(R|A)$ as well. The new JPD $P(W,D,F,A,I,R) = P(W)P(D)P(F)P(A|D,F)P(I|W,D,A)P(R|A)$ can be used to re-compute the likelihood of the scenarios, given the occurrence of the refueling report at position 1.
+
+
+\begin{figure*}[!t]
+\begin{center}
+ \includegraphics[width=.95\textwidth]{img/dynamic-decision-graph.eps}
+ \caption{Dynamic decision graph of the influence diagram shown in Figure~\ref{fig:decision-graph}.}
+ % decision-graph.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=-0 -0 424 277
+\end{center}
+\end{figure*}
+
+
+\subsection{Decision network}
+
+{\red needs to be reworked - Patrick}
+
+The BN described in the previous section can be extended into the decision network (DN) shown in Figure~\ref{fig:decision-graph}. This DN consists of the same nodes as in the causal model in Figure~\ref{fig:causal-model} plus a decision node $D$ and a utility node $U$. A decision node represents possible actions the decision maker can take. In this case the actions are the different directions the patrol ship can travel, such as North, East, South-west, etc. The utility node, on the other hand, represents the utility function where the parents of the utility node, i.e. $\{LS,LP,IA\}$, are the arguments of this function:
+
+\[
+ U(LS,LP,IA) = -\alpha d(LS,LP) - (1-\alpha) d(IA,LP),
+\]
+
+where $d(X,Y)$ is the distance between $X$ and $Y$ and $\alpha$ is a value between $[0,1]$ that is used to control the importance of either $d(LS,LP)$ or $d(IA,LP)$. In case $\alpha=1$ the utility function is $U(LS,LP,IA) = -d(LS,LP)$ and therefore solely based on the distance between the smuggler's boat and the patrol ship, while $\alpha=0$ the utility function is solely based on the distance of the patrol ship and the intercept area. The choice of $\alpha$ should be based on the information that is available. If more information is available that could help to locate the smuggler's go-fast then we want to weight  $d(LS,LP)$ more by using a higher $\alpha$ value. A higher utility is obtained when the patrol ship is either closer to the smuggler's location or to an intercept area (where eventually the smugglers should travel to).
+
+% In order to evaluate the different decisions modeled in a DN the impact of the decision's consequences need to be measured. The consequence of a decision is measured through a utility node. For example, we need to drive to work either via route A or route B in the shortest amount of time. Clearly in this case the utility is based on the amount of time required to travel to work and the route that results in the lowest amount of time gets a higher associated utility value. In Figure~\ref{fig:decision-graph} an example of a DN is shown with a single decision variable (square node) and utility variable (diamond node) together with several random variables (oval nodes). Since a DN is generalization of a BN we start discussing BNs first.
+
+\subsection{Dynamic Decision Networks}
+
+{\red Explain the basics of DDN - Patrick}
+In the Figure~\ref{fig:decision-graph} a static influence diagram was shown. However, intercepting a smuggler's go-fast is very dynamic environment where the location of the go-fast and the patrol ship are constantly changing. In these environment sequential decision making is required in order to successfully intercept the go-fast. In Figure~\ref{fig:dynamic-decision-graph} a {\em dynamic decision network (DDN)} is shown based on the influence diagram shown in Figure~\ref{fig:decision-graph}. The DDG \ldots
+
+\subsection{Partially Observable Markov Decision Process}
+
+{\red Explain definition of POMDP as a seq. decis. making proc. - Tom}
+{\red Also extend to multi-agent POMDP, reducibility}
+
+% Making decisions based on a POMDP defined in the previous section
+
+\section{Scenario-Based Decision-Making}
+
+{\red explain what we want to do, why do we need to plan, what is the role of scenarios, what kind of decisions do we want to make? - Tom \& Patrick}
+
+\subsection{Planning Under Uncertainty}
+
+{\red Method to find decisions based on repeated sampling of the state-space. requires: Discrete action model and state space, and a method of defining the current belief of the smuggler's location. - Tom}
+
+\subsection{World Representation}
+
+{\red How do we represent the possible states - Tom}
+
+\subsection{Belief State Estimation with Context}
+
+{\red how do we estimate the position of the smugglers based on the observations and the context: description of particle filter - Rik}
+
+\subsection{Multi-Agent Decision Making}
+
+{\red some thoughts on how to handle these kind of problems (i.e. MPOMDP or DEC-POMDP) - Tom \& Patrick}
+% Cite Ad hoc Autonomous agent teams
+% Cite multi-agent II pursuit games
+
+\section{Conclusion}
+\begin{itemize}
+\item Summarise what we discussed in the paper
+\item State what the next steps are
+\item Future work
+\end{itemize}
+
+\section*{Acknowledgment}
+
+\bibliographystyle{IEEEtran}
+\bibliography{BNbib, tombib}
+
+% that's all folks
+\end{document}

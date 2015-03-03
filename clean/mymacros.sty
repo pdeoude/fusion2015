@@ -1,0 +1,176 @@
+% File:  mymacros.sty
+%
+
+%Required by the memoir class
+\def\bf{\bfseries}
+\def\tt{\ttfamily}
+
+% general macros
+\def\R{\rm I\!R}
+
+\def\be{\begin{equation}}
+\def\ee{\end{equation}}
+\def\bea{\begin{eqnarray}}
+\def\eea{\end{eqnarray}}
+\def\bem{\begin{multiline}}
+\def\eem{\end{multiline}}
+
+\def\eq#1{Equation~(\ref{eq:#1})}
+\def\eqs#1{(\ref{eq:#1})}
+\def\fig#1{Figure~\ref{fig:#1}}
+\def\tabl#1{Table~\ref{tab:#1}}
+\def\sect#1{Section~\ref{sec:#1}}
+\def\chp#1{Chapter~\ref{chp:#1}}
+\def\app#1{Appendix~\ref{app:#1}}
+\def\alg#1{Algorithm~\ref{alg:#1}}
+\def\defi#1{\ref{def:#1}}
+\def\defin#1{Definition~\ref{def:#1}}
+\def\prop#1{Proposition~\ref{pro:#1}}
+
+\def\oneover#1{\frac{1}{#1}}
+\def\v#1{\vec{#1}}
+\def\m#1{\mathbf{#1}}
+\def\ent{\mathcal{H}}
+\def\neg#1{\bar{#1}}
+\def\?#1{\framebox[1.1\width]{JN:#1}}
+\def\!#1{{\bf [#1]}}
+
+% nice capitals
+\def\t{\theta}
+\def\A{{\mathcal{A}}}
+\def\B{{\mathcal{B}}}
+\def\C{{\mathcal{C}}}
+\def\D{{\mathcal{D}}}
+\def\E{{\mathcal{E}}}
+\def\F{{\mathcal{F}}}
+\def\G{{\mathcal{G}}}
+\def\H{{\mathcal{H}}}
+\def\I{{\mathcal{I}}}
+\def\L{{\mathcal{L}}}
+\def\M{{\mathcal{M}}}
+\def\N{{\mathcal{N}}}
+\def\P{{\mathcal{P}}}
+\def\Q{{\mathcal{Q}}}
+\def\R{{\mathcal{R}}}
+\def\S{{\mathcal{S}}}
+\def\T{{\mathcal{T}}}
+\def\U{{\mathcal{U}}}
+\def\V{{\mathcal{V}}}
+\def\X{{\mathcal{X}}}
+\def\Y{{\mathcal{Y}}}
+\def\Z{{\mathcal{Z}}}
+
+\def\AA{{\mathbf{A}}}
+\def\BB{{\mathbf{B}}}
+\def\CC{{\mathbf{C}}}
+\def\DD{{\mathbf{D}}}
+\def\EE{{\mathbf{E}}}
+\def\FF{{\mathbf{F}}}
+\def\GG{{\mathbf{G}}}
+\def\HH{{\mathbf{H}}}
+\def\II{{\mathbf{I}}}
+\def\JJ{{\mathbf{J}}}
+\def\KK{{\mathbf{K}}}
+\def\LL{{\mathbf{L}}}
+\def\MM{{\mathbf{M}}}
+\def\NN{{\mathbf{N}}}
+\def\OO{{\mathbf{O}}}
+\def\PP{{\mathbf{P}}}
+\def\QQ{{\mathbf{Q}}}
+\def\RR{{\mathbf{R}}}
+\def\SS{{\mathbf{S}}}
+\def\TT{{\mathbf{T}}}
+\def\UU{{\mathbf{U}}}
+\def\VV{{\mathbf{V}}}
+\def\WW{{\mathbf{W}}}
+\def\XX{{\mathbf{X}}}
+\def\YY{{\mathbf{Y}}}
+\def\ZZ{{\mathbf{Z}}}
+
+\def\hh{{\mathbf{h}}}
+\def\ll{{\mathbf{l}}}
+\def\vv{{\mathbf{v}}}
+\def\ww{{\mathbf{w}}}
+\def\xx{{\mathbf{x}}}
+\def\yy{{\mathbf{y}}}
+\def\zz{{\mathbf{z}}}
+
+
+\def\Pa{{\mathbf{Pa}}}
+\def\pa{{\mathbf{pa}}}
+\def\Ch{{\mathbf{Ch}}}
+\def\Desc{{\mathbf{Desc}}}
+\def\Nb{{\mathbf{Nb}}}
+
+\def\mkbig#1{\phantom{l}#1\phantom{l}}
+
+\def\BL{\bm{BL}}
+
+\def\todo#1{\begingroup \noindent\red\bfseries TODO: #1 \endgroup \\[6pt]}
+\def\fixme#1{\begingroup \red \bf (FIXME: #1) \endgroup}
+\def\todobox#1#2{\noindent\psframebox*[fillcolor=lightgray,fillstyle=solid,boxsep=false]{\begin{minipage}{\textwidth}\begingroup \bf\em TODO: #1 \endgroup\\[6pt]#2\end{minipage}}}
+
+\newcommand{\argmax}{\operatornamewithlimits{argmax}}
+
+% theorems, environments, etc
+\newtheorem{definition}{Definition}[section]
+% \newtheorem{theorem}{Theorem}[chapter]
+% \newtheorem{corollary}[theorem]{Corollary}
+% %\newtheorem{algorithm}{Algorithm}[chapter]
+% %\newtheorem{definition}{Definition}[chapter]
+% \newtheorem{proposition}[theorem]{Proposition}
+% \newtheorem{proc}{Procedure}[chapter]
+% \newtheorem{lemma}[theorem]{Lemma}
+\def\qed{\hfill $\square$}
+%\newenvironment{proof}[1][Proof]
+%       {\begin{trivlist}\item[\hskip \labelsep {\bfseries #1}]}
+%       {\end{trivlist}}
+
+
+\newenvironment{example}[1][Example]
+       {\rule[2mm]{\textwidth}{.1pt} {\bfseries #1} \\ \rule{\textwidth}{.1pt} }
+       {\\ \rule[1mm]{\textwidth}{.1pt}}
+\usepackage{amssymb}
+\def\descsection#1{\vspace{1.5ex}\noindent{\bf#1}\vspace{1.5ex}}
+
+\def\colorbox#1{\begin{center}\psframebox*[fillcolor=lightgray,fillstyle=solid,boxsep=false]{\begin{minipage}{11cm}#1\end{minipage}}\end{center}}
+
+% \newenvironment{todo}[1][TODO: #1]
+% {\begin{center}\psframebox[fillcolor=lightgray,fillstyle=solid]{\begin{minipage}{11cm}}
+% {\end{minipage}}\end{center}}
+
+
+%\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+
+\newlength\figsize
+\setlength\figsize{0.5\textwidth}
+
+% \long\def\symbolfootnote[#1]#2{\begingroup%
+% \def\thefootnote{\fnsymbol{ctr}}\footnote[#1]{#2}\endgroup}
+
+%\renewcommand{\subsubsection}[1]{\noindent\begingroup\bf#1\,\endgroup}
+
+%\newenvironment{definition}[1]%
+%{\refstepcounter{definition}\vspace{10pt}\par\noindent
+%\textbf{Definition \thechapter.\thedefinition\ (#1)}\begin{itshape}\par\noindent\vspace{10pt}}%
+%{\end{itshape}\vspace{10pt}\par}
+
+
+
+
+
+% write something better for this:
+%\newtheorem{algorithm}{Algorithm}
+
+%\newenvironment{algorithm}[1][Algorithm]
+%       {\rule[2mm]{\textwidth}{.1pt} {\bfseries #1} \\ \rule{\textwidth}{.1pt}}
+%       {\rule[1mm]{\textwidth}{.1pt}}
+
+\def\toptitlebar{ 
+\hrule height4pt 
+\vskip .25in} 
+ 
+\def\bottomtitlebar{ 
+\vskip .05in 
+\hrule height1pt 
+\vskip .3in}
