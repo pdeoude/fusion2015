@@ -1,8 +1,11 @@
 \documentclass[conference]{IEEEtran}
 
-\usepackage{graphicx, epstopdf, booktabs, cite, amsmath, stfloats, pstricks}
+\usepackage{graphicx, booktabs, cite, amsmath, stfloats, pstricks, epstopdf}
+\usepackage{pstricks,pst-node,pst-tree}
 \usepackage[caption=false,font=footnotesize]{subfig}
 \usepackage{mymacros}
+
+\DeclareGraphicsExtensions{.eps}
 
 \graphicspath{img/}
 % correct bad hyphenation here
@@ -244,12 +247,37 @@ In the Figure~\ref{fig:decision-graph} a static influence diagram was shown. How
 
 \subsection{Partially Observable Markov Decision Process}
 
-{\red Explain definition of POMDP as a seq. decis. making proc. - Tom}
-{\red Also extend to multi-agent POMDP, reducibility}
+A Markov Decision Process (MDP) \cite{bellman1957dynamic,mdp} describes synchronous interations between an agent and the world. MDP's are used to model sequential decision making procresses, for which both exact and approximate methods of inference exist. At each time-step an agent takes an action that changes the state of the world. The agent can collect rewards, which are received when it takes certain actions in certain states. An MDP is formally described as the tuple $\langle\S,\mathcal{A},T,R,\gamma\rangle$:
+
+\begin{itemize}
+\item $\S$ is the finite set of states of the world,
+\item $\mathcal{A}$ is the finite set of actions,
+\item $T:\S\times\mathcal{A}\rightarrow\P(s'|a,s)$ is the state transition function \ie the probability of moving to state $s'$ given that action $a$ was performed in state $s$,
+\item $R:\S\times\mathcal{A}\rightarrow\mathbb{R}$ is the reward function, which maps each state-action pair to a real reward. Note that this can represent a cost, \ie $r < 0$,
+\item $\gamma$ is the discount factor, representing the difference in preference between present and future rewards.
+\end{itemize}
+
+In some problems, the state space $\S$ be factorized, meaning that it can be represented by discrete set of state variables. As such, the state $\S$ can be described as a vector $\left(X_1,\ldots,\X_n\right)$ where each variable $X_i$ can take on a value in its domain.
+The goal of an MDP is to find a policy $\pi:\S\rightarrow\mathcal{A}$ that maps states to actions such that the reward is maximized. Often, a horizon $h$ is introduced to limit the look-ahead distance.
+
+In the case of MDP's the assumption is made that an agent can fully observe the world, as is the case in for instance games of complete information like Chess or Checkers. However, in many real-world domains, the state of the world is not fully observable, and the agent cannot determine the state it is in with complete accuracy. To represent this uncertainty over the agent's current state and observations, the MDP model can be extended to the Partially Observable MDP (POMDP) \cite{aastrom1965optimal,pomdp}. A POMDP can be formally described as $\langle\S,\mathcal{A},T,R,\Omega,O,\gamma\rangle$:
+
+\begin{itemize}
+\item $\S,\mathcal{A},T,R,$ and $\gamma$ describe the Markov Decision Process,
+\item $\Omega$ is the finite set of possible observations,
+\item $O:\S\times\mathcal{A}\rightarrow\P(o|a,s')$ is the probability of observing $o$ in state $s'$, after performing action $a$. 
+\end{itemize}
+
+POMDP's require an agent to maintain an internal {\it belief state}, in which all knowldge about the current state is summarized. POMDP's are harder to solve exactly than MDP's, and require approximate methods to be used in real-world problems \cite{pineau2006anytime}.
+
+Recently, the MDP framework was extended to include multi-agent decision-making, \ie MMDP and MPOMDP. In these cases, the action space $\mathcal{A}$ represents the joint-actions $\A_{m} = \A_1\times\ldots\times\A_n$ of all $n$ agents under consideration.Whereas solving an MDP can be performed in polynomial time, solving multi-agent problems suffer from the fact that their action space increases exponentially with the number of agents.
+
+In Section \ref{sec:scenario-based-dm} we will use the POMDP model developped in this subsection to detail an approach to planning and decision-making under uncertainty in the smuggler use-case.
 
 % Making decisions based on a POMDP defined in the previous section
 
 \section{Scenario-Based Decision-Making}
+\label{sec:scenario-based-dm}
 
 {\red explain what we want to do, why do we need to plan, what is the role of scenarios, what kind of decisions do we want to make? - Tom \& Patrick}
 
@@ -281,7 +309,7 @@ In the Figure~\ref{fig:decision-graph} a static influence diagram was shown. How
 \section*{Acknowledgment}
 
 \bibliographystyle{IEEEtran}
-\bibliography{BNbib, tombib}
+\bibliography{tombib,BNbib}
 
 % that's all folks
 \end{document}
