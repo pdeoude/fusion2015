@@ -46,11 +46,13 @@ The abstract goes here.
 
 \section{Introduction}
 
-Decision making in contemporary complex domains, such as large-scale crisis management, Search \& Rescue operations, border security, anti-drug operations etc., can pose an enormous cognitive challenge on the decision maker. Decision makers often need to construct and manage multiple {\em scenarios} regarding the situation description in order to deal with uncertainties that are encountered in these domains. A scenario is a projected or imagined sequence of events describing what could possibly happen (or have happened). By keeping track of the possible scenarios that are compatible with the known information the decision maker can maintain multiple states of situation awareness that are required to be able to make the right decision at the right moment in time. However, the set of possible scenarios may become significantly large in complex real-world applications (typically involving numerous factors and uncertainties), while human cognitive limitations pose restrictions on the number of scenarios that decision makers can effectively handle at any given time. Therefore, to be able to effectively manage a (possibly large) set of scenarios, and to ultimately decide on the information to be presented to the decision makers, automated managing of scenarios must be addressed.
+Decision making in contemporary complex domains, such as large-scale crisis management, Search \& Rescue operations, border security, anti-drug operations etc., can pose an enormous cognitive challenge on the decision maker. Decision makers often need to construct and manage multiple {\em scenarios} regarding the situation description in order to deal with uncertainties that are encountered in these domains. A scenario is a projected or imagined sequence of events describing what could possibly happen (or have happened). By keeping track of the possible scenarios that are compatible with the known information the decision maker can maintain multiple states of situation awareness that are required to be able to make the right decision at the right moment in time. However, the set of possible scenarios may become significantly large in complex real-world applications (typically involving numerous factors and uncertainties), while human cognitive limitations pose restrictions on the number of scenarios that decision makers can effectively handle at any given time. Therefore, to be able to effectively manage a (possibly large) set of scenarios, and to ultimately decide on the information to be presented to the decision makers, automated management of scenarios should be addressed.
 
 A scenario can be considered a narration concerning various events that have materialized (or going to materialize) over time. These events are often causally dependent on each other and can be captured as variables in a causal model \cite{pearl00book}. In \cite{conrado14if} we have shown that these causal models support {\em scoping of states} of scenario variables. Moreover, such causal models can be captured through Bayesian networks (BNs) \cite{pearl88book, jensen07book} to provide a convenient framework to manage a large set of scenarios through: (i) pruning of insignificant scenarios, (ii) updating the scenarios based on new observations and (iii) computing the likelihood of a scenario given the latest information to establish an ordering on the set of relevant scenarios. Additionally, BNs allows what-if exploration where, for example, the likelihood of certain (future) events are computed based on various assumptions about the occurrence of other events of the scenario.
 
 While BNs provide an effective way to manage scenarios it does not allow the actual decisions taken by the decision maker to be modeled. Neither do they provide advise on which decision the decision maker should take. In this paper the model is extended by describing the structure of the decision process as well. This allows the model to give advice about the actual decisions the decision maker wants to consider. The extended model is called a {\em decision network} \cite{russell02bn} (also influence diagram or decision graph \cite{jensen07book}) and includes next to the chance nodes also decision and utility nodes. Influence diagrams also supports assessment of risk by, for example, computing the worst case scenario\footnote{The worst-case scenario is not necessarily the most likely scenario} considering the utilities in the model.
+
+{\red What do we expect, are we proposing a planning and simulation tool, (semi-)autonomous mission management, or decision support? I think we should place the proposed solution somewhere, so it is clear what it might be used for. In my view it could be used for all of the above, but it is probably better to focus on one application.}
 
 % In \cite{conrado14if} a method was discussed to manage the set of possible scenarios using Bayesian networks (BNs) \cite{pearl88book, jensen07book}. With the help of BN an estimate of the likelihood of the scenario to unfold can be computed given the evidence that is available at the time. With these likelihoods the set of scenarios can be ranked form most to least likely scenario, which enables the decision maker to focus on the set of most likely scenarios. The method described there did not model the actual decisions that a decision maker could make. In this paper 
 
@@ -241,38 +243,38 @@ where $d(X,Y)$ is the distance between $X$ and $Y$ and $\alpha$ is a value betwe
 % In order to evaluate the different decisions modeled in a DN the impact of the decision's consequences need to be measured. The consequence of a decision is measured through a utility node. For example, we need to drive to work either via route A or route B in the shortest amount of time. Clearly in this case the utility is based on the amount of time required to travel to work and the route that results in the lowest amount of time gets a higher associated utility value. In Figure~\ref{fig:decision-graph} an example of a DN is shown with a single decision variable (square node) and utility variable (diamond node) together with several random variables (oval nodes). Since a DN is generalization of a BN we start discussing BNs first.
 
 \subsection{Dynamic Decision Networks}
-
 {\red Explain the basics of DDN - Patrick}
-In the Figure~\ref{fig:decision-graph} a static influence diagram was shown. However, intercepting a smuggler's go-fast is very dynamic environment where the location of the go-fast and the patrol ship are constantly changing. In these environment sequential decision making is required in order to successfully intercept the go-fast. In Figure~\ref{fig:dynamic-decision-graph} a {\em dynamic decision network (DDN)} is shown based on the influence diagram shown in Figure~\ref{fig:decision-graph}. The DDG \ldots
+
+In the Figure~\ref{fig:decision-graph} a static influence diagram was shown. However, intercepting a smuggler's go-fast is very dynamic environment where the location of the go-fast and the patrol ship are constantly changing. In these environments sequential decision making is required in order to successfully intercept the go-fast. In Figure~\ref{fig:dynamic-decision-graph} a {\em dynamic decision network (DDN)} is shown based on the influence diagram shown in Figure~\ref{fig:decision-graph}. The DDG \ldots
 
 \subsection{Partially Observable Markov Decision Process}
+{\red connect this to the previous section - Tom \& Patrick}
 
-A Markov Decision Process (MDP) \cite{bellman1957dynamic,mdp} describes synchronous interations between an agent and the world. MDP's are used to model sequential decision making procresses, for which both exact and approximate methods of inference exist. At each time-step an agent takes an action that changes the state of the world. The agent can collect rewards, which are received when it takes certain actions in certain states. An MDP is formally described as the tuple $\langle\S,\mathcal{A},T,R,\gamma\rangle$:
+A Markov Decision Process (MDP) \cite{bellman1957dynamic,mdp} describes synchronous interactions between an agent and the world. MDPs are used to model sequential decision making problems. At each time-step an agent takes an action that changes the state of the world. The agent can collect rewards, which are received when it takes certain actions in certain states. An MDP is formally described as the tuple $\langle\S,\mathcal{A},T,R,\gamma\rangle$:
 
 \begin{itemize}
-\item $\S$ is the finite set of states of the world,
-\item $\mathcal{A}$ is the finite set of actions,
-\item $T:\S\times\mathcal{A}\rightarrow\P(s'|a,s)$ is the state transition function \ie the probability of moving to state $s'$ given that action $a$ was performed in state $s$,
-\item $R:\S\times\mathcal{A}\rightarrow\mathbb{R}$ is the reward function, which maps each state-action pair to a real reward. Note that this can represent a cost, \ie $r < 0$,
+\item $\S$ is the set of states of the world,
+\item $\mathcal{A}$ is the set of actions,
+\item $T:\S\times\mathcal{A}\to\P(s'|a,s)$ is the state transition function \ie the probability of moving to state $s'$ given that action $a$ was performed in state $s$,
+\item $R:\S\times\mathcal{A}\to\mathbb{R}$ is the reward function, which maps each state-action pair to a real reward. Note that this can represent a cost, \ie $r < 0$,
 \item $\gamma$ is the discount factor, representing the difference in preference between present and future rewards.
 \end{itemize}
 
-In some problems, the state space $\S$ be factorized, meaning that it can be represented by discrete set of state variables. As such, the state $\S$ can be described as a vector $\left(X_1,\ldots,\X_n\right)$ where each variable $X_i$ can take on a value in its domain.
-The goal of an MDP is to find a policy $\pi:\S\rightarrow\mathcal{A}$ that maps states to actions such that the reward is maximized. Often, a horizon $h$ is introduced to limit the look-ahead distance.
+The state space $\S$ of an MDP can be factored, meaning that it is represented by a discrete set of state variables. As such, the state $\S$ can be described as a vector $\left(X_1,\ldots,\X_n\right)$ where each variable $X_i$ can take on a value in its domain. 
 
-In the case of MDP's the assumption is made that an agent can fully observe the world, as is the case in for instance games of complete information like Chess or Checkers. However, in many real-world domains, the state of the world is not fully observable, and the agent cannot determine the state it is in with complete accuracy. To represent this uncertainty over the agent's current state and observations, the MDP model can be extended to the Partially Observable MDP (POMDP) \cite{aastrom1965optimal,pomdp}. A POMDP can be formally described as $\langle\S,\mathcal{A},T,R,\Omega,O,\gamma\rangle$:
+The goal of an MDP is to find a policy $\pi:\S\rightarrow\mathcal{A}$ that maps states to actions such that the reward is maximized. Often, a horizon $h$ is introduced to limit the look-ahead distance. In the case of MDPs the assumption is made that an agent can fully observe the world, as is the case in for instance games of complete information like Chess or Checkers. However, in many real-world domains, the state of the world is not fully observable, and the agent cannot determine the state it is in with complete accuracy. To represent this uncertainty over the agent's current state and observations, the MDP model can be extended to the Partially Observable MDP (POMDP) \cite{aastrom1965optimal,pomdp}. A POMDP can be formally described as $\langle\S,\mathcal{A},T,R,\Omega,O,\gamma\rangle$:
 
 \begin{itemize}
 \item $\S,\mathcal{A},T,R,$ and $\gamma$ describe the Markov Decision Process,
-\item $\Omega$ is the finite set of possible observations,
-\item $O:\S\times\mathcal{A}\rightarrow\P(o|a,s')$ is the probability of observing $o$ in state $s'$, after performing action $a$. 
+\item $\Omega$ is the set of possible observations,
+\item $O:\S\times\mathcal{A}\to\P(o|a,s')$ is the probability of observing $o$ in state $s'$, after performing action $a$. 
 \end{itemize}
 
-POMDP's require an agent to maintain an internal {\it belief state}, in which all knowldge about the current state is summarized. POMDP's are harder to solve exactly than MDP's, and require approximate methods to be used in real-world problems \cite{pineau2006anytime}.
+POMDP's require an agent to maintain an internal {\it belief state}, in which all knowledge about the current state is summarized. POMDP's are harder to solve exactly than MDP's, and require approximate methods to be used in real-world problems \cite{pineau2006anytime}.
 
-Recently, the MDP framework was extended to include multi-agent decision-making, \ie MMDP and MPOMDP. In these cases, the action space $\mathcal{A}$ represents the joint-actions $\A_{m} = \A_1\times\ldots\times\A_n$ of all $n$ agents under consideration.Whereas solving an MDP can be performed in polynomial time, solving multi-agent problems suffer from the fact that their action space increases exponentially with the number of agents.
+The MDP approach has been extended to include multi-agent decision-making, \ie MMDP and MPOMDP. In these cases, the action space $\mathcal{A}$ represents the joint-actions $\A_{m} = \A_1\times\ldots\times\A_n$ of all $n$ agents under consideration. Where solving an MDP can be performed in polynomial time, solving multi-agent problems suffer from the fact that their action space increases exponentially with the number of agents.
 
-In Section \ref{sec:scenario-based-dm} we will use the POMDP model developped in this subsection to detail an approach to planning and decision-making under uncertainty in the smuggler use-case.
+In Section \ref{sec:scenario-based-dm} we will use the POMDP model developed in this section to detail an approach to planning and decision-making under uncertainty in the smuggler use-case.
 
 % Making decisions based on a POMDP defined in the previous section
 
@@ -285,7 +287,12 @@ In Section \ref{sec:scenario-based-dm} we will use the POMDP model developped in
 
 {\red Method to find decisions based on repeated sampling of the state-space. requires: Discrete action model and state space, and a method of defining the current belief of the smuggler's location. - Tom}
 
-\subsection{World Representation}
+\subsection{State Representation}
+\label{sub:staterep}
+
+The maritime security domain generally plays out over a sizable area. Based on the problem, the area of interest can span over  dozens of kilometers. Planning on a (near-)continuous state space would soon become intractable based on the number of hidden locations for the smuggler and action spaces for the intercept vehicles. Therefore we propose a framework in which an area of interest is factored into discrete elements before or at the start of an operation. Based on the surface-area of interest and the required precision of the mission, a location of interest is selected on a geographical system, which is then divided into discrete cells.
+
+Given the factored state space $S = \left(X_1,\ldots,\X_n\right)$, the domain of each variable $X_i$ can be defined by the occupying agent(s) \ie $x_i = \left(x_{i1}, \ldots, x_{ik}\right)$, where $x_{ij}\in\left(boat_i, car_i, plane_i\right)$ {\red better names for these}. Each variable's domain is restricted based on the underlying geographic characteristics \ie boats can only occupy a location on water. Moreover, political borders and no-fly zones can further restrict the domain of each variable.
 
 {\red How do we represent the possible states - Tom}
 
@@ -293,15 +300,15 @@ In Section \ref{sec:scenario-based-dm} we will use the POMDP model developped in
 
 {\red how do we estimate the position of the smugglers based on the observations and the context: description of particle filter - Rik}
 
-\subsection{Multi-Agent Decision Making}
+\subsection{Multi-Agent Decision-Making}
 
-{\red some thoughts on how to handle these kind of problems (i.e. MPOMDP or DEC-POMDP) - Tom \& Patrick}
+{\red some thoughts on how to handle these kind of problems (i.e. MPOMDP or DEC-POMDP, using MCTS (UCT/BRUE etc)) - Tom \& Patrick}
 % Cite Ad hoc Autonomous agent teams
 % Cite multi-agent II pursuit games
 
 \section{Conclusion}
 \begin{itemize}
-\item Summarise what we discussed in the paper
+\item Summarize what we discussed in the paper
 \item State what the next steps are
 \item Future work
 \end{itemize}
