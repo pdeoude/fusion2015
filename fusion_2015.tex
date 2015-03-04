@@ -281,7 +281,7 @@ In Section \ref{sec:scenario-based-dm} we will use the POMDP model developed in 
 \section{Scenario-Based Decision-Making}
 \label{sec:scenario-based-dm}
 
-{\red explain what we want to do, why do we need to plan, what is the role of scenarios, what kind of decisions do we want to make? - Tom \& Patrick}
+{\red explain what we want to do, why do we need to plan, what is the role of scenarios, what kind of decisions do we want to make? assumptions made! - Tom \& Patrick}
 
 \subsection{Planning Under Uncertainty}
 
@@ -290,14 +290,19 @@ In Section \ref{sec:scenario-based-dm} we will use the POMDP model developed in 
 \subsection{State Representation}
 \label{sub:staterep}
 
+The state represents the locations of the set of agents $\Psi$ under consideration for the planner. Each agent $\psi_i$ occupies a single location on a geographical map. Where the map is defined by the underlying geographical area in which the scenario is located.
+
 The maritime security domain generally plays out over a sizable area. Based on the problem, the area of interest can span over  dozens of kilometers. Planning on a (near-)continuous state space would soon become intractable based on the number of hidden locations for the smuggler and action spaces for the intercept vehicles. Therefore we propose a framework in which an area of interest is factored into discrete elements before or at the start of an operation. Based on the surface-area of interest and the required precision of the mission, a location of interest is selected on a geographical system, which is then divided into discrete cells.
 
-Given the factored state space $S = \left(X_1,\ldots,\X_n\right)$, the domain of each variable $X_i$ can be defined by the occupying agent(s) \ie $x_i = \left(x_{i1}, \ldots, x_{ik}\right)$, where $x_{ij}\in\left(boat_i, car_i, plane_i\right)$ {\red better names for these}. Each variable's domain is restricted based on the underlying geographic characteristics \ie boats can only occupy a location on water. Moreover, political borders and no-fly zones can further restrict the domain of each variable.
+Given the factored state space $S = \left(X_1,\ldots,X_n\right)$, the domain of each variable $X_i$ can be defined by the occupying agent(s) \ie $x_i=\left(x_{i1},\ldots,x_{ik}\right)$, where $x_{ij}\in\Psi$. Each variable's domain is restricted based on the underlying geographic characteristics \ie boats can only occupy a location on water. Moreover, political borders and no-fly zones can further restrict the domain of each variable.
 
 {\red How do we represent the possible states - Tom}
 
 \subsection{Belief State Estimation with Context}
 
+In the defined state representation, the locations of the friendly {\red define friendly/hostile somewhere, perhaps bluefor and opfor are better terms?} agents are assumed to be known at each point in time. This assumption is based on the availability of GPS localization and wireless communication techniques. However, the location of the smuggler is unknown to the agents and therefore our planner. Given that the goal of the multi-agent plan is to locate, track and capture the smuggler, respectively, the combined set of agents needs to maintain a belief over the current location of the smuggler's go-fast.
+
+{\red also explain that we do not know the exact location of the go-fast, and that we expect only sparse and/or unreliable observations}
 {\red how do we estimate the position of the smugglers based on the observations and the context: description of particle filter - Rik}
 
 \subsection{Multi-Agent Decision-Making}
