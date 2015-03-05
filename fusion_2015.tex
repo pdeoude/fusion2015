@@ -114,12 +114,15 @@ Area where the intercept vehicles can intercept the smugglers' go-fast. \\
 \end{table}
 
 
+%TODO define intercept area
+
+
 % Timely response in Search and Rescue (SAR) operations is most critical in the first few hours after the emergency has taken place. Generally after the initial hours of the incident the chances of finding possible survivors is significantly reduced. Before the actual rescue operation can commence the main challenge is to locate the incident site. In order to locate the incident site the available resources, such as helicopter, planes, ships, search crew, dogs, etc. must deployed as fast as possible at the right location to minimize the localization time. In order to determine initial search location observation that can be used to infer the the possible incident location can be used.
 
-\section{Decision Network}
+\section{Scenario Modeling}
 \label{sec:influence-diagrams}
 
-In \cite{conrado14if} we used BNs to represent a symmetric scenario tree capturing all possible scenarios given the modeled scenario variables. The decision maker can use this BN to manage the set of scenario using probabilistic inference to do pruning, ranking and what-if exploration. Based on this information the decision maker decides on which course of action is best by making a decision. This decision results in an action or a set of actions that influences further development of the scenario. For example, sailing my intercept vehicle in the wrong direction moving away from the smugglers results in fewer or none possible intercept areas. In this paper we extend the scenario reasoning framework discussed in \cite{conrado14if} to include the decision maker's decisions explicitly. The models that allows us to model decisions into the BN are called decision network. A {\em decision network (DN)} (also influence diagram or decision graph \cite{russell02bn,howard84rpada,jensen07book}) is a concise graphical and mathematical representation of a decision problem. DNs are a generalization of BNs so we therefore start discussing BNs first.
+In \cite{conrado14if} we used BNs to represent a symmetric scenario tree capturing all possible scenarios given the modeled scenario variables. The decision maker can use this BN to manage the set of scenario using probabilistic inference to do pruning, ranking and what-if exploration. Based on this information the decision maker decides on which course of action is best by making a decision. This decision results in an action or a set of actions that influences further development of the scenario. For example, sailing my intercept vehicle in the wrong direction, moving away from the smugglers, results in fewer or none possible intercept areas. In this paper we extend the scenario reasoning framework discussed in \cite{conrado14if} to include the decision maker's decisions explicitly. A BN can be extended to include the decision maker's decision. Such a model is called a decision network and generalized BNs. Before we start explaining DNs we first discuss BNs.
 
 
 \begin{figure}
@@ -133,57 +136,11 @@ In \cite{conrado14if} we used BNs to represent a symmetric scenario tree capturi
 
 \subsection{Bayesian networks}\label{sec:bayesian-networks}
 
-% \begin{figure}
-%  \centering
-% \subfloat[\label{fig:bn-example}]{\scalebox{.7}{
-% $
-% \psmatrix[colsep=.7cm,rowsep=.7cm,mnode=circle]
-%  & [name=W] W  \\
-% [name=D] D & & [name=I] I\; \\
-%  & [name=A] A \\
-% [name=F] F 
-% \psset{arrowscale=2}
-% \psset{nodesep=1pt}
-% \ncline{->}{W}{I}
-% \ncline{->}{D}{I}
-% \ncline{->}{D}{A}
-% \ncline{->}{F}{A}
-% \ncline{->}{A}{I}
-% \endpsmatrix$}}\qquad
-% \subfloat[\label{fig:bn-example2}]{\scalebox{.7}{
-% $
-% \psmatrix[colsep=.7cm,rowsep=.7cm,mnode=circle]
-%  & [name=W] W  \\
-% [name=D] D & & [name=I] I\; \\
-%  & [name=A] A \\
-% [name=F] F & & [name=R] R
-% \psset{arrowscale=2}
-% \psset{nodesep=1pt}
-% \ncline{->}{W}{I}
-% \ncline{->}{D}{I}
-% \ncline{->}{D}{A}
-% \ncline{->}{F}{A}
-% \ncline{->}{A}{I}
-% \ncline{->}{A}{R}
-% \endpsmatrix$}}\\[10pt]
-% \subfloat[\label{fig:cpt-example}]{
-%  \begin{tabular}{r|ccc|c|c} 
-% $D$	& \multicolumn{3}{c|}{X} & Y &  Z \\ 
-%  \diagbox{$A$}{$F$} & Small & Medium & Large & & \\
-% \hline
-%  No & 0.1 & 1 & 1 & \ldots & \ldots \\
-%  Yes at 1 & 0.9 & 0 & 0 & \ldots & \ldots \\ 
-%  Yes at 2 & 0 & 0 & 0 & \ldots & \ldots \\ 
-%  Yes at 3 & 0 & 0 & 0 & \ldots & \ldots \\ 
-%  \end{tabular}}
-% \caption{Bayesian network of the causal model shown in Figure~\ref{fig:causal-graph1} (a) and Figure~\ref{fig:causal-graph2} (b), as well as a CPT of the discrete conditional probability distribution $P(A|D,F)$ (c).}
-% \end{figure}
-
 {\red needs to be reworked - Patrick}
 
-A Bayesian network (BN) is a probabilistic graphical model that efficiently represents a joint probability distribution (JPD) over a set of random variables \cite{jensen01book,pearl88book}. A BN is represented through a Directed Acyclic Graph (DAG), where each node in the DAG corresponds to a random variable of the JPD. For example, the causal graphs shown in Figure~ 2 can be captured by the DAGs shown in Figure 5a and~\ref{fig:bn-example}, where scenario variables (solid circles in Figure 2) are represented as random variables (nodes), and each possible scenario variable state corresponds to a random variable state. 
-Note that, the range of states for the scenario variables (and therefore the range of states for the random variables) is not determined a priori but as the estimation processes take place, as explained in section II, on scoping of states.
-For each node given its parents in the DAG, a conditional probability distribution (CPD) needs to be specified. For instance, the CPD $P(A|D,F)$ must be specified for the variable $RefuelingAction$ ($A$). Discrete CPDs can be represented through conditional probability tables (CPTs).  Since the variables $D$, $F$ and $A$ are discrete, the CPD $P(A|D,F)$ can be represented through the CPT shown in Figure~\ref{fig:cpt-example}. This CPT expresses that, given destination X and a small amount of fuel on board, the chance that a refueling action takes place (at location 1) is $0.9$, i.e. $P$($A$~=~Yes~at~1$|$$D$~=~X,~$F$~=~Small) = 0.9. For larger amounts of fuel (and the same destination X), it is estimated that no refueling action takes place. Moreover, there is no chance that the refueling action takes place at locations 2 and 3, as these locations are farther than X itself. This example shows that incompatibility of state combinations can simplify the specification of CPTs for scenario variables, as the probabilities of such combinations are zero.
+A Bayesian network (BN) is a probabilistic graphical model that efficiently represents a joint probability distribution (JPD) over a set of random variables \cite{jensen01book,pearl88book}. A BN is represented through a Directed Acyclic Graph (DAG), where each node in the DAG corresponds to a random variable of the JPD. For example, the causal graph shown in Figure~\ref{fig:causal-model} could describe a DAG of a BN where the scenario variables (solid circles in Figure~\ref{fig:causal-model} are represented as random variables (nodes), and each possible scenario variable state corresponds to a random variable state\footnote{. 
+Note that, the range of states for the scenario variables (and therefore the range of states for the random variables) is not determined a priori but as the estimation processes take place, as explained in \cite{conrado14if} on scoping of states.}
+For each node given its parents in the DAG, a conditional probability distribution (CPD) needs to be specified. For instance, the CPD $P(LS|D)$ must be specified for the variable $LocationSmuggler$ ($LS$). Discrete CPDs can be represented through conditional probability tables (CPTs).  Since the variables $LS$ and $D$ are discrete, the CPD $P(LS|D)$ can be represented through the CPT shown in Figure~\ref{fig:cpt-example}. This CPT expresses that, given destination X and a small amount of fuel on board, the chance that a refueling action takes place (at location 1) is $0.9$, i.e. $P$($A$~=~Yes~at~1$|$$D$~=~X,~$F$~=~Small) = 0.9. For larger amounts of fuel (and the same destination X), it is estimated that no refueling action takes place. Moreover, there is no chance that the refueling action takes place at locations 2 and 3, as these locations are farther than X itself. This example shows that incompatibility of state combinations can simplify the specification of CPTs for scenario variables, as the probabilities of such combinations are zero.
 
 Before the introduction of BNs, probabilistic inferences were performed directly on a JPD defined over several variables. This, however, limited such operations only to JPDs defined over a small set of variables due to the combinatorial complexity. A Bayesian network, on the other hand, exploits conditional independencies between the random variables. Consequently, the JPD can be factorized into CPDs for each variable in the model. 
 For example, considering the BN shown in Figure 5a, the JPD $P(\VV)$ (where $\VV$\footnote{In this section, a single random variable is presented as an uppercase letter and its states as lowercase letters. A set of random variables and of states are shown as bold uppercase and bold lowercase letters, respectively.} = $\{W, D, F, A, I\}$) factorizes into a set of CPDs, i.e.
@@ -219,33 +176,52 @@ Moreover, one of the main strengths of BNs is the possibility to perform predict
 Also in the second phase of the example (whose BN is shown in Figure~\ref{fig:bn-example}), a new variable $R$ is added to the model to capture the received refuel report. The model needs to be updated by specifying the CPD $P(R|A)$ as well. The new JPD $P(W,D,F,A,I,R) = P(W)P(D)P(F)P(A|D,F)P(I|W,D,A)P(R|A)$ can be used to re-compute the likelihood of the scenarios, given the occurrence of the refueling report at position 1.
 
 
+
+
+\subsection{Decision Networks}\label{sec:decision-networks}
+
+A {\em decision network (DN)} (also influence diagram or decision graph \cite{russell02bn,howard84rpada,jensen07book}) is a concise graphical and mathematical representation of a decision problem. For example, the BN described in the previous section can be extended into the decision network (DN) shown in Figure~\ref{fig:decision-graph}. This DN consists of the same chance nodes as in the causal model in Figure~\ref{fig:causal-model} plus a decision node $B$ and a utility node $U$. A decision node represents possible actions the decision maker can take. In this case the actions are the different bearings the intercept vehicle can travel, such as North, East, South-west, etc. Next to the decisions we have to model the desirability of the states we end up in after taking an action. This desirability is modeled through the utility node and is dependent on the location of the intercept vehicle and areas. It is desirable that the intercept vehicle is near or at the location of the intercept areas prior to arrival of the smugglers, such that we are able to intercept the smugglers. Thus, the preference of the decision maker can be captured through a utility function that uses the position of the intercept vehicle and intercept areas as arguments.
+
+The location of the intercept vehicle\footnote{In this section we assume there is only a single intercept vehicle} and the smuggler's go-fast constitute a state $s$ in a set of states $\S$ defining the smuggler's domain. However, due to partial observability of the current state, the decision maker (also called agent in decision theoretic literature) has to maintain a belief $P(\S = s | a, \epsilon)$ over the possible states it might be in given an action $a$ and evidence $\epsilon$. The reason for this is that the position of the smugglers is not directly observable after an action $a$, but needs to be estimated from observations $\epsilon$, such as radar, sonar, visual observations or Intel about a possible destination or refueling location (see also causal model in Figure~\ref{fig:causal-model}). Since the agent does not know in which state it is it needs to compute an expected utility based on the utility function $U(s)$ capturing the preferences of the decision maker:
+
+\begin{eqnarray}
+ EU(a|\epsilon) = \sum_{s'}P(\S = s'|a, \epsilon)U(s')
+\end{eqnarray}
+
+With the help of the expected utility $EU(a|\epsilon)$ the best action $a^*$ can be computed with:
+
+\begin{eqnarray}\label{eq:meu}
+ a^* = \argmax_a EU(a|\epsilon)
+\end{eqnarray}
+
+Equation~\ref{eq:meu} presents two challenges we need to address in order to compute the best action $a^*$, namely the estimation of $P(\S = s'|a, \epsilon)$ and the computation of the utility using the utility function $U(s')$.
+
+
+% 
+% 
+% {\red needs to be reworked - Patrick}
+% 
+% The BN described in the previous section can be extended into the decision network (DN) shown in Figure~\ref{fig:decision-graph}. This DN consists of the same nodes as in the causal model in Figure~\ref{fig:causal-model} plus a decision node $D$ and a utility node $U$. A decision node represents possible actions the decision maker can take. In this case the actions are the different directions the patrol ship can travel, such as North, East, South-west, etc. The utility node, on the other hand, represents the utility function where the parents of the utility node, i.e. $\{LS,LP,IA\}$, are the arguments of this function:
+% 
+% \[
+%  U(LS,LP,IA) = -\alpha d(LS,LP) - (1-\alpha) d(IA,LP),
+% \]
+% 
+% where $d(X,Y)$ is the distance between $X$ and $Y$ and $\alpha$ is a value between $[0,1]$ that is used to control the importance of either $d(LS,LP)$ or $d(IA,LP)$. In case $\alpha=1$ the utility function is $U(LS,LP,IA) = -d(LS,LP)$ and therefore solely based on the distance between the smuggler's boat and the patrol ship, while $\alpha=0$ the utility function is solely based on the distance of the patrol ship and the intercept area. The choice of $\alpha$ should be based on the information that is available. If more information is available that could help to locate the smuggler's go-fast then we want to weight  $d(LS,LP)$ more by using a higher $\alpha$ value. A higher utility is obtained when the patrol ship is either closer to the smuggler's location or to an intercept area (where eventually the smugglers should travel to).
+
+% In order to evaluate the different decisions modeled in a DN the impact of the decision's consequences need to be measured. The consequence of a decision is measured through a utility node. For example, we need to drive to work either via route A or route B in the shortest amount of time. Clearly in this case the utility is based on the amount of time required to travel to work and the route that results in the lowest amount of time gets a higher associated utility value. In Figure~\ref{fig:decision-graph} an example of a DN is shown with a single decision variable (square node) and utility variable (diamond node) together with several random variables (oval nodes). Since a DN is generalization of a BN we start discussing BNs first.
+
 \begin{figure*}[!t]
 \begin{center}
  \includegraphics[width=.95\textwidth]{img/dynamic-decision-graph.eps}
- \caption{Dynamic decision graph of the influence diagram shown in Figure~\ref{fig:decision-graph}.}
- % decision-graph.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=-0 -0 424 277
+ \caption{Dynamic decision graph of the influence diagram shown in Figure~\ref{fig:decision-graph}.}\label{fig:ddn} 
 \end{center}
 \end{figure*}
 
 
-\subsection{Decision network}
-
-{\red needs to be reworked - Patrick}
-
-The BN described in the previous section can be extended into the decision network (DN) shown in Figure~\ref{fig:decision-graph}. This DN consists of the same nodes as in the causal model in Figure~\ref{fig:causal-model} plus a decision node $D$ and a utility node $U$. A decision node represents possible actions the decision maker can take. In this case the actions are the different directions the patrol ship can travel, such as North, East, South-west, etc. The utility node, on the other hand, represents the utility function where the parents of the utility node, i.e. $\{LS,LP,IA\}$, are the arguments of this function:
-
-\[
- U(LS,LP,IA) = -\alpha d(LS,LP) - (1-\alpha) d(IA,LP),
-\]
-
-where $d(X,Y)$ is the distance between $X$ and $Y$ and $\alpha$ is a value between $[0,1]$ that is used to control the importance of either $d(LS,LP)$ or $d(IA,LP)$. In case $\alpha=1$ the utility function is $U(LS,LP,IA) = -d(LS,LP)$ and therefore solely based on the distance between the smuggler's boat and the patrol ship, while $\alpha=0$ the utility function is solely based on the distance of the patrol ship and the intercept area. The choice of $\alpha$ should be based on the information that is available. If more information is available that could help to locate the smuggler's go-fast then we want to weight  $d(LS,LP)$ more by using a higher $\alpha$ value. A higher utility is obtained when the patrol ship is either closer to the smuggler's location or to an intercept area (where eventually the smugglers should travel to).
-
-% In order to evaluate the different decisions modeled in a DN the impact of the decision's consequences need to be measured. The consequence of a decision is measured through a utility node. For example, we need to drive to work either via route A or route B in the shortest amount of time. Clearly in this case the utility is based on the amount of time required to travel to work and the route that results in the lowest amount of time gets a higher associated utility value. In Figure~\ref{fig:decision-graph} an example of a DN is shown with a single decision variable (square node) and utility variable (diamond node) together with several random variables (oval nodes). Since a DN is generalization of a BN we start discussing BNs first.
-
 \subsection{Dynamic Decision Networks}
-{\red Explain the basics of DDN - Patrick}
 
-In the Figure~\ref{fig:decision-graph} a static influence diagram was shown. However, intercepting a smuggler's go-fast is very dynamic environment where the location of the go-fast and the patrol ship are constantly changing. In these environments sequential decision making is required in order to successfully intercept the go-fast. In Figure~\ref{fig:dynamic-decision-graph} a {\em dynamic decision network (DDN)} is shown based on the influence diagram shown in Figure~\ref{fig:decision-graph}. The DDG \ldots
+In the Figure~\ref{fig:decision-graph} a decision network was shown for a, so called, one-shot decision. However, intercepting a smuggler that is actively trying to prevent interception governs an environment that is very dynamic. In such environments a one-shot decision is not sufficient and sequential decision making is required to be able to intercept the smugglers. In Figure~\ref{fig:dynamic-decision-graph} a {\em dynamic decision network (DDN)} is shown based on the one-shot DN shown in Figure~\ref{fig:decision-graph}.
 
 \subsection{Partially Observable Markov Decision Process}
 {\red connect this to the previous section - Tom \& Patrick}
