@@ -325,6 +325,9 @@ MCTS only requires a generative model, or simulator, to generate possible histor
 
 Each simulation consist of two parts, 1) the \emph{selection} step, where actions are selected and simulated inside the tree according to the {\it selection policy}, and 2) the \emph{simulation} step, where moves are played according to a simulation strategy, outside the tree. After each simulation, its cumulative result $R_t = \sum\nolimits_{k=t}^{\infty} \gamma^{k−t}r_k$ is backpropagated from the expanded leaf to the root.
 
+{\red waarom is exact belief bijhouden kut?}
+Several methods for dealing with partial observability in MCTS have been proposed such as Information Set MCTS and Counterfactual regret minimization \cite{cowling2012information,Lisy15Online}, but these approaches do not necessarily apply to general-purpose POMDPs. Silver and Veness \cite{silver2010monte} proposed to maintain a separate $V(ha)$ at each node to maintain a node-value over previous histories. On the other hand, Somani et al. \cite{somani2013despot} apply a technique which they name regularization to the search process, in which the results stored at each node comprise the average over all histories. {\red check this!}.
+
 {\red some thoughts on how to handle these kind of problems (i.e. MPOMDP or DEC-POMDP, using MCTS (UCT/BRUE etc)) - Tom \& Patrick}
 % Cite Ad hoc Autonomous agent teams
 % Cite multi-agent II pursuit games
