@@ -226,31 +226,31 @@ In the Figure~\ref{fig:decision-graph} a decision network was shown for a, so ca
 \subsection{Partially Observable Markov Decision Process}
 {\red connect this to the previous section - Tom \& Patrick}
 
-A Markov Decision Process (MDP) \cite{bellman1957dynamic,mdp} describes synchronous interactions between an agent and the world. MDPs are used to model sequential decision making problems. At each time-step an agent takes an action that changes the state of the world. The agent can collect rewards, which are received when it takes certain actions in certain states. An MDP is formally described as the tuple $\langle\S,\mathcal{A},T,R,\gamma\rangle$:
+A Markov Decision Process (MDP) \cite{bellman1957dynamic,mdp} describes synchronous interactions between an agent and the world. MDPs are used to model sequential decision making problems in which the current state determines the fully dynamics of the world. At each time-step $t$, an agent takes an action, changing the state and collecting a reward. An MDP is formally described as the tuple $\langle\S,\mathcal{A},\P,R,\gamma\rangle$:
 
 \begin{itemize}
-\item $\S$ is the set of states of the world,
-\item $\mathcal{A}$ is the set of actions,
-\item $T:\S\times\mathcal{A}\to\P(s'|a,s)$ is the state transition function \ie the probability of moving to state $s'$ given that action $a$ was performed in state $s$,
+\item $\S$ is the set of states of the world. The state space can be factored, meaning that it is represented by a discrete set of state variables, described as a vector $\left(X_1,\ldots,\X_n\right)$ where each variable $X_i$ can take on a value in its domain,
+\item $\mathcal{A}$ is the set of possible actions. In the case of a multi-agent problem $\mathcal{A}$ represents the joint-actions $\A_{m} = \A_1\times\ldots\times\A_n$ of all $n$ agents under consideration,
+\item $\P:\S\times\mathcal{A}\to\P(s'|a,s)$ is the state transition function \ie the probability of moving to state $s'$ given that action $a$ was performed in state $s$,
 \item $R:\S\times\mathcal{A}\to\mathbb{R}$ is the reward function, which maps each state-action pair to a real reward. Note that this can represent a cost, \ie $r < 0$,
 \item $\gamma$ is the discount factor, representing the difference in preference between present and future rewards.
 \end{itemize}
 
-The state space $\S$ of an MDP can be factored, meaning that it is represented by a discrete set of state variables. As such, the state $\S$ can be described as a vector $\left(X_1,\ldots,\X_n\right)$ where each variable $X_i$ can take on a value in its domain. 
-
-The goal of an MDP is to find a policy $\pi:\S\rightarrow\mathcal{A}$ that maps states to actions such that the reward is maximized. Often, a horizon $h$ is introduced to limit the look-ahead distance. In the case of MDPs the assumption is made that an agent can fully observe the world, as is the case in for instance games of complete information like Chess or Checkers. However, in many real-world domains, the state of the world is not fully observable, and the agent cannot determine the state it is in with complete accuracy. To represent this uncertainty over the agent's current state and observations, the MDP model can be extended to the Partially Observable MDP (POMDP) \cite{aastrom1965optimal,pomdp}. A POMDP can be formally described as $\langle\S,\mathcal{A},T,R,\Omega,O,\gamma\rangle$:
+In the case of MDPs the assumption is made that an agent can fully observe the world, as is the case in for instance games of complete information like Chess or Checkers. However, in many real-world domains, the state of the world is not fully observable, and the agent cannot determine the state it is in with complete accuracy after each action. To represent this uncertainty over the agent's current state and observations, the MDP model can be extended to the Partially Observable MDP (POMDP) \cite{aastrom1965optimal,pomdp}: 
 
 \begin{itemize}
-\item $\S,\mathcal{A},T,R,$ and $\gamma$ describe the Markov Decision Process,
+\item $\S,\mathcal{A},\P,R,$ and $\gamma$ describe the MDP,
 \item $\Omega$ is the set of possible observations,
-\item $O:\S\times\mathcal{A}\to\P(o|a,s')$ is the probability of observing $o$ in state $s'$, after performing action $a$. 
+\item $O:\S\times\mathcal{A}\to\P(o|s)$ is the probability of observing $o$ in state $s$. 
 \end{itemize}
 
-POMDP's require an agent to maintain an internal {\it belief state}, in which all knowledge about the current state is summarized. POMDP's are harder to solve exactly than MDP's, and require approximate methods to be used in real-world problems \cite{pineau2006anytime}.
+A history describes a sequence of actions and observations, $h_t = {a_1, o_1, \ldots, a_t, o_t}$. In a POMDP agent(s) maintain an internal {\it belief state} $\B = P(s_t | h_t)$, in which the probability distribution over the possible states are summarized given history $h_t$. The agents' action selection policy $\pi(h,a)$ determines the probability distribution $P(a_{t+1}|h_t)$ over actions, given its current history, and the value function $V_{\pi}(h)$ is the expected {\it return} from state $s$ when following policy $\pi$. The return $R_t = \sum\nolimits_{k=t}^{\infty} \gamma^{k−t}r_k$ is the total discounted reward accumulated from time $t$ onwards. In any POMDP there is at least one optimal policy $π^*(h, a)$ with the optimal value function.
 
-The MDP approach has been extended to include multi-agent decision-making, \ie MMDP and MPOMDP. In these cases, the action space $\mathcal{A}$ represents the joint-actions $\A_{m} = \A_1\times\ldots\times\A_n$ of all $n$ agents under consideration. Where solving an MDP can be performed in polynomial time, {\red cite} solving multi-agent problems suffer from the fact that their action space increases exponentially with the number of agents.
+POMDP's are harder to solve exactly than MDP's, suffering from the {\it curse of dimensionality} as well as the {\it curse of history}. Therefore, they require approximate methods to be used in real-world problems \cite{pineau2006anytime}.
 
-In Section \ref{sec:scenario-based-dm} we will use the POMDP model developed in this section to detail an approach to planning and decision-making under uncertainty in the smuggler use-case.
+% A history is a sequence of actions and observations, ht = {a1, o1, ..., at, ot} or htat+1 = {a1, o1, ..., at, ot, at+1}. The agent’s action-selection behaviour can be described by a policy, π(h, a), that maps a history h to a probability distribution over actions, π(h, a) = P r(at+1 = a|ht = h). The return Rt = P∞ k=t γk−trk is the total discounted reward accumulated from time t onwards, where γ is a discount factor specified by the environment. The value function Vπ(h) is the expected return from state s when following policy π, Vπ (h) = Eπ[Rt|ht = h]. The optimal value function is the maximum value function achievable by any policy, V∗(h) = maxπVπ(h). In any POMDP there is at least one optimal policy π∗(h, a) that achieves the optimal value function. The belief state is the probability distribution over states given history h, B(s, h) = P r(st = s|ht = h).
+
+In Section \ref{sec:scenario-based-dm} we will use the POMDP model developed in this section to detail an approach to planning and decision-making under uncertainty in the smuggler use case.
 
 % Making decisions based on a POMDP defined in the previous section
 
@@ -260,7 +260,7 @@ In Section \ref{sec:scenario-based-dm} we will use the POMDP model developed in 
 {\red explain what we want to do, why do we need to plan, what is the role of scenarios, what kind of decisions do we want to make? assumptions made! - Tom \& Patrick}
 {\red we are planning on a strategic level, with a high degree of abstraction. mention how this plan can be used, what is required to execute it etc.}
 
-\begin{figure}
+\begin{figure}[t]
 \begin{center}
  \includegraphics[width=.45\textwidth]{img/planning_archi.png}
  \caption{Architecture of multi-layered planner.}\label{fig:planning-archi}
@@ -277,6 +277,8 @@ Locating and capturing the smuggler as described in the use-case requires coordi
 \item capturing the smuggler by strategic positioning of patrol boats.
 \end{itemize}
 Planning these tasks requires close coordination between the agents. A joint strategy for the execution of such a plan, based on the uncertain knowledge provided by prior knowledge and observations a may play a large role in the success of such missions. Moreover, exploring possible future scenario's based on the expected behavior of the smuggler may offer new insights.
+
+
 
 {\red Method to find decisions based on repeated sampling of the state-space. requires: Discrete action model and state space, and a method of defining the current belief of the smuggler's location. - Tom}
 
@@ -298,24 +300,30 @@ In the defined state representation, the locations of the friendly {\red define 
 {\red also explain that we do not know the exact location of the go-fast, and that we expect only sparse and/or unreliable observations}
 {\red how do we estimate the position of the smugglers based on the observations and the context: description of particle filter - Rik}
 
-\section{Dynamic Multi-Agent Decision-Making}
+\section{Online Multi-Agent Decision-Making}
 \label{sec:ma-dec-mak}
 
-Using the described definition of the smugglers case, our goal is to find a joint strategy that minimizes the probability of escape for the smuggler. Based on the complexity and dynamic nature of the problem, constructing a plan off-line is not a feasible approach {\red cite?}. However, on-line planning offers the capability of establishing a plan that i) immediately generates an ongoing strategy, ii) which improves over time, and iii) can cope with incoming observations, sudden constraints, and changing situations.
+Using the described definition of the smugglers case as a POMDP, our goal is to find a joint strategy that minimizes the probability of escape for the smuggler. Online planning offers the capability of establishing a plan that i) immediately generates an ongoing strategy, ii) which improves over time, and iii) can cope with incoming observations, sudden constraints, and changing situations. Moreover, these dynamic nature of the problem requires an {\it anytime} planner, which can return a policy at any moment, rather than when the full search is completed.
 
-Using a forward search technique, 
+Using a forward search technique, the current history or belief is used to form an approximation of the optimal value function. Generally, online planning algorithms for POMDPs are based on point-based value iteration \cite{pineau2006anytime,ross2008online}, generating and traversing a search-tree in a heuristic best-first order. However, these techniques are only efficient if the POMDP is compactly factored or small, Moreover, these techniques cannot return a policy anytime, rather they require the search to be fully completed in order to return the optimal policy.
 
 {\red Mention: SPATAPS, etc.}
 
 \begin{figure}
 \begin{center}
  \includegraphics[width=.45\textwidth]{img/searchtree.png}
- \caption{Architecture of multi-layered planner.}\label{fig:searchtree}
+ \caption{Search procedure with determinization.}\label{fig:searchtree}
 \end{center}
 \end{figure}
 
 \subsection{Monte-Carlo Tree Search}
 \label{sub:mcts}
+
+Using Monte-Carlo methods for online planning is an active branch of research in the field of artificial intelligence \cf \cite{browne2012survey}. {\it Monte-Carlo tree search} (MCTS) \cite{coulom2007efficient,kocsis2006bandit} is a simulation-based best-first search technique for decision-making problems. MCTS has shown to improve performance in various domains, such as the two-player game Go \cite{lee2010current}, real-time strategy games \cite{browne2012survey}, arcade games such as Ms Pac-Man \cite{realtime2014}, and the Physical Traveling Salesman \cite{powleytsp}, but also in domains such as optimization, scheduling, and security \cite{browne2012survey}. Generally, these types domains can be represented as an MDP or POMDP, and new research has shifted focus to adapting MCTS specifically to these domains \cite{silver2010monte,Feldman12BRUE}. 
+
+MCTS only requires a generative model, or simulator, to generate possible histories in the domain. Given the definition of the POMDP it can generate a node for each state in the tree. Each node maintains a visit count $n(s, a)$, and value $Q(s, a)$ for each action. These values can be initialized to $0$ or with an initial heuristic value. MCTS grows a search tree incrementally over time, by \emph{expanding} a leaf node of the tree every simulation. Averaged values of the rewards stored at nodes represent an estimate of the value $V^{\prime}$ of the (partial) policy represented by its descendants.
+
+Each simulation consist of two parts, 1) the \emph{selection} step, where actions are selected and simulated inside the tree according to the {\it selection policy}, and 2) the \emph{simulation} step, where moves are played according to a simulation strategy, outside the tree. After each simulation, its cumulative result $R_t = \sum\nolimits_{k=t}^{\infty} \gamma^{k−t}r_k$ is backpropagated from the expanded leaf to the root.
 
 {\red some thoughts on how to handle these kind of problems (i.e. MPOMDP or DEC-POMDP, using MCTS (UCT/BRUE etc)) - Tom \& Patrick}
 % Cite Ad hoc Autonomous agent teams
