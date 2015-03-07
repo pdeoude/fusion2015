@@ -295,7 +295,13 @@ Similarly, the action space is factored based on the discretization of the state
 
 \subsection{Belief Filtering with Context}
 
-In the defined state representation, the locations of the friendly {\red define friendly/hostile somewhere, perhaps bluefor and opfor are better terms?} agents are assumed to be known at each point in time. This assumption is based on the availability of GPS localization and wireless communication techniques. However, the location of the smuggler is unknown to the agents and therefore our planner. Given that the goal of the multi-agent plan is to locate, track and capture the smuggler, respectively, the combined set of agents needs to maintain a belief over the current location of the smuggler's go-fast.
+In the defined state representation, the locations of the friendly {\red define friendly/hostile somewhere, perhaps bluefor and opfor are better terms? rik: I think friendly fits the notion here quite well. Blue force is a pretty militarized term in my opinion} agents are assumed to be known at each point in time. This assumption is based on the availability of GPS localization and wireless communication techniques. However, the location of the smuggler is unknown to the agents and therefore our planner. Given that the goal of the multi-agent plan is to locate, track and capture the smuggler, respectively, the combined set of agents needs to maintain a belief over the current location of the smuggler's go-fast.
+
+The challenge in the targeted domains is often that available sensors do not provide full coverage of the area of interest and therefore, observations are sparse, of low quality and disparate in nature. The belief of the target's true location is a probability distribution over his possible location. Generally, exact computation of this distribution is infeasible, so a suitable approximation algorithm is required.
+
+A common technique for target tracking is Particle Filters \cite{Blackman1999}. The PF-algorithm makes use of a set of particles, representing possible locations of the target. A particle's so-called importance factor represents the likelihood of that particle being correct. The distribution of the set of particles gives a measure for the uncertainty about the target’s true location.
+
+Given the current scenario it is possible to improve the PF's tracking performance, by ruling out particles that - based on the scenario - cannot be correct \cite{deOude2014}. This procedure can be used to sample the possible locations of the target in different scenarios. The predicted locations can in turn be used to improve the planning.
 
 {\red also explain that we do not know the exact location of the go-fast, and that we expect only sparse and/or unreliable observations}
 {\red how do we estimate the position of the smugglers based on the observations and the context: description of particle filter - Rik}
