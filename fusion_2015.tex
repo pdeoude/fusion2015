@@ -354,17 +354,13 @@ By using the technique as described, simulated observations by agents are mainta
 
 To summarize the methods and models presented in the previous sections we present an approach to multi-agent planning in the smuggler's use-case. First, note that the dynamic decision network described in Subsection \ref{sub:dyn-dec-net} was translated into a POMDP as described in Section \ref{sec:scenario-based-dm}. The general approach to generating decisions for large POMDPs was then described in Subsections \ref{sub:mcts} and \ref{sub:pomcts}. As such, we can define a general solution combining decision networks, POMDPs and MCTS for decision making in the described domain. 
 
-The challenges encountered are as follows:
+The expected challenges to be encountered are as follows:
 \begin{itemize}
-\item The definition of the discrete state space may result in a large number of possible futures. This may limit how far into the future it will be possible to plan,
-\item Sparse initial knowledge may result in only a rough approximation of the smuggler's location. As such, finding a robust plan may be difficult.
-\item Considering multi-agent planning, the number of joint actions may be huge. For instance, considering the action space defined in Subsection \ref{sub:problem-rep} with four agents results in a branching factor of $|\A|^4 = 8^4 = 4096$. This problem may be avoided by using heuristics in the search process, such as \emph{progressive widening} \cite{chaslot2008progressive}. Another reduction in the action space may be achieved by removing reverse actions from the search \cite{realtime2014}. 
-\item 
+\item The definition of the discrete state space may result in a large number of possible futures. This may limit how far into the future it will be possible to plan.
+\item Sparse initial knowledge may result in only a rough approximation of the smuggler's location. As such, finding a plan that is guaranteed to intercept the smuggler may be difficult.
+\item Considering multi-agent planning, the number of joint actions may be huge. For instance, considering the action space defined in Subsection \ref{sub:problem-rep} with four agents, this results in a branching factor of $|\A| = 8^4 = 4096$. This problem may be avoided by using heuristics in the search process, such as \emph{progressive widening} \cite{chaslot2008progressive}. Another reduction in the action space may be achieved by removing reverse actions from the search \cite{realtime2014}. 
+\item The behavior of the smuggler should be realistically simulated. Due to the large state space, it is not realistic to consider the smuggler's actions as part of the search. Rather, a simulation policy should select realistic moves for the smuggler based on his destination, while leaving room for small variations.
 \end{itemize}
-
-{\red some thoughts on how to handle these kind of problems (i.e. MPOMDP or DEC-POMDP, using MCTS (UCT/BRUE etc)) - Tom \& Patrick}
-% Cite Ad hoc Autonomous agent teams
-% Cite multi-agent II pursuit games
 
 \section{Conclusion}
 \begin{itemize}
