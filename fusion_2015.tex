@@ -1,6 +1,6 @@
 \documentclass[conference]{IEEEtran}
 
-\usepackage{graphicx, booktabs, cite, amsmath, stfloats, pstricks, epstopdf}
+\usepackage{graphicx,booktabs,cite,amsmath,stfloats,pstricks,epstopdf}
 \usepackage{pstricks,pst-node,pst-tree}
 \usepackage[caption=false,font=footnotesize]{subfig}
 \usepackage{mymacros}
@@ -76,13 +76,7 @@ Maritime drug trafficking is an ongoing problem in the Caribbean sea. Very fast 
 The main challenge of anti-drug trafficking organizations, such as the coast guard, is to locate the smuggler's go-fast in order to intercept it. There are several type of observations that can be used. Location of the smuggler's go-fast can be determined by radar ($RO$) in case of calm sea or at close range or by visual observation ($VO$). A more recent type of observation is through the use of sonar mounted on buoys in the ocean ($SO$) that can register the typical engine sound of go-fast. Unfortunately, these type of observation might not be available. For radar and sonar the coverage is often limited and, therefore, not always available. Visual observations is only possible if an observer is close enough to report about it. With the knowledge of the location of the smuggler's go-fast allows us the reason about the possible intercept areas. This area can be a location where the smuggler's go-fast currently is or a more strategic position that is believed to be visited by the smugglers at some point in the future. These strategic positions are inferred from Intel collected during the anti-drug operations, for example. There might be Intel that the smugglers need to refuel at some refueling location along their route ($RA$). This belief is based on Intel about the amount of fuel loaded on board prior to departure ($AF$), the possible destination ($D$) and the possible locations where refueling is possible ($LR$). If there is strong belief that the smugglers are going to refuel at a certain location then that location is a possible intercept area. In Figure~\ref{fig:causal-model} the causal model is depicted that describes the causal influences between these variables. All the variables are listed in Table~\ref{tab:scenario-variables}.
 
 
-\begin{figure}
-\begin{center}
- \includegraphics[width=.4\textwidth]{img/causal-model.eps}
- \caption{Causal model of the smuggler scenario}\label{fig:causal-model}
- % decision-graph.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=-0 -0 424 277
-\end{center}
-\end{figure}
+
 
 
 \begin{table}[!ht]
@@ -96,17 +90,25 @@ The main challenge of anti-drug trafficking organizations, such as the coast gua
 $LocationSmuggler$ ($LS$) &
 The location of the smuggler's go-fast. \\
 $Destination$ ($D$) &
-Destination to which the smugglers travel. \\
+Potential destination to which the smugglers travel. \\
 $LocationRefuel$ ($LR$) &
-Locations of stationary refuel ships in the concerned area of the sea. \\
+Locations of stationary refuel location in the concerned area of the sea. \\
 $Weather$ ($W$) &
-Weather conditions (for the concerned area and time) relevant for the smugglers' traveling. \\
+Weather conditions at a certain location relevant for the smugglers' traveling. \\
 $RefuelingAction$ ($RA$) &
 Occurrence (or not) of a refueling action by the smugglers, as well as its position. \\
-$InterceptVehicle$ ($IV$) &
+$LocationInterceptVehicle$ ($LI$) &
 Location of an available intercept vehicle. This could either be coast guard's go-fast or helicopter etc. \\
 $InterceptArea$ ($IA$) &
 Area where the intercept vehicles can intercept the smugglers' go-fast. \\
+$Destination$ ($D$) &
+Destination the smugglers are likely to travel to. \\
+$RadarObservation$ ($RO$) &
+Radar observation of the smugglers' go-fast. \\
+$SonarObservation$ ($SO$) &
+Sonar observation of the smugglers' go-fast. \\
+$VisualObservation$ ($VO$) &
+Visual observation of the smugglers' go-fast. \\
 \bottomrule
 \end{tabular}
 %\caption{Overview of scenario variables from the causal graphs in Figure~\ref{fig:causal-graph1} and \ref{fig:causal-graph2}, as well as their semantics.}\label{tab:cpt-example}
@@ -125,13 +127,14 @@ Area where the intercept vehicles can intercept the smugglers' go-fast. \\
 In \cite{conrado14if} we used BNs to represent a symmetric scenario tree capturing all possible scenarios given the modeled scenario variables. The decision maker can use this BN to manage the set of scenario using probabilistic inference to do pruning, ranking and what-if exploration. Based on this information the decision maker decides on which course of action is best by making a decision. This decision results in an action or a set of actions that influences further development of the scenario. For example, sailing my intercept vehicle in the wrong direction, moving away from the smugglers, results in fewer or none possible intercept areas. In this paper we extend the scenario reasoning framework discussed in \cite{conrado14if} to include the decision maker's decisions explicitly. A BN can be extended to include the decision maker's decision. Such a model is called a decision network and generalized BNs. Before we start explaining DNs we first discuss BNs.
 
 
-\begin{figure}
+\begin{figure*}
 \begin{center}
- \includegraphics[width=.4\textwidth]{img/decision-network.eps}
- \caption{Decision network based on the causal model shown in Figure~\ref{fig:causal-model}.\label{fig:decision-graph}}
+ \subfloat[Causal model of the smuggler scenario\label{fig:causal-model}]{\includegraphics[width=.4\textwidth]{img/causal-model.eps}}
+\subfloat[Decision network based on the causal model shown in Figure~\ref{fig:causal-model}\label{fig:decision-graph}]{ \includegraphics[width=.4\textwidth]{img/decision-network.eps}}
+ \caption{}
  % decision-graph.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=-0 -0 424 277
 \end{center}
-\end{figure}
+\end{figure*}
 
 
 \subsection{Bayesian networks}\label{sec:bayesian-networks}
@@ -214,7 +217,7 @@ Equation~\ref{eq:meu} presents two challenges we need to address in order to com
 \begin{figure*}[!t]
 \begin{center}
  \includegraphics[width=.95\textwidth]{img/dynamic-decision-graph.eps}
- \caption{Dynamic decision graph of the influence diagram shown in Figure~\ref{fig:decision-graph}.}\label{fig:ddn} 
+ \caption{Dynamic decision network of the decision network shown in Figure~\ref{fig:decision-graph}.}\label{fig:ddn} 
 \end{center}
 \end{figure*}
 
