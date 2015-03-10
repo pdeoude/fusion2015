@@ -304,9 +304,7 @@ The challenge in the targeted domains is often that available sensors do not pro
 
 A common technique for target tracking is Particle Filters (PF) \cite{Blackman1999}. The PF-algorithm makes use of a set of particles, representing possible locations of the target. A particle's so-called importance factor represents the likelihood of that particle being correct. The distribution of the set of particles gives a measure for the uncertainty about the target's true location.
 
-Given the current scenario it is possible to improve the PF's tracking performance, by ruling out particles that - based on the scenario - cannot be correct \cite{deOude2014}. This procedure can be used to sample the possible locations of the target in different scenarios. The predicted locations can in turn be used to improve the planning.
-
-{\red how do we estimate the position of the smugglers based on the observations and the context: description of particle filter - Rik}
+Given the current scenario it is possible to improve the PF's tracking performance, by ruling out particles that - based on the scenario - cannot be correct \cite{deOude2014}. For instance, given the DDN in Figure \ref{fig:ddn}, there are two variables that influence the location of the smuggler (LS): $W$ and $D$. Assume that at some moment after receiving a specific piece of intel, the destination of the smuggler ($D$) becomes known. This information can be used to predicts possible routes of the smuggler to this designated location. Consequently, these routes can then be used to improve the planning.
 
 \section{Multi-Agent Decision-Making}
 \label{sec:ma-dec-mak}
