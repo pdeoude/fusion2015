@@ -282,37 +282,33 @@ POMDP's are harder to solve exactly than MDP's, suffering from the {\it curse of
 In Section \ref{sec:scenario-based-dm} we will describe a configuration of a POMDP in order to introduce an approach to sequential planning and decision-making under uncertainty in the smuggler use case. 
 
 % Making decisions based on a POMDP defined in the previous section
-\begin{figure}[t]
-\begin{center}
- \includegraphics[width=.44\textwidth]{img/planning_archi.png}
- \caption{Architecture of multi-layered planner.}\label{fig:planning-archi}
-\end{center}
-\end{figure}
+%\begin{figure}[t]
+%\begin{center}
+% \includegraphics[width=.44\textwidth]{img/planning_archi.png}
+% \caption{Architecture of multi-layered planner.}\label{fig:planning-archi}
+%\end{center}
+%\end{figure}
 
 \section{POMDP for the Drug Trafficking Domain}
 \label{sec:scenario-based-dm}
 
-In the smuggler case, the final goal is to generate a robust, strategic, and multi-agent plan. This means that the focus of the following subsections is to define an abstract model of the domain in which high-level plans can be generated. Figure \ref{fig:planning-archi} displays a surmised architecture of the conceptualized system, in which the constituent of interest is marked. Although a comprehensive discussion about the requirements of such an architecture is outside the scope of this paper. However, based on the envisaged architecture, we make the assumption that the locations of all friendly agents are available. Moreover, we assume that two-way communication with all friendly agents is possible, such that commands can be sent, and observations received. The proposed methods can nonetheless be extended to environments where agents do not share their observations and belief. In this case, the decentralized POMDP (DEC-POMDP) \cite{dec-pomdp,oliehoek2008optimal} model is to be defined.
-
-In Section \ref{sec:influence-diagrams} models were used to describe a formal reasoning method about possible future states of a drug trafficking event. Based on these models, we can explore possible futures and strategies to create a robust plan of action. The goal of this section is to define the elements of the POMDP model as described in Subsection \ref{sub:pomdp}, which we will use in Section \ref{sec:ma-dec-mak} to establish and rank decisions.
+In Section \ref{sec:influence-diagrams} models are used to describe a formal reasoning method about possible future states of a drug trafficking event. Based on these models, we can explore possible futures and strategies to create a robust plan of action. The goal of this section is to define the elements of the POMDP model as described in Subsection \ref{sub:pomdp}, which we will use in Section \ref{sec:ma-dec-mak} to establish and rank decisions.
 
 \subsection{Planning Under Uncertainty}
 \label{sub:plan-uncert}
 
-Locating and capturing the smuggler as described in the use-case requires coordination between a team of agents. This team can be heterogeneous in the sense that different agents have different levels of autonomy, capabilities, and payloads. For example, we may have the availability of two UAV's with infrared sensors, and four armed, human operated patrol boats. Given this task force, several distinct but reliant tasks can be distinguished:
-\begin{itemize}
-\item locating the smuggler based on its most likely location and observations,
-\item tracking the location smuggler after is was located,
-\item capturing the smuggler by strategic positioning of patrol boats.
-\end{itemize}
-Planning these tasks requires cooperation between the agents. Therefore, a joint strategy for the execution of such a plan, based on the uncertain knowledge provided by prior knowledge and observations may play a large role in the success of such missions. Moreover, exploring possible future scenario's based on the expected behavior of the smuggler may offer new insights for human operators.
+To scope the definition of our problem, we make the assumption that the locations of all friendly agent is available. Moreover, we assume that two-way communication with the agent is possible, such that commands can be sent, and observations received. The proposed methods can nonetheless be extended to environments where agents can not share their observations. In this case, a \emph{decentralized} POMDP (DEC-POMDP) \cite{dec-pomdp,oliehoek2008optimal} model is to be defined.
+
+Based on the decision network depicted in Figure \ref{fig:decision-graph} an exploration of possible plans should be generated to explore which course of action is the most likely to capture the smuggler. In this section, the individual elements of the POMDP are defined in order to use an algorithm to generate plans for the intercept vehicle. The state $\S$ represents the possible locations of the intercept vehicle $LI$. Moreover, we define a particle filter to map the agent's belief over the possible locations of the smuggler $LS$ in which the context of the problem has an influence on the location of the smuggler. Variables such as the expected destination $D$, refueling actions $RA$ and external factors such as the weather $W$ all influence the belief over the location of the smuggler. The actions $\A$ represent the he intercept vehicle's decisions $A$. The agent receives a reward $r$ only when the smuggler is captured. This can be defined as the fact that the agent is in the direct vicinity of the smuggler. Lastly, observations $\OO$ map to the evidence nodes $VO, RO, SO$ in the decision network.
+
+The following subsections define an abstract model of the domain in which high-level decisions can be generated.
 
 \subsection{Problem Representation}
 \label{sub:problem-rep}
 
-The state represents the locations of the set of agents under consideration for the planner. Each agent $\psi_i\in\Psi$ occupies a single location on a map defined by the underlying geographical area in which the scenario takes place.
+The state represents the location of the intercept vehicle under consideration for the planner. Although the model can be extended to represent a set of multiple agents, in which each agent $\psi_i\in\Psi$ occupies a single location on a map defined by the underlying geographical area in which the scenario takes place.
 
-Maritime security situations may play out over a sizable area. Based on the situation, the area of interest can span over dozens of kilometers. Planning on a (near-)continuous state space would soon become intractable based on the number of hidden locations for the smuggler and action spaces for the intercept vehicles. Therefore we propose a framework in which an area of interest is factored into discrete elements. Based on the surface-area and the required resolution of the mission, a location of interest is selected on a geographical system. We assume there is a system in place that automatically divides the selected area into discrete cells of a desired resolution. Higher resolutions result in more fine-grained plan at the cost of longer computation times.
+Maritime security situations may play out over a sizable area. Based on the situation, the concerned area can span over dozens of kilometers. Planning on a (near-)continuous state space would soon become intractable based on the number of hidden locations for the smuggler and action spaces for the intercept vehicles. Therefore we propose a framework in which an area of interest is factored into discrete elements. Based on the surface-area and the required resolution of the mission, an area is selected on a geographical system that divides the selected area into discrete cells of a desired resolution. Higher resolutions result in more fine-grained plan at the cost of longer computation times.
 
 Given the factored state space $S = \left(X_1,\ldots,X_n\right)$, the domain of each variable $X_i$ can be defined by the occupying agent(s) \ie $x_i=\left(x_{i1},\ldots,x_{ik}\right)$, where $x_{ij}\in\Psi$. Each variable's domain is restricted based on the underlying geographic characteristics \ie boats can only occupy a location on water. Moreover, political borders and no-fly zones can further restrict the domain of each variable.
 
@@ -334,6 +330,17 @@ The challenge in the targeted domains is often that available sensors do not pro
 A common technique for target tracking is Particle Filters (PF) \cite{Blackman1999}. The PF-algorithm makes use of a set of particles, representing possible locations of the target. A particle's so-called importance factor represents the likelihood of that particle being correct. The distribution of the set of particles gives a measure for the uncertainty about the target's true location.
 
 Given the current scenario it is possible to improve the PF's tracking performance, by ruling out particles that - based on the scenario - cannot be correct \cite{deOude2014}. For instance, given the DDN in Figure \ref{fig:ddn}, there are two variables that influence the location of the smuggler (LS): $W$ and $D$. Assume that at some moment after receiving a specific piece of intel, the destination of the smuggler ($D$) becomes known. This information can be used to predicts possible routes of the smuggler to this designated location. Consequently, these routes can then be used to improve the planning.
+
+\subsection{Planning With Multiple Agents}
+\label{sub:plan-mult-ag}
+{\red beter beschrijven}
+Locating and capturing the smuggler as described in the use-case requires coordination between a team of agents. This team can be heterogeneous in the sense that different agents have different levels of autonomy, capabilities, and payloads. For example, we may have the availability of two UAV's with infrared sensors, and four armed, human operated patrol boats. Given this task force, several distinct but reliant tasks can be distinguished:
+\begin{itemize}
+\item locating the smuggler based on its most likely location and observations,
+\item tracking the location smuggler after is was located,
+\item capturing the smuggler by strategic positioning of patrol boats.
+\end{itemize}
+Planning these tasks requires cooperation between the agents. Therefore, a joint strategy for the execution of such a plan, based on the uncertain knowledge provided by prior knowledge and observations may play a large role in the success of such missions. Moreover, exploring possible future scenario's based on the expected behavior of the smuggler may offer new insights for human operators.
 
 \section{Multi-Agent Decision-Making}
 \label{sec:ma-dec-mak}
