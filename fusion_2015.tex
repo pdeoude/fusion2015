@@ -135,7 +135,7 @@ In \cite{conrado14if} we used BNs to represent a symmetric scenario tree capturi
 
 \begin{figure*}
 \begin{center}
- \subfloat[Causal model of the smuggler scenario\label{fig:causal-model}]{\includegraphics[width=.4\textwidth]{img/causal-model.eps}}
+ \subfloat[Causal model of the smuggler scenario\label{fig:causal-model}]{\includegraphics[width=.35\textwidth]{img/causal-model.eps}}\qquad
 \subfloat[Decision network based on the causal model shown in Figure~\ref{fig:causal-model}\label{fig:decision-graph}]{ \includegraphics[width=.4\textwidth]{img/decision-network.png}}
  \caption{}
  % decision-graph.eps: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=-0 -0 424 277
@@ -251,7 +251,11 @@ Equation~\ref{eq:meu} presents two challenges we need to address in order to com
 \subsection{Dynamic Decision Networks}
 \label{sub:dyn-dec-net}
 
-In the Figure~\ref{fig:decision-graph} a decision network was shown for a, so called, one-shot decision. However, intercepting a smuggler that is actively trying to prevent interception governs an environment that is very dynamic. In such environments a one-shot decision is not sufficient and sequential decision making is required to be able to reason about scenarios relevant for intercepting the smugglers. In Figure~\ref{fig:ddn} a {\em dynamic decision network (DDN)} is shown based on the one-shot DN shown in Figure~\ref{fig:decision-graph}.
+In the Figure~\ref{fig:decision-graph} a decision network was shown for a, so called, one-shot decision. However, intercepting a smuggler that is actively trying to prevent interception governs an environment that is very dynamic. In such environments a one-shot decision is not sufficient and sequential decision making is required to be able to reason about scenarios relevant for intercepting the smugglers. In Figure~\ref{fig:ddn} a {\em dynamic decision network (DDN)} is shown based on the one-shot DN shown in Figure~\ref{fig:decision-graph}. A DDN consist of a Dynamic Bayesian Network (DBN) \cite{murphy00book} and a set of decision and utility nodes. A DBN is a BN discussed in Section~\ref{sec:bayesian-networks} describing temporal probabilistic model that allows to reason about variables over time. In DBN transition probabilities for dynamic variables need to be specified. For example, in Figure~\ref{fig:ddn} the transition probabilities for the location of the smugglers need to be specified. Note that, there is no direct link between the position of the intercept vehicle $LI_i$ and $LI_{i+1}$ in two consecutive time slices, because we assume that the location fo the intercept vehicle is always known. This means that the variable $LI_i$ can be observed in each time slice.
+
+In the DDN shown in Figure~\ref{fig:ddn} we distinguish between two types of chance variables, namely dynamic variables that changes over time, shown as white oval nodes, and static variables that are time invariant during the smuggling operation, shown as gray oval nodes. Observations for time invariant nodes are typically coming from Intel. For example, Intel can be acquired about the possible destination the smugglers are traveling to. Moreover, in this model we assume that the state of the weather ($W$) at a certain location remains unchanged, i.e. once the weather is observed it will not change anymore.
+
+Since the location of the smugglers is not directly observable the model depicted in Figure~\ref{fig:ddn} is considered a Partially Observable Markov Decision Process (POMDP). The location of the smugglers need to be estimated through observations such as radar ($RO_i$), visual ($VO_i$) or sonar ($SO_i$) observations. Additionally, also information about weather $W$ and destination $D$ can be used to estimate the location of the smugglers.
 
 \subsection{Partially Observable Markov Decision Process}
 \label{sub:pomdp}
