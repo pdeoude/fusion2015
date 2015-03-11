@@ -13,22 +13,23 @@
 
 \begin{document}
 
-\title{Scenario-based Reasoning through Dynamic Decision Networks for Countering Maritime Drug Trafficking}
+\title{Scenario-based Reasoning \\through Dynamic Decision Networks}
 
-\author{\IEEEauthorblockN{Patrick de Oude}  
-\IEEEauthorblockA{D-CIS Lab\\
+\author{
+\IEEEauthorblockN{Patrick de Oude}
+\IEEEauthorblockA{
 Thales Research and Technology\\
 Delft, The Netherlands\\
 Email: patrick.deoude@d-cis.nl}
 \and
 \IEEEauthorblockN{Tom Pepels}
-\IEEEauthorblockA{D-CIS Lab\\
+\IEEEauthorblockA{
 Thales Research and Technology\\
 Delft, The Netherlands\\
 Email: tom.pepels@d-cis.nl}
 \and
 \IEEEauthorblockN{Rik Claessens}
-\IEEEauthorblockA{D-CIS Lab\\
+\IEEEauthorblockA{
 Thales Research and Technology\\
 Delft, The Netherlands\\
 Email: rik.claessens@d-cis.nl}
@@ -363,9 +364,7 @@ During the selection step, a policy is required to explore the tree to choose pr
 \label{eq:uct}
 i^* = argmax_{i \in I(p)}\left\{ Q(s,a) + C \sqrt{ \frac{\ln{n(s)}}{n(s, a)}}\right\},
 \end{equation}
-where $n(s)$ and $n(s, a)$ are the visit counts of the current node and its child, respectively. $C$ is the exploration constant to tune. 
-
-Commonly, the \emph{rollout policy} selects actions uniformly random. However, using heuristics or domain knowledge can greatly improve the quality of the recommended decisions \cite{browne2012survey}.
+where $n(s)$ and $n(s, a)$ are the visit counts of the current node and its child, respectively. $C$ is the exploration constant to tune. Commonly, the \emph{rollout policy} selects actions uniformly random. However, using heuristics or domain knowledge can greatly improve the quality of the recommended decisions \cite{browne2012survey}.
 
 \begin{figure}
 \begin{center}
@@ -395,20 +394,13 @@ The dynamic decision network described in Subsection \ref{sub:dyn-dec-net} was t
 The expected challenges to be encountered are as follows:
 \begin{itemize}
 \item Sparse initial knowledge may result in only a rough approximation of the smuggler's location. As such, finding a plan that is guaranteed to intercept the smuggler may be difficult.
-\item Considering multi-agent planning, the number of joint actions may be huge. For instance, considering the action space defined in Subsection \ref{sub:problem-rep} with four agents, this results in a branching factor of $|\A\mid  = 9^4 = 6561$. This problem can be countered by using heuristics in the search process, such as \emph{progressive widening} \cite{chaslot2008progressive}. Another reduction in the action space may be achieved by removing reverse actions from the search \cite{realtime2014}. 
+\item Considering multi-agent planning, the number of joint actions may be huge. For instance, considering the action space defined in Subsection \ref{sub:problem-rep} with four agents, this results in a branching factor of $\left\vert\A\right\vert  = 9^4 = 6561$. This problem can be countered by using heuristics in the search process, such as \emph{progressive widening} \cite{chaslot2008progressive}. Another reduction in the action space may be achieved by removing reverse actions from the search \cite{realtime2014}. 
 \item The behavior of the smuggler should be realistically simulated. Due to the large state space, it is not realistic to consider the smuggler's actions as part of the search. Rather, a simulation policy should select realistic moves for the smuggler based on his destination, while leaving room for small variations.
 \item A random rollout policy for the intercepting agents is not sufficient. Instead, during rollouts, agents should select actions using some heuristic policy.
 \end{itemize}
 {\red add to this list - all}
 
-\section{Conclusion}
-\begin{itemize}
-\item Summarize what we discussed in the paper
-\item State what the next steps are
-\item Future work
-\end{itemize}
-
-\section*{Acknowledgment}
+%\section*{Acknowledgment}
 
 \bibliographystyle{IEEEtran}
 \bibliography{tombib,BNbib}
