@@ -211,7 +211,7 @@ A {\em decision network (DN)} (also influence diagram or decision graph \cite{ru
 The location of the intercept vehicle\footnote{In this section we assume there is only a single intercept vehicle} and the smuggler's go-fast constitute a state $s$ in a set of states $\S$ defining the smuggler's domain. However, due to partial observability of the current state, the decision maker (also called agent in decision theoretic literature) has to maintain a belief $P(\S = s \mid  a, \epsilon)$ over the possible states it might be in given an action $a$ and evidence $\epsilon$. The reason for this is that the position of the smuggler is not directly observable after an action $a$, but needs to be estimated from observations $\epsilon$, such as radar, sonar, visual observations or Intel about a possible destination or refueling location (see also causal model in Figure~\ref{fig:causal-model}). Since the agent does not know in which state it is it needs to compute an expected utility based on the utility function $U(s)$ capturing the preferences of the decision maker:
 
 \begin{eqnarray}
- EU(a|\epsilon) = \sum_{s'}P(\S = s'\mid a, \epsilon)U(s')
+ EU(a|\epsilon) = \sum_{s^\prime}P(\S = s^\prime\mid a, \epsilon)U(s^\prime)
 \end{eqnarray}
 
 With the help of the expected utility $EU(a|\epsilon)$ the best action $a^*$ can be computed with:
@@ -220,7 +220,7 @@ With the help of the expected utility $EU(a|\epsilon)$ the best action $a^*$ can
  a^* = \argmax_a EU(a\mid \epsilon)
 \end{eqnarray}
 
-Equation~\ref{eq:meu} presents two challenges we need to address in order to compute the best action $a^*$, namely the estimation of $P(\S = s'|a, \epsilon)$ and the computation of the utility using the utility function $U(s')$.
+Equation~\ref{eq:meu} presents two challenges we need to address in order to compute the best action $a^*$, namely the estimation of $P(\S = s^\prime|a, \epsilon)$ and the computation of the utility using the utility function $U(s^\prime)$.
 
 
 % 
@@ -248,11 +248,11 @@ Equation~\ref{eq:meu} presents two challenges we need to address in order to com
 \subsection{Dynamic Decision Networks}
 \label{sub:dyn-dec-net}
 
-In the Figure~\ref{fig:decision-graph} a decision network was shown for a so-called \emph{one-shot} decision. However, intercepting a smuggler that is actively trying to prevent capture governs an environment that is very dynamic. In such environments a one-shot decision is not sufficient and sequential decision making is required to be able to reason about scenarios relevant for intercepting the smuggler. In Figure~\ref{fig:ddn} a {\em dynamic decision network (DDN)} is shown based on the one-shot DN shown in Figure~\ref{fig:decision-graph}. A DDN consist of a Dynamic Bayesian Network (DBN) \cite{murphy00book} and a set of decision and utility nodes. A DBN is a BN discussed in Section~\ref{sec:influence-diagrams} {\red dat is deze sectie} and describes a temporal probabilistic model that allows reasoning about variables over time. In a DBN, transition probabilities for dynamic variables are to be specified. For example, in Figure~\ref{fig:ddn} the transition probabilities for the location of the smuggler are to be specified. Note that, there is no direct link between the position of the intercept vehicle $LI_i$ and $LI_{i+1}$ in two consecutive time slices, because we assume that the location of the intercept vehicle is always known. This means that the variable $LI_i$ can be observed in each time slice.
+In the Figure~\ref{fig:decision-graph} a decision network was shown for a so-called \emph{one-shot} decision. However, intercepting a smuggler that is actively trying to prevent capture governs an environment that is very dynamic. In such environments a one-shot decision is not sufficient and sequential decision making is required to be able to reason about scenarios relevant for intercepting the smuggler. In Figure~\ref{fig:ddn} a {\em dynamic decision network (DDN)} is shown based on the one-shot DN shown in Figure~\ref{fig:decision-graph}. A DDN consist of a Dynamic Bayesian Network (DBN) \cite{murphy00book} and a set of decision and utility nodes. A DBN is a BN discussed in Section~\ref{sec:influence-diagrams} {\red dat is deze sectie} and describes a temporal probabilistic model that allows reasoning about variables over time. In a DBN, transition probabilities for dynamic variables are to be specified. For example, in Figure~\ref{fig:ddn} the transition probabilities for the location of the smuggler are to be specified. Note that, there is no direct link between the position of the intercept vehicle $LI_t$ and $LI_{t+1}$ in two consecutive time slices, because we assume that the location of the intercept vehicle is always known. This means that the variable $LI_t$ can be observed in each time slice.
 
 In the DDN shown in Figure~\ref{fig:ddn} we distinguish between two types of chance variables, namely dynamic variables that change over time, shown as white oval nodes, and static variables that are time invariant during the smuggling operation, shown as gray oval nodes. Observations for time invariant nodes are typically coming from Intel. For example, Intel can be acquired about the possible destination of the smuggler. Moreover, in this model we assume that the state of the weather ($W$) at a certain location remains unchanged, \ie once the weather is observed its state is assumed not to change.
 
-Because the location of the smuggler is not directly observable, the model depicted in Figure~\ref{fig:ddn} is considered a Partially Observable Markov Decision Process (POMDP). The location of the smuggler needs to be estimated through observations such as radar ($RO_i$), visual ($VO_i$) or sonar ($SO_i$) observations. Additionally, information regarding weather $W$, and destination $D$ can be used to estimate the location of the smuggler.
+Because the location of the smuggler is not directly observable, the model depicted in Figure~\ref{fig:ddn} is considered a Partially Observable Markov Decision Process (POMDP). The location of the smuggler needs to be estimated through observations such as radar ($RO_t$), visual ($VO_t$) or sonar ($SO_t$) observations. Additionally, information regarding weather $W$, and destination $D$ can be used to estimate the location of the smuggler.
 
 \subsection{Partially Observable Markov Decision Process}
 \label{sub:pomdp}
@@ -262,14 +262,14 @@ A Markov Decision Process (MDP)~\cite{bellman1957dynamic,mdp} describes synchron
 \begin{itemize}
 \item $\S$ is the set of states of the world. In the case of a \emph{factored} MDP, it is represented by a discrete set of state variables, described as a vector $\left(X_1,\ldots,X_n\right)$ where each variable $X_i$ can take on a value in its domain,
 \item $\mathcal{A}$ is the set of possible actions. In the case of a multi-agent problem $\mathcal{A}$ represents the joint actions $\A_{m} = \A_1\times\ldots\times\A_n$ of all $n$ agents under consideration,
-\item $\P:\S\times\mathcal{A}\to\P(s'\mid a,s)$ is the state transition function, \ie the probability of moving to state $s'$ given that action $a$ was performed in state $s$,
+\item $\P:\S\times\mathcal{A}\to\P(s^\prime\mid a,s)$ is the state transition function, \ie the probability of moving to state $s'$ given that action $a$ was performed in state $s$,
 \item $\R:\S\times\mathcal{A}\to\mathbb{R}$ is the reward function, which maps each state-action pair to a real reward,
 \item $\gamma$ is the discount factor, which prioritizes present over future rewards.
 \end{itemize}
 
 The agent's goal is to find a policy $\pi$ that maximizes the value function
 \begin{equation}
-V_{\pi}(s) = \R(s,\pi(s)) + \gamma\sum\limits_{s^\prime\in\S}\P\left(s'\mid\pi(s),s\right)V_{\pi}(s^\prime).
+V_{\pi}(s) = \R(s,\pi(s)) + \gamma\sum\limits_{s^\prime\in\S}\P\left(s^\prime\mid\pi(s),s\right)V_{\pi}(s^\prime).
 \end{equation} 
 By describing a problem as an MDP, the assumption is made that the agent can fully observe the world. However, in many real-world domains, the state of the world is not fully observable, and the agent cannot immediately determine the state it is in. To represent this uncertainty over the agent's current state and observations, the MDP model can be extended to a Partially Observable MDP (POMDP)~\cite{aastrom1965optimal,pomdp} such that: 
 
@@ -303,7 +303,7 @@ In Section~\ref{sec:influence-diagrams} models are used to describe a formal rea
 
 To scope the definition of our problem, we make the assumption that the locations of all friendly agent is available. Moreover, we assume that two-way communication with the agent is possible, such that commands can be sent, and observations received. The proposed methods can nonetheless be extended to environments where agents can not share their observations. In this case, a \emph{decentralized} POMDP (DEC-POMDP)~\cite{dec-pomdp,oliehoek2008optimal} model is to be defined.
 
-Based on the decision network depicted in Figure~\ref{fig:decision-graph} an exploration of possible plans should be generated to explore which course of action is the most likely to capture the smuggler. In this section, the individual elements of the POMDP are defined in order to use an algorithm to generate plans for the intercept vehicle. The state $\S$ represents the possible locations of the intercept vehicle $(LI_i)$. Moreover, we define a particle filter to map the agent's belief over the possible locations of the smuggler $(LS_i)$ in which the context of the problem has an influence on the location of the smuggler. Variables such as the expected destination $(D)$, refueling actions $(RA)$ and external factors such as the weather $(W)$ all influence the belief over the location of the smuggler. The actions $\A$ represent the he intercept vehicle's decisions $(A)$. The agent receives a reward $r$ only when the smuggler is captured. This can be defined as the fact that the agent is in the direct vicinity of the smuggler. Lastly, observations $\mathcal{O}$ map to the evidence nodes $(VO_i), (RO_i), (SO_i)$ in the decision network.
+Based on the decision network depicted in Figure~\ref{fig:decision-graph} an exploration of possible plans should be generated to explore which course of action is the most likely to capture the smuggler. In this section, the individual elements of the POMDP are defined in order to use an algorithm to generate plans for the intercept vehicle. The state $\S$ represents the possible locations of the intercept vehicle $(LI_t)$. Moreover, we define a particle filter to map the agent's belief over the possible locations of the smuggler $(LS_t)$ in which the context of the problem has an influence on the location of the smuggler. Variables such as the expected destination $(D)$, refueling actions $(RA)$ and external factors such as the weather $(W)$ all influence the belief over the location of the smuggler. The actions $\A$ represent the he intercept vehicle's decisions $(A)$. The agent receives a reward $r$ only when the smuggler is captured. This can be defined as the fact that the agent is in the direct vicinity of the smuggler. Lastly, observations $\mathcal{O}$ map to the evidence nodes $(VO_t), (RO_t), (SO_t)$ in the decision network.
 
 The following subsections define an abstract model of the domain in which high-level decisions can be generated.
 
@@ -320,7 +320,7 @@ Similarly, the action space is factored based on the discretization of the state
 
 The space of observations $\mathcal{O}$, in the smuggler's case is small. The smuggler can be observed, or not observed at a location. We identify two types of observations:
 \begin{itemize}
-\item Based on the sensor payload of an agent, an observation model describes its footprint, modeled as $(VO_i), (RO_i), (SO_i)$ in the BN
+\item Based on the sensor payload of an agent, an observation model describes its footprint, modeled as $(VO_t), (RO_t), (SO_t)$ in the BN
 \item External evidence, such as a refueling action $(RA)$. These observations are used as evidence $\epsilon$ in the BN
 \end{itemize}
 Both observations, and evidence can be used to update an agent's belief of the smuggler's location.
@@ -330,7 +330,7 @@ Both observations, and evidence can be used to update an agent's belief of the s
 
 The challenge in the targeted domain is often that available sensors do not provide full coverage of the area of interest and therefore, observations are sparse, of low quality and disparate in nature. The belief of the target's true location is a probability distribution over his possible location. Generally, exact computation of this distribution is infeasible, so a suitable approximation algorithm is required.
 
-A common technique for target tracking is Particle Filters (PF)~\cite{Blackman1999}. The PF-algorithm makes use of a set of particles, representing possible locations of the target. A particle's so-called importance factor represents the likelihood of that particle being correct, based on the set of observations. Variables $VO_i$, $RO_i$ and $SO_i$ represent the different kinds of observations that can be used in the PF-algorithm in this scenario. The distribution of the set of particles gives a measure for the uncertainty about the target's true location.
+A common technique for target tracking is Particle Filters (PF)~\cite{Blackman1999}. The PF-algorithm makes use of a set of particles, representing possible locations of the target. A particle's so-called importance factor represents the likelihood of that particle being correct, based on the set of observations. Variables $VO_t$, $RO_t$ and $SO_t$ represent the different kinds of observations that can be used in the PF-algorithm in this scenario. The distribution of the set of particles gives a measure for the uncertainty about the target's true location.
 
 Given the current scenario it is possible to improve the PF's tracking performance, by ruling out particles that - based on the scenario - cannot be correct~\cite{Claessens2015}. For instance, given the DDN in Figure~\ref{fig:ddn}, there are two variables that influence the location of the smuggler ($LS$): $W$ and $D$. Assume that at some moment after receiving a specific piece of Intel, the destination of the smuggler ($D$) becomes known. This information can be used to predict possible routes of the smuggler to this designated location. Consequently, a PF can be used to predict a smuggler's possible trajectory along that route.
 
