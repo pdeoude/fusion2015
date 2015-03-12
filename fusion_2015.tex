@@ -269,7 +269,7 @@ A Markov Decision Process (MDP)~\cite{bellman1957dynamic,mdp} describes synchron
 
 The agent's goal is to find a policy $\pi$ that maximizes the value function
 \begin{equation}
-V_{\pi}(s) = \R(s,\pi(s)) + \gamma\sum\limits_{s\in\S}\P\left(s'\mid\pi(s),s\right)V_{\pi}(s).
+V_{\pi}(s) = \R(s,\pi(s)) + \gamma\sum\limits_{s^\prime\in\S}\P\left(s'\mid\pi(s),s\right)V_{\pi}(s^\prime).
 \end{equation} 
 By describing a problem as an MDP, the assumption is made that the agent can fully observe the world. However, in many real-world domains, the state of the world is not fully observable, and the agent cannot immediately determine the state it is in. To represent this uncertainty over the agent's current state and observations, the MDP model can be extended to a Partially Observable MDP (POMDP)~\cite{aastrom1965optimal,pomdp} such that: 
 
@@ -328,11 +328,9 @@ Both observations, and evidence can be used to update an agent's belief of the s
 \subsection{Belief Filtering with Context}
 \label{subsec:belief-filter}
 
-In the defined state representation, the locations of the friendly agents are assumed to be known at each point in time. This assumption is based on the availability of GPS localization and wireless communication techniques. However, the location of the smuggler is unknown to the agents. Given that the goal of the multi-agent plan is to locate, track and capture the smuggler, respectively, the combined set of agents needs to maintain a belief over the current location of the smuggler's go-fast.
+The challenge in the targeted domain is often that available sensors do not provide full coverage of the area of interest and therefore, observations are sparse, of low quality and disparate in nature. The belief of the target's true location is a probability distribution over his possible location. Generally, exact computation of this distribution is infeasible, so a suitable approximation algorithm is required.
 
-The challenge in the targeted domains is often that available sensors do not provide full coverage of the area of interest and therefore, observations are sparse, of low quality and disparate in nature. The belief of the target's true location is a probability distribution over his possible location. Generally, exact computation of this distribution is infeasible, so a suitable approximation algorithm is required.
-
-A common technique for target tracking is Particle Filters (PF)~\cite{Blackman1999}. The PF-algorithm makes use of a set of particles, representing possible locations of the target. A particle's so-called importance factor represents the likelihood of that particle being correct, based on the set of observations. Variables $VO$, $RO$ and $SO$ represent the different kinds of observations that can be used in the PF-algorithm in this scenario. The distribution of the set of particles gives a measure for the uncertainty about the target's true location.
+A common technique for target tracking is Particle Filters (PF)~\cite{Blackman1999}. The PF-algorithm makes use of a set of particles, representing possible locations of the target. A particle's so-called importance factor represents the likelihood of that particle being correct, based on the set of observations. Variables $VO_i$, $RO_i$ and $SO_i$ represent the different kinds of observations that can be used in the PF-algorithm in this scenario. The distribution of the set of particles gives a measure for the uncertainty about the target's true location.
 
 Given the current scenario it is possible to improve the PF's tracking performance, by ruling out particles that - based on the scenario - cannot be correct~\cite{Claessens2015}. For instance, given the DDN in Figure~\ref{fig:ddn}, there are two variables that influence the location of the smuggler ($LS$): $W$ and $D$. Assume that at some moment after receiving a specific piece of Intel, the destination of the smuggler ($D$) becomes known. This information can be used to predict possible routes of the smuggler to this designated location. Consequently, a PF can be used to predict a smuggler's possible trajectory along that route.
 
@@ -341,7 +339,7 @@ Given the current scenario it is possible to improve the PF's tracking performan
 
 As described, the definition of our POMDP can be extended to include decision-making by multiple agents. This results in an altered problem definition. Nonetheless, the models to be used can be trivially extended by considering joint actions and observations by the set of agents.
 
-Locating and capturing the smuggler by multiple agents requires some form of centralized coordination. The team can be heterogeneous in the sense that different agents have different levels of autonomy, capabilities, and payloads. For example, we may have the availability of two UAV's with infrared sensors, and four armed, human operated patrol boats. Given this task force, several distinct but reliant tasks can be distinguished:
+Locating and capturing the smuggler by multiple agents requires some form of centralized coordination. The team can be heterogeneous in the sense that different agents have different levels of autonomy, capabilities, and payloads. For example, we may have the availability of two UAV's with infrared sensors, and four armed, human operated patrol boats. Given this task force, several distinct but reliant tasks can be distinguished for individual agents:
 \begin{itemize}
 \item Locating the smuggler based on its most likely location and observations
 \item Tracking the location smuggler after is was located
