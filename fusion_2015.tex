@@ -43,6 +43,10 @@ Email: rik.claessens@d-cis.nl}
 Generally scenario-based reasoning methods do not explicitly consider the decisions in the reasoning process, while the consequences of these decisions do affect the further development of the scenarios. In this paper we extend a previously discussed scenario-based reasoning framework to include the actual decisions a decision maker needs to consider. The framework is based on Dynamic Decision Networks that allows to combine Bayesian networks with utilities and decision variables. Dynamic Decision Network can be used to reason about optimal sequential decisions under different observations and/or what-if conditions. Moreover, we discuss possible approaches to estimation and planning in case of complex decision problems. Throughout this paper the concepts are explained with the help of an example from the maritime security domain about countering a drug trafficking operation.
 \end{abstract}
 
+\noindent
+{\bf Keywords: scenarios, situation assessment, decision making, causal models, causal processes, Bayesian networks, Monte Carlo Tree Search, particle filter, POMDP, Intel-based operations}
+
+
 \IEEEpeerreviewmaketitle
 
 \section{Introduction}
@@ -53,6 +57,12 @@ Decision making in contemporary complex domains, such as large-scale crisis mana
 A scenario can be considered as a narration concerning various events that have materialized (or going to materialize) over time. These events are often causally dependent on each other and can be captured as variables in a causal model \cite{pearl00book}. In \cite{conrado14if} we have shown that these causal models support {\em scoping of states} of scenario variables. Moreover, such causal models can be captured through Bayesian networks (BNs) \cite{pearl88book, jensen07book} to provide a convenient framework to manage a large set of scenarios through: (i) pruning of insignificant scenarios, (ii) updating the scenarios based on new observations and (iii) computing the likelihood of a scenario given the latest information to establish an ordering on the set of relevant scenarios. Additionally, BNs allows what-if exploration where, for example, the likelihood of certain (future) events are computed based on various assumptions about the occurrence of other events of the scenario.
 
 While BNs provide an effective way to manage scenarios it does not allow the actual decisions to be modeled. Neither do they provide recommendations on which decisions to take. In this paper the scenario-based reasoning framework is extended by capturing the structure of the decision process as well. This allows the model to give recommendations regarding decisions under the decision maker's consideration. The extended model is called a {\em decision network} \cite{russell02bn} (also influence diagram or decision graph \cite{jensen07book}). Next to chance nodes decision networks include both decision and utility nodes. such models also support assessment of risk by, for example, computing the worst case scenario considering the utilities in the model.
+
+
+Many approaches focuses on analyzing multiple hypotheses for situation assessment for decision support in which the decisions are not explicitly part of the model \cite{roy07fus,gustavi11eisic,holsopple}. In \cite{comes09iscram} an approach is described where scenario-based reasoning is integrated into Multi-Criteria Decision Analysis (MCDA). The aim of the combined scenario-based reasoning and MCDA approach is to evaluate each alternative for action (decision) under each scenario. 
+
+% The approach and computer tool presented in \cite{gustavi11eisic}, on the other hand, focus on a qualitative analysis to support the generation and evaluation of hypotheses in applications such as threat assessment and forensic analysis. The approach is based on two established analytical methods, namely Morphological Analysis and Analysis of Competing Hypotheses, and accounts for available evidence by matching it against the elements of the hypotheses (rather than the full hypotheses). 
+
 %TODO add literature review
 
 To facilitate the discussion we consider an example from the maritime security domain about countering a drug smuggling operation by intercepting a drug transport. Such domains, where information becomes available over time, are inherently dynamic. Alongside this, static information, such as Intel about the possible destination of the transport or context information about the area in which the smuggling operation takes place needs to be considered. Given the dynamic nature of this domain, sequential decisions is required. To support incorporation of dynamic and static information as well as sequential decision making we consider {\em dynamic decision networks} (DDN) \cite{russell02bn, jensen07book}. By casting the scenario model in a DDN we can reason about sequential decisions under various observations, what-if conditions and determine what is the best sequence of decisions to successfully counter the smuggling operation.
@@ -87,7 +97,8 @@ The main challenge of anti-drug trafficking organizations, such as the coast gua
 \begin{table}[!ht]
  \centering
  \caption{Overview of scenario variables from the causal model shown Figure~\ref{fig:causal-model}, as well as their semantics.}
- \begin{tabular}[!ht]{rp{4cm}}
+ \scalebox{.7}{
+ \begin{tabular}[!ht]{rp{6cm}}
 \toprule
  Variable & Semantics \\
 \cmidrule(r){1-1}
@@ -115,7 +126,7 @@ Sonar observation of the smuggler's go-fast. \\
 $VisualObservation$ ($VO$) &
 Visual observation of the smuggler's go-fast. \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 %\caption{Overview of scenario variables from the causal graphs in Figure~\ref{fig:causal-graph1} and \ref{fig:causal-graph2}, as well as their semantics.}\label{tab:cpt-example}
 \label{tab:scenario-variables}
 \end{table}
@@ -252,7 +263,7 @@ Equation~\ref{eq:meu} presents two challenges we need to address in order to com
 \subsection{Dynamic Decision Networks}
 \label{sub:dyn-dec-net}
 
-In the Figure~\ref{fig:decision-graph} a decision network was shown for a so-called \emph{one-shot} decision. However, intercepting a smuggler that is actively trying to prevent capture governs an environment that is very dynamic. In such environments a one-shot decision is not sufficient and sequential decision making is required to be able to reason about scenarios relevant for intercepting the smuggler. In Figure~\ref{fig:ddn} a {\em dynamic decision network (DDN)} is shown based on the one-shot DN shown in Figure~\ref{fig:decision-graph}. A DDN consist of a Dynamic Bayesian Network (DBN) \cite{murphy00book} and a set of decision and utility nodes. A DBN is a BN discussed in Section~\ref{sec:influence-diagrams} {\red dat is deze sectie} and describes a temporal probabilistic model that allows reasoning about variables over time. In a DBN, transition probabilities for dynamic variables are to be specified. For example, in Figure~\ref{fig:ddn} the transition probabilities for the location of the smuggler are to be specified. Note that, there is no direct link between the position of the intercept vehicle $LI_t$ and $LI_{t+1}$ in two consecutive time slices, because we assume that the location of the intercept vehicle is always known. This means that the variable $LI_t$ can be observed in each time slice.
+In the Figure~\ref{fig:decision-graph} a decision network was shown for a so-called \emph{one-shot} decision. However, intercepting a smuggler that is actively trying to prevent capture governs an environment that is very dynamic. In such environments a one-shot decision is not sufficient and sequential decision making is required to be able to reason about scenarios relevant for intercepting the smuggler. In Figure~\ref{fig:ddn} a {\em dynamic decision network (DDN)} is shown based on the one-shot DN shown in Figure~\ref{fig:decision-graph}. A DDN consist of a Dynamic Bayesian Network (DBN) \cite{murphy02phdthesis} and a set of decision and utility nodes. A DBN is a BN discussed in Section~\ref{sec:influence-diagrams} {\red dat is deze sectie} and describes a temporal probabilistic model that allows reasoning about variables over time. In a DBN, transition probabilities for dynamic variables are to be specified. For example, in Figure~\ref{fig:ddn} the transition probabilities for the location of the smuggler are to be specified. Note that, there is no direct link between the position of the intercept vehicle $LI_t$ and $LI_{t+1}$ in two consecutive time slices, because we assume that the location of the intercept vehicle is always known. This means that the variable $LI_t$ can be observed in each time slice.
 
 In the DDN shown in Figure~\ref{fig:ddn} we distinguish between two types of chance variables, namely dynamic variables that change over time, shown as white oval nodes, and static variables that are time invariant during the smuggling operation, shown as gray oval nodes. Observations for time invariant nodes are typically coming from Intel. For example, Intel can be acquired about the possible destination of the smuggler. Moreover, in this model we assume that the state of the weather ($W$) at a certain location remains unchanged, \ie once the weather is observed its state is assumed not to change.
 
@@ -320,7 +331,7 @@ The state represents the location of the intercept vehicle under consideration f
 
 Given a factored state space $S = \left(X_1, \ldots, X_n\right)$, the domain of each variable $X_i$ can be defined as a single agent. Each variable's domain is restricted based on the underlying geographic characteristics \ie boats can only occupy a location on water. Moreover, political borders and no-fly zones can further restrict the domain of each variable.
 
-Similarly, the action space is factored based on the discretization of the state space. Suppose the state space is factored into square grids, then the possible actions for agents consist of $a\in\left\{n, nw, w, sw, s, se, e, ne, \o\right\}$ where $\o$ represents taking no action (\ie waiting). Based on the speed of each agent, actions are performed in specific intervals, where each action relocates the agent to an adjacent cell. Using these atomic actions, a set of waypoints can be defined to represent a plan. Waypoints are generated by repeatedly selecting the same action until the plan requires movement in a new direction. For instance, an action sequence for a given agent $a_i: n, n, n, n, w, w, w$ can be transformed to two waypoints, the first four cells north, and the second three cells west of the first.
+Similarly, the action space is factored based on the discretization of the state space. Suppose the state space is factored into square grids, then the possible actions for agents consist of $a\in\left\{n, nw, w, sw, s, se, e, ne, \emptyset \right\}$ where $\emptyset$ represents taking no action (\ie waiting). Based on the speed of each agent, actions are performed in specific intervals, where each action relocates the agent to an adjacent cell. Using these atomic actions, a set of waypoints can be defined to represent a plan. Waypoints are generated by repeatedly selecting the same action until the plan requires movement in a new direction. For instance, an action sequence for a given agent $a_i: n, n, n, n, w, w, w$ can be transformed to two waypoints, the first four cells north, and the second three cells west of the first.
 
 The space of observations $\mathcal{O}$, in the smuggler's case is small. The smuggler can be observed, or not observed at a location. We identify two types of observations:
 \begin{itemize}
