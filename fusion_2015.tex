@@ -40,7 +40,7 @@ Email: rik.claessens@d-cis.nl}
 
 % As a general rule, do not put math, special symbols or citations in the abstract
 \begin{abstract}
-Generally scenario-based reasoning methods do not explicitly consider the decisions in the reasoning process, while the consequences of these decisions do affect the further development of the scenarios. In this paper we extend a previously discussed scenario-based reasoning framework to include the actual decisions a decision maker needs to consider. The framework is based on Dynamic Decision Networks that allows to combine Bayesian networks with utilities and decision variables. Dynamic Decision Network can be used to reason about optimal sequential decisions under different observations and/or what-if conditions. Moreover, we discuss possible approaches to estimation and planning in case of complex decision problems. Throughout this paper the concepts are explained with the help of an example from the maritime security domain about countering a drug trafficking operation.
+Generally scenario-based reasoning methods do not explicitly consider the decisions in the scenario reasoning process, while the consequences of these decisions do affect the further development of the scenarios. In this paper we extend a previously discussed scenario-based reasoning framework to include the actual decisions a decision maker needs to consider. The framework is based on Dynamic Decision Networks that allows to combine Bayesian networks with utilities and decision variables. Dynamic Decision Network can be used to reason about optimal sequential decisions under different observations and/or what-if conditions. Moreover, we discuss possible approaches to estimation and planning in case of complex decision problems. Throughout this paper the concepts are explained with the help of an example from the maritime security domain about countering a drug trafficking operation.
 \end{abstract}
 
 \noindent
@@ -56,26 +56,25 @@ Decision making in contemporary complex domains, such as large-scale crisis mana
 
 A scenario can be considered as a narration concerning various events that have materialized (or going to materialize) over time. These events are often causally dependent on each other and can be captured as variables in a causal model \cite{pearl00book}. In \cite{conrado14if} we have shown that these causal models support {\em scoping of states} of scenario variables. Moreover, such causal models can be captured through Bayesian networks (BNs) \cite{pearl88book, jensen07book} to provide a convenient framework to manage a large set of scenarios through: (i) pruning of insignificant scenarios, (ii) updating the scenarios based on new observations and (iii) computing the likelihood of a scenario given the latest information to establish an ordering on the set of relevant scenarios. Additionally, BNs allows what-if exploration where, for example, the likelihood of certain (future) events are computed based on various assumptions about the occurrence of other events of the scenario.
 
-While BNs provide an effective way to manage scenarios it does not allow the actual decisions to be modeled. Neither do they provide recommendations on which decisions to take. In this paper the scenario-based reasoning framework is extended by capturing the structure of the decision process as well. This allows the model to give recommendations regarding decisions under the decision maker's consideration. The extended model is called a {\em decision network} \cite{russell02bn} (also influence diagram or decision graph \cite{jensen07book}). Next to chance nodes decision networks include both decision and utility nodes. such models also support assessment of risk by, for example, computing the worst case scenario considering the utilities in the model.
+While BNs provide an effective way to manage scenarios it does not allow the actual decisions to be modeled. Neither do they provide recommendations on which decisions to take. In this paper the scenario-based reasoning framework is extended by capturing the structure of the decision process as well. This allows the model to give recommendations regarding decisions under the decision maker's consideration. The extended model is called a {\em decision network} \cite{russell02bn} (also influence diagram or decision graph \cite{jensen07book}). Next to chance nodes decision networks include both decision and utility nodes\footnote{Decision Network can also be used for the assessment of risk by, for example, computing the worst case scenario considering the utilities in the model.}.
 
 
-Many approaches focuses on analyzing multiple hypotheses for situation assessment for decision support in which the decisions are not explicitly part of the model \cite{roy07fus,gustavi11eisic,holsopple}. In \cite{comes09iscram} an approach is described where scenario-based reasoning is integrated into Multi-Criteria Decision Analysis (MCDA). The aim of the combined scenario-based reasoning and MCDA approach is to evaluate each alternative for action (decision) under each scenario. 
+Many approaches focuses on analyzing multiple hypotheses for situation assessment for decision support in which the decisions are not explicitly part of the model \cite{roy07fus,gustavi11eisic,holsopple}. In \cite{comes09iscram} an approach is described where scenario-based reasoning is integrated into Multi-Criteria Decision Analysis (MCDA). The aim of the combined scenario-based reasoning and MCDA approach is to evaluate each alternative for action (decision) under each scenario. In this approach, however, future developments of scenarios are considered under different alternative for actions, while in this paper we focus also on past scenario developments as well as future developments.
 
 % The approach and computer tool presented in \cite{gustavi11eisic}, on the other hand, focus on a qualitative analysis to support the generation and evaluation of hypotheses in applications such as threat assessment and forensic analysis. The approach is based on two established analytical methods, namely Morphological Analysis and Analysis of Competing Hypotheses, and accounts for available evidence by matching it against the elements of the hypotheses (rather than the full hypotheses). 
 
-%TODO add literature review
 
-To facilitate the discussion we consider an example from the maritime security domain about countering a drug smuggling operation by intercepting a drug transport. Such domains, where information becomes available over time, are inherently dynamic. Alongside this, static information, such as Intel about the possible destination of the transport or context information about the area in which the smuggling operation takes place needs to be considered. Given the dynamic nature of this domain, sequential decisions is required. To support incorporation of dynamic and static information as well as sequential decision making we consider {\em dynamic decision networks} (DDN) \cite{russell02bn, jensen07book}. By casting the scenario model in a DDN we can reason about sequential decisions under various observations, what-if conditions and determine what is the best sequence of decisions to successfully counter the smuggling operation.
+To facilitate the discussion we consider an example from the maritime security domain about countering a drug smuggling operation by intercepting a drug transport. Such domains, where information becomes available over time, are inherently dynamic. Alongside this, static information, such as Intel about the possible destination of the transport or context information about the area in which the smuggling operation takes place needs to be considered. Given the dynamic nature of this domain, sequential decisions is required. To support incorporation of dynamic and static information as well as sequential decision making we consider {\em dynamic decision networks} (DDN) \cite{russell02bn, jensen07book}. By casting the scenario model into a DDN we can reason about the best sequence of decisions given the evidence that is available. Moreover, DDN also support what-if exploration by assuming evidence for certain scenario variables. In this way the decision maker can reason about the best sequence of decisions under different assumptions of the behavior of the smuggler.
 
-Most real-world sequential decision problems are often intractable to solve exactly due to partial observability, i.e. the current state of the situation cannot be directly observed. For example, in the smuggling example the location of the smuggler is not directly observable. This means that the corresponding Dynamic Decision Network is a Partial Observable Markov Decision Process (POMDP) \cite{russell02bn}. In these cases approximate methods need to be used for the the estimation of the current state and also for reasoning about the sequence of future sequential decisions. In this paper we consider a particle filter for the estimation of the current state, while for finding the optimal sequence of future decisions we use Monte Carlo Tree Search (MCTS).
+
+%TODO TOM: make sure this makes sense what I'm saying here, please rewrite
+Most real-world sequential decision problems are often intractable to solve exactly due to partial observability, i.e. the current state of the situation cannot be directly observed. For example, in the smuggling example the location of the smuggler is not directly observable. This means that the corresponding Dynamic Decision Network needs to be translated into a Partial Observable Markov Decision Process (POMDP) \cite{russell02bn}. In these cases approximate methods need to be used for the the estimation of the current state and also for reasoning about the sequence of future sequential decisions. In this paper we consider a particle filter for the estimation of the current state, while for finding the optimal sequence of future decisions we use Monte Carlo Tree Search (MCTS).
 
 % In this paper we discuss the methods that are required to do scenario-based reasoning incorporating decisions explicitly in a decision support tool.
 
 % {\red What do we expect, are we proposing a planning and simulation tool, (semi-)autonomous mission management, or decision support? I think we should place the proposed solution somewhere, so it is clear what it might be used for. In my view it could be used for all of the above, but it is probably better to focus on one application.}
 
 % In \cite{conrado14if} a method was discussed to manage the set of possible scenarios using Bayesian networks (BNs) \cite{pearl88book, jensen07book}. With the help of BN an estimate of the likelihood of the scenario to unfold can be computed given the evidence that is available at the time. With these likelihoods the set of scenarios can be ranked form most to least likely scenario, which enables the decision maker to focus on the set of most likely scenarios. The method described there did not model the actual decisions that a decision maker could make. In this paper 
-
-%TODO add related work about the use of influence diagrams and secenario based reasoning
 
 % In the BNIn this paper we are going to extend the framework discussed in \cite{conrado14if} with the actual decision
 
@@ -85,14 +84,19 @@ Most real-world sequential decision problems are often intractable to solve exac
 
 % When making decisions in complex contemporary applications, e.g. intelligence operations and large-scale crisis management, decision makers often need to construct and manage multiple hypotheses regarding the situation description in order to deal with uncertainties. Hypotheses about a situation's description are commonly referred to as {\em scenarios}. A scenario can be defined as a projected or imagined sequence of events describing what could possibly happen (or have happened). Scenarios can be used to deal with uncertainty by allowing the exploration of diverse descriptions of a given situation (and its possible developments) that are compatible with known information at any given time. Scenarios can thus offer multiple states of situation awareness and help overcome cognitive biases, and as such should ideally explore the whole set of plausible and relevant states of the world. Owing to human cognitive limitations, however, keeping track of all relevant information can become a challenge, even when only a few scenarios are considered.
 
+
+In Section~\ref{sec:maritime-drug-trafficking} we discuss the used running example in this paper from the the maritime drug trafficking domain. In this section we describe how the problem of intercepting a drug smuggling go-fast can be modeled through a causal model. In Section~\ref{sec:scenarios-decision-network} we discuss how the causal model from the previous section can be used in a Decision Network such that the decision maker decisions can be explicitly modeled. Moreover, we discuss how to extend this to sequential decisions in Dynamic Decision Networks. Section~\ref{sec:scenario-based-dm} and Section~\ref{sec:ma-dec-mak} we discuss how to represent and solve the Dynamic Decision Network using POMDPs, particle filter and MCTS considering the drug trafficking use case. We conclude the paper with a discussion in Section~\ref{sec:discussion}.
+
 %TODO add overview of the paper
-\section{Causal Models}
+\section{Maritime Drug Trafficking}\label{sec:maritime-drug-trafficking}
 
 %TODO explain the scenario
 
-Maritime drug trafficking is an ongoing problem in the Caribbean sea. Very fast and small vessels, so called go-fasts, are used to transport contraband from Columbia's and Venezuela's coast to Jamaica, Haiti and Dominican Republic to be further transported into North-America. The popularity of a go-fast to be used as a drug trafficking vehicle is due to the go-fast's size, speed and low radar and optical signatures. This makes go-fasts hard to detect and difficult to intercept by often slower coast guard vehicles. Nevertheless, the U.S. coast guard deploys their own go-fasts and helicopters equipped with anti-materiel rifles (AMR) to disable the engine of a running go-fast. 
+Maritime drug trafficking is an ongoing problem in the Caribbean sea. Very fast and small vessels, so called go-fasts, are used to transport contraband from the north-east South-America's coast to Jamaica, Haiti and Dominican Republic to be further transported into North-America. The popularity of a go-fast to be used as a drug trafficking vehicle is due to the go-fast's size, speed and low radar and optical signatures. This makes go-fasts hard to detect and difficult to intercept by slower coast guard vehicles. To counter the drug smuggling the U.S. coast guard deploys their own go-fasts and helicopters equipped with anti-materiel rifles (AMR) to disable the engine of a running go-fast. 
 
-The main challenge of anti-drug trafficking organizations, such as the coast guard, is to locate the smuggler's go-fast in order to intercept it. There are several type of observations that can be used. Location of the smuggler's go-fast can be determined by radar ($RO$) in case of calm sea or at close range or by visual observation ($VO$). A more recent type of observation is through the use of sonar mounted on buoys in the ocean ($SO$) that can register the typical engine sound of go-fast. Unfortunately, these type of observation might not be available. For radar and sonar the coverage is often limited and, therefore, not always available. A visual observation is only possible if an observer is close enough to report it. Knowledge regarding the location of the smuggler's go-fast allows us to reason about the possible intercept areas. This area can be a location where the smuggler's go-fast currently is or a more strategic position that is believed to be visited by the smuggler at some point in the future. These strategic positions are inferred from Intel collected during the anti-drug operations, for example. There might be Intel that the smuggler needs to refuel at some refueling location along their route ($RA$). This belief is based on Intel about the amount of fuel loaded on board prior to departure ($AF$), the possible destination ($D$) and the possible locations where refueling is possible ($LR$). If there is strong belief that the smuggler is going to refuel at a certain location then that location is a possible intercept area. In Figure~\ref{fig:causal-model} the causal model is depicted that describes the causal influences between these variables. All the variables are listed in Table~\ref{tab:scenario-variables}.
+The main challenge of anti-drug trafficking organizations, such as the coast guard, is to locate the smuggler's go-fast ($LS$) during transit. There are several type of observations that can be used to narrow down the possible locations of the smuggler such that intercept vehicles ($LI$) can travel to or be positioned strategically at an intercept area\footnote{An intercept area is an area where the smuggler is likely to travel through at some point in the future.} ($IA$), namely radar ($RO$), sonar ($SO$) and visual observations ($VO$). Radar observations can detect the signature of the go-fast, but are only available in case of calm sea or if the radar is at close range. Sonar mounted on buoys in the ocean ($SO$) can detect the distinctive engine sound of go-fast. Unfortunately, the coverage of both observations are limited and, therefore, not always available. A visual observation is only possible if an observer is close enough to report it. Beside the observation of the smuggler also Intel about the drug operations can be used to determine possible intercept area. There might be Intel that the smuggler needs to refuel ($RA$) at some refueling location $LR$) along their route. This belief is based on Intel about the amount of fuel loaded on board prior to departure ($AF$), the possible destination ($D$) and the possible locations where refueling is possible ($LR$). If there is strong belief that the smuggler is going to refuel at a certain location then that location is potentially a possible intercept area. Also the weather ($W$) can influence the possible location of the smugglers. In Figure~\ref{fig:causal-model} the causal model is depicted that describes the causal influences between the different variables. All the variables are listed in Table~\ref{tab:scenario-variables}.
+
+In \cite{conrado14if} we discuss how to determine the states of the variables, i.e. scoping of states, in the model shown in Figure~\ref{fig:causal-model}. The state combinations of all the variables make up the different scenarios in this domain. In the next section we discuss how causal models can be used in Decision Networks to include decisions in the scenario.
 
 \begin{table}[!ht]
  \centering
@@ -117,8 +121,8 @@ $LocationInterceptVehicle$ ($LI$) &
 Location of an available intercept vehicle. This could either be coast guard's go-fast or helicopter etc. \\
 $InterceptArea$ ($IA$) &
 Area where the intercept vehicles can intercept the smuggler's go-fast. \\
-$Destination$ ($D$) &
-Destination the smuggler are likely to travel to. \\
+$AmountFuel$ ($AF$) &
+The amount of fuel that is loaded on board of the go-fast. \\
 $RadarObservation$ ($RO$) &
 Radar observation of the smuggler's go-fast. \\
 $SonarObservation$ ($SO$) &
@@ -137,13 +141,12 @@ Visual observation of the smuggler's go-fast. \\
 
 % Timely response in Search and Rescue (SAR) operations is most critical in the first few hours after the emergency has taken place. Generally after the initial hours of the incident the chances of finding possible survivors is significantly reduced. Before the actual rescue operation can commence the main challenge is to locate the incident site. In order to locate the incident site the available resources, such as helicopter, planes, ships, search crew, dogs, etc. must deployed as fast as possible at the right location to minimize the localization time. In order to determine initial search location observation that can be used to infer the the possible incident location can be used.
 
-\section{Scenario Modeling}
-\label{sec:influence-diagrams}
+\section{Scenarios and Decision Networks}\label{sec:scenarios-decision-network}
 
 In \cite{conrado14if} BNs were used to represent a symmetric scenario tree capturing all possible scenarios given the modeled variables and states. The decision maker can use this BN to manage the set of scenarios under consideration using probabilistic inference to do pruning, ranking and what-if exploration. Based on this information the decision maker decides upon a course of action. %by making a decision.
-This decision results in an action or a set of actions, which  influence further development of the scenario. For example, sailing the intercept vehicle in the wrong direction, moving away from the smuggler, results in fewer or none possible intercept areas. 
+This decision results in an action or a set of actions, which  influence further development of the scenario. For example, sailing the intercept vehicle in the wrong direction, i.e. moving away from the smuggler, results in fewer or none possible intercept areas. 
 
-In this paper we extend the scenario reasoning framework discussed in \cite{conrado14if} to include the decisions explicitly. A BN can be extended to include decisions and corresponding utilities. Such a generalized model is called a decision network. In Subsection \ref{sec:bayesian-networks}, we briefly introduce BNs in the described use case. Next, in Subsection \ref{sec:decision-networks}, the described model is extended to include decisions.
+In this paper we extend the scenario reasoning framework discussed in \cite{conrado14if} to include decisions explicitly. A BN can be extended to include decisions and corresponding utilities by introducing decision and utility nodes, respectively. Such a generalized model is called a {\em decision network} (DN). In Subsection~\ref{sub:bayesian-networks}, we briefly introduce BNs in the described use case. Next, in Subsection~\ref{sec:decision-networks}, the described model is extended to include decisions.
 
 \begin{figure*}
 \begin{center}
@@ -155,7 +158,7 @@ In this paper we extend the scenario reasoning framework discussed in \cite{conr
 \end{figure*}
 
 
-\subsection{Bayesian networks}\label{sec:bayesian-networks}
+\subsection{Bayesian networks}\label{sub:bayesian-networks}
 
 % \begin{table}
 % \centering
@@ -223,10 +226,10 @@ Moreover, one of the main strengths of BNs is the possibility to perform predict
 
 A {\em decision network (DN)} (also influence diagram or decision graph \cite{russell02bn,howard84rpada,jensen07book}) is a concise graphical and mathematical representation of a decision problem. For example, the BN described in the previous section can be extended into the decision network (DN) shown in Figure~\ref{fig:decision-graph}. This DN consists of the same chance nodes as in the causal model in Figure~\ref{fig:causal-model} plus a decision node $B$ and a utility node $U$. A decision node represents possible actions the decision maker can take. In this case the actions are the different bearings the intercept vehicle can travel, such as North, East, South-west, etc. Next to the decisions we model the desirability of the states we end up in after taking an action. This desirability is modeled through the utility node and is dependent on the location of the intercept vehicle and areas. It is desirable that the intercept vehicle is near or at the location of the intercept areas prior to arrival of the smuggler, such that we are able to intercept the smuggler. Thus, the preference of the decision maker can be captured through a utility function that uses the position of the intercept vehicle and intercept areas as arguments.
 
-The location of the intercept vehicle\footnote{In this section we assume there is only a single intercept vehicle} and the smuggler's go-fast constitute a state $s$ in a set of states $\S$ defining the smuggler's domain. However, due to partial observability of the current state, the decision maker (also called agent in decision theoretic literature) has to maintain a belief $P(\S = s \mid  a, \epsilon)$ over the possible states it might be in given an action $a$ and evidence $\epsilon$. The reason for this is that the position of the smuggler is not directly observable after an action $a$, but needs to be estimated from observations $\epsilon$, such as radar, sonar, visual observations or Intel about a possible destination or refueling location (see also causal model in Figure~\ref{fig:causal-model}). Since the agent does not know in which state it is it needs to compute an expected utility based on the utility function $U(s)$ capturing the preferences of the decision maker:
+The location of the intercept vehicle\footnote{In this section we assume there is only a single intercept vehicle} and the smuggler's go-fast constitute a state $s$ in a set of states $\S$ defining the smuggler's domain. However, due to partial observability of the current state, the decision maker (from this point on we refer to the decision maker as  agent) has to maintain a belief $P(\S = s \mid  a, \epsilon)$ over the possible states it might be in given an action $a$ and evidence $\epsilon$. The reason for this is that the position of the smuggler is not directly observable after an action $a$, but needs to be estimated from observations $\epsilon$, such as radar, sonar, visual observations or Intel about a possible destination or refueling location (see also causal model in Figure~\ref{fig:causal-model}). Since the agent does not know in which state it is in it needs to compute an expected utility based on the utility function $U(s)$ capturing the preferences of the decision maker:
 
 \begin{eqnarray}
- EU(a|\epsilon) = \sum_{s^\prime}P(\S = s^\prime\mid a, \epsilon)U(s^\prime)
+ EU(a|\epsilon) = \sum_{s^\prime}\P(\S = s^\prime\mid a, \epsilon)U(s^\prime)
 \end{eqnarray}
 
 With the help of the expected utility $EU(a|\epsilon)$ the best action $a^*$ can be computed with:
@@ -263,11 +266,13 @@ Equation~\ref{eq:meu} presents two challenges we need to address in order to com
 \subsection{Dynamic Decision Networks}
 \label{sub:dyn-dec-net}
 
-In the Figure~\ref{fig:decision-graph} a decision network was shown for a so-called \emph{one-shot} decision. However, intercepting a smuggler that is actively trying to prevent capture governs an environment that is very dynamic. In such environments a one-shot decision is not sufficient and sequential decision making is required to be able to reason about scenarios relevant for intercepting the smuggler. In Figure~\ref{fig:ddn} a {\em dynamic decision network (DDN)} is shown based on the one-shot DN shown in Figure~\ref{fig:decision-graph}. A DDN consist of a Dynamic Bayesian Network (DBN) \cite{murphy02phdthesis} and a set of decision and utility nodes. A DBN is a BN discussed in Section~\ref{sec:influence-diagrams} {\red dat is deze sectie} and describes a temporal probabilistic model that allows reasoning about variables over time. In a DBN, transition probabilities for dynamic variables are to be specified. For example, in Figure~\ref{fig:ddn} the transition probabilities for the location of the smuggler are to be specified. Note that, there is no direct link between the position of the intercept vehicle $LI_t$ and $LI_{t+1}$ in two consecutive time slices, because we assume that the location of the intercept vehicle is always known. This means that the variable $LI_t$ can be observed in each time slice.
+In Figure~\ref{fig:decision-graph} a decision network is shown for a so-called \emph{one-shot} decision. However, intercepting a smuggler that is actively trying to prevent capture governs an environment that is very dynamic. In such environments a one-shot decision is not sufficient and sequential decision making is required to be able to reason about scenarios relevant for intercepting the smuggler. In Figure~\ref{fig:ddn} a {\em dynamic decision network (DDN)} is shown based on the one-shot DN shown in Figure~\ref{fig:decision-graph}. A DDN consist of a Dynamic Bayesian Network (DBN) \cite{murphy02phdthesis} that is extended with a set of decision and utility nodes. A DBN is a BN, discussed in Section~\ref{sub:bayesian-networks}, and describes a temporal probabilistic model that supports reasoning about variables over time. In a DBN, transition probabilities for the dynamic variables $LS_t$ need to be specified. Note that, there is no direct link between the position of the intercept vehicle $LI_t$ in two consecutive time slices, because we assume that the location of the intercept vehicle is always known. This means that the variable $LI_t$ is instantiated in each time slice.
 
 In the DDN shown in Figure~\ref{fig:ddn} we distinguish between two types of chance variables, namely dynamic variables that change over time, shown as white oval nodes, and static variables that are time invariant during the smuggling operation, shown as gray oval nodes. Observations for time invariant nodes are typically coming from Intel. For example, Intel can be acquired about the possible destination of the smuggler. Moreover, in this model we assume that the state of the weather ($W$) at a certain location remains unchanged, \ie once the weather is observed its state is assumed not to change.
 
-Because the location of the smuggler is not directly observable, the model depicted in Figure~\ref{fig:ddn} is considered a Partially Observable Markov Decision Process (POMDP). The location of the smuggler needs to be estimated through observations such as radar ($RO_t$), visual ($VO_t$) or sonar ($SO_t$) observations. Additionally, information regarding weather $W$, and destination $D$ can be used to estimate the location of the smuggler.
+Since the location of the smuggler is generally not directly observable observations, such as radar ($RO_t$), visual ($VO_t$) or sonar ($SO_t$), are required to estimate the current state. Additionally, information regarding weather $W$, and destination $D$ can also be used to estimate the location of the smuggler. Due to this partial observability the model depicted in Figure~\ref{fig:ddn} is solved with the help of a Partially Observable Markov Decision Process (POMDP) which is discussed in the next section.
+
+% Because the location of the smuggler is not directly observable, the model depicted in Figure~\ref{fig:ddn} should be solved with the help of a Partially Observable Markov Decision Process (POMDP). The location of the smuggler needs to be estimated through observations such as radar ($RO_t$), visual ($VO_t$) or sonar ($SO_t$) observations. Additionally, information regarding weather $W$, and destination $D$ can be used to estimate the location of the smuggler.
 
 \subsection{Partially Observable Markov Decision Process}
 \label{sub:pomdp}
@@ -282,11 +287,14 @@ A Markov Decision Process (MDP)~\cite{bellman1957dynamic,mdp} describes synchron
 \item $\gamma$ is the discount factor, which prioritizes present over future rewards.
 \end{itemize}
 
+
+%TODO TOM: is value function the same as utility function. This needs to made consistent throughout the text
+
 The agent's goal is to find a policy $\pi$ that maximizes the value function
 \begin{equation}
 V_{\pi}(s) = \R(s,\pi(s)) + \gamma\sum\limits_{s^\prime\in\S}\P\left(s^\prime\mid\pi(s),s\right)V_{\pi}(s^\prime).
 \end{equation} 
-By describing a problem as an MDP, the assumption is made that the agent can fully observe the world. However, in many real-world domains, the state of the world is not fully observable, and the agent cannot immediately determine the state it is in. To represent this uncertainty over the agent's current state and observations, the MDP model can be extended to a Partially Observable MDP (POMDP)~\cite{aastrom1965optimal,pomdp} such that: 
+By describing a problem as an MDP, the assumption is made that the agent can fully observe the world. However, in many real-world domains, the state of the world is not fully observable (as is the case in the drug smuggling example), and the agent cannot immediately determine the state it is in. To represent this uncertainty over the agent's current state and observations, the MDP model can be extended to a Partially Observable MDP (POMDP)~\cite{aastrom1965optimal,pomdp} such that: 
 
 \begin{itemize}
 \item $\S,\mathcal{A},\P,R,$ and $\gamma$ describe the MDP,
@@ -296,9 +304,12 @@ By describing a problem as an MDP, the assumption is made that the agent can ful
 
 In order to maintain an internal belief state, the agent can only use its observed \emph{history}. A history describes a sequence of actions and observations, $h_t = \{a_1, o_1, \ldots, a_t, o_t\}$. An agent maintains an internal {\it belief state} $\B = P(s_t\mid  h_t)$, in which the probability distribution over the possible states are summarized given the current history $h_t$. The agent's \emph{policy} $\pi(h,a)$ determines the probability distribution $P(a_{t+1}\mid h_t)$ over available actions given the history. The value function $V_{\pi}(h)$ is the {\it expected return} when following policy $\pi$, where the return $R_t = \sum\nolimits_{k=t}^{\infty} \gamma^{k−t}r_k$ is the total discounted reward received from time $t$. In any POMDP there is at least one optimal policy $\pi^*(h, a)$ with the optimal value.
 
-POMDP's are harder to solve exactly than MDPs, suffering from both the {\it curse of dimensionality} as well as the {\it curse of history}~\cite{pineau2006anytime}. Therefore, they require approximate methods to be used in real-world problems.
+POMDPs are harder to solve exactly than MDPs, suffering from both the {\it curse of dimensionality} as well as the {\it curse of history}~\cite{pineau2006anytime}. Therefore, they require approximate methods to be used in real-world problems.
 
 In Section~\ref{sec:scenario-based-dm} we will describe a configuration of a POMDP in order to introduce an approach to sequential planning and decision-making under uncertainty in the smuggler use case. 
+
+
+%TODO we need to say something about scenarios here. Text seems to depart a bit from scenario based reasoning. How does POMDP help in scenario-based reasoning?
 
 % Making decisions based on a POMDP defined in the previous section
 %\begin{figure}[t]
@@ -308,17 +319,22 @@ In Section~\ref{sec:scenario-based-dm} we will describe a configuration of a POM
 %\end{center}
 %\end{figure}
 
+%TODO I liked the previous title better. We should avoid that is paper feels like an overview of planning under uncertainty methods. We should always connect to scenario to make the paper more coherent
 \section{POMDP for the Drug Trafficking Domain}
 \label{sec:scenario-based-dm}
 
-In Section~\ref{sec:influence-diagrams} models are used to describe a formal reasoning method about possible future states of a drug trafficking event. Based on these models, we can explore possible futures and strategies to create a robust plan of action. The goal of this section is to define the elements of the POMDP model as described in Subsection~\ref{sub:pomdp}, which we will use in Section~\ref{sec:ma-dec-mak} to establish and rank decisions.
+In Section~\ref{sec:scenarios-decision-network} models are used to describe a formal reasoning method about possible future states of a drug trafficking event. Based on these models, we can explore possible futures and strategies to create a robust plan of action. The goal of this section is to define the elements of the POMDP model as described in Subsection~\ref{sub:pomdp}, which we will use in Section~\ref{sec:ma-dec-mak} to establish and rank decisions.
 
 \subsection{Planning Under Uncertainty}
 \label{sub:plan-uncert}
 
-To scope the definition of our problem, we make the assumption that the locations of all friendly agent is available. Moreover, we assume that two-way communication with the agent is possible, such that commands can be sent, and observations received. The proposed methods can nonetheless be extended to environments where agents can not share their observations. In this case, a \emph{decentralized} POMDP (DEC-POMDP)~\cite{dec-pomdp,oliehoek2008optimal} model is to be defined.
+% FIXME I think this can be removed
+% To scope the definition of our problem, we make the assumption that the location of the intercept vehicle is known. Moreover, we assume that two-way communication with the agent is possible, such that commands can be sent, and observations received. The proposed methods can nonetheless be extended to environments where agents can not share their observations. In this case, a \emph{decentralized} POMDP (DEC-POMDP)~\cite{dec-pomdp,oliehoek2008optimal} model is to be defined.
 
-Based on the decision network depicted in Figure~\ref{fig:decision-graph} an exploration of possible plans should be generated to explore which course of action is the most likely to capture the smuggler. In this section, the individual elements of the POMDP are defined in order to use an algorithm to generate plans for the intercept vehicle. The state $\S$ represents the possible locations of the intercept vehicle $(LI_t)$. Moreover, we define a particle filter to map the agent's belief over the possible locations of the smuggler $(LS_t)$ in which the context of the problem has an influence on the location of the smuggler. Variables such as the expected destination $(D)$, refueling actions $(RA)$ and external factors such as the weather $(W)$ all influence the belief over the location of the smuggler. The actions $\A$ represent the he intercept vehicle's decisions $(A)$. The agent receives a reward $r$ only when the smuggler is captured. This can be defined as the fact that the agent is in the direct vicinity of the smuggler. Lastly, observations $\mathcal{O}$ map to the evidence nodes $(VO_t), (RO_t), (SO_t)$ in the decision network.
+Based on the decision network depicted in Figure~\ref{fig:decision-graph} an exploration of possible plans should be generated to explore which course of action is the most likely to capture the smuggler. In this section, the individual elements of the POMDP are defined in order to use an algorithm to generate plans for the intercept vehicle. The state $\S$ represents the possible locations of the intercept vehicle $(LI_t)$. Moreover, we define a particle filter to map the agent's belief over the possible locations of the smuggler $(LS_t)$ in which the context of the problem has an influence on the location of the smuggler. Variables such as the expected destination $(D)$, refueling actions $(RA)$ and external factors such as the weather $(W)$ all influence the belief over the location of the smuggler. The actions $\A$ represent the intercept vehicle's decisions $(A)$. The agent receives a reward $R(s,a)$ only when the smuggler is captured {\red what about the intercept area?}. This can be defined as the fact that the agent is in the direct vicinity of the smuggler. Lastly, observations $\mathcal{O}$ map to the evidence nodes $(VO_t), (RO_t), (SO_t)$ in the decision network.
+
+%TODO I'm not sure how the intercept area (IA) variable is used. According to the DDN this is the only variable that should influence your action. The reward is based on LS, LI and IA, but how?
+
 
 The following subsections define an abstract model of the domain in which high-level decisions can be generated.
 
@@ -329,16 +345,17 @@ Maritime security situations may play out over a sizable area. Based on the situ
 
 The state represents the location of the intercept vehicle under consideration for the planner. The model can be extended to represent multiple agents, in which each agent $\psi_i\in\Psi$ occupies a single location defined by the underlying geographical area in which the scenario takes place.
 
-Given a factored state space $S = \left(X_1, \ldots, X_n\right)$, the domain of each variable $X_i$ can be defined as a single agent. Each variable's domain is restricted based on the underlying geographic characteristics \ie boats can only occupy a location on water. Moreover, political borders and no-fly zones can further restrict the domain of each variable.
+Given a factored state space $S = \left(X_1, \ldots, X_n\right)$, the domain of each variable $X_i$ can be defined as a single agent. For example, the states of the variables $LS$ and $LI$ make up the state space. Each variable's domain is restricted based on the underlying geographic characteristics \ie boats can only occupy a location on water. Moreover, political borders and no-fly zones can further restrict the domain of each variable.
 
 Similarly, the action space is factored based on the discretization of the state space. Suppose the state space is factored into square grids, then the possible actions for agents consist of $a\in\left\{n, nw, w, sw, s, se, e, ne, \emptyset \right\}$ where $\emptyset$ represents taking no action (\ie waiting). Based on the speed of each agent, actions are performed in specific intervals, where each action relocates the agent to an adjacent cell. Using these atomic actions, a set of waypoints can be defined to represent a plan. Waypoints are generated by repeatedly selecting the same action until the plan requires movement in a new direction. For instance, an action sequence for a given agent $a_i: n, n, n, n, w, w, w$ can be transformed to two waypoints, the first four cells north, and the second three cells west of the first.
 
 The space of observations $\mathcal{O}$, in the smuggler's case is small. The smuggler can be observed, or not observed at a location. We identify two types of observations:
 \begin{itemize}
-\item Based on the sensor payload of an agent, an observation model describes its footprint, modeled as $(VO_t), (RO_t), (SO_t)$ in the BN
+%\item Based on the sensor payload of an agent, an observation model describes its footprint, modeled as $(VO_t), (RO_t), (SO_t)$ in the BN
+\item Based on the type of sensor the observation model is modeled with $P(VO_t|LS_t), P(RO_t|LS_t), P(SO_t|LS_t)$.
 \item External evidence, such as a refueling action $(RA)$. These observations are used as evidence $\epsilon$ in the BN
 \end{itemize}
-Both observations, and evidence can be used to update an agent's belief of the smuggler's location.
+Evidence can be used to update an agent's belief of the smuggler's location.
 
 \subsection{Belief Filtering with Context}
 \label{subsec:belief-filter}
@@ -349,6 +366,7 @@ A common technique for target tracking is Particle Filters (PF)~\cite{Blackman19
 
 Given the current scenario it is possible to improve the PF's tracking performance, by ruling out particles that - based on the scenario - cannot be correct~\cite{Claessens2015}. For instance, given the DDN in Figure~\ref{fig:ddn}, there are two variables that influence the location of the smuggler ($LS$): $W$ and $D$. Assume that at some moment after receiving a specific piece of Intel, the destination of the smuggler ($D$) becomes known. This information can be used to predict possible routes of the smuggler to this designated location. Consequently, a PF can be used to predict a smuggler's possible trajectory along that route.
 
+%TODO maybe this should be moved to the discussion.
 \subsection{Planning With Multiple Agents}
 \label{sub:plan-mult-ag}
 
@@ -362,15 +380,18 @@ Locating and capturing the smuggler by multiple agents requires some form of cen
 \end{itemize}
 Planning these tasks requires cooperation between the agents. Therefore, a joint strategy for the execution of such a plan, based on the uncertain knowledge provided by prior knowledge and observations may play a large role in the success of such missions. Moreover, exploring possible future scenario's based on the expected behavior of the smuggler may offer new insights for human operators.
 
+%TODO why do we have a seperate section? This is also about planning, as is the previous section. right?
 \section{Planning and Decision-Making}
 \label{sec:ma-dec-mak}
 
-Making decisions in uncertain situations is a complex strategic task. In circumstances where situational knowledge and observations are sparse it is hard for humans to predict and rank all possible outcomes in order to develop a robust plan. Therefore, using the described definition of the smuggler case as a POMDP, our goal is to find a joint strategy that minimizes the probability of escape for the smuggler. Online planning offers the capability of establishing a plan that (i) immediately generates an ongoing strategy, (ii) which improves over time, and (iii) can manage incoming observations, sudden constraints, and changing situations. 
+Making decisions in uncertain situations is a complex strategic task. In circumstances where situational knowledge and observations are sparse it is hard for humans to predict and rank all possible outcomes in order to develop a robust plan. Therefore, using the described definition of the smuggler case as a POMDP, our goal is to find a joint {\red why joint?... there is only one intercept vehicle} strategy that minimizes the probability of escape for the smuggler. Online planning offers the capability of establishing a plan that (i) immediately generates an ongoing strategy, (ii) which improves over time, and (iii) can manage incoming observations, sudden constraints, and changing situations. 
 
 Using a forward search technique, the current belief is used to form an approximation of the optimal value function. Generally, online planning algorithms for POMDPs use a point-based value iteration~\cite{pineau2006anytime,ross2008online}, generating and traversing a search tree in a heuristic best-first order. However, these techniques are only efficient if the POMDP is either compactly factored, or has a small state space. Moreover, these techniques cannot be interrupted to return a policy at anytime, rather, they require the search to be fully completed in order to return a policy. Lastly, introducing new knowledge such as new constraints or intelligence would require outright re-planning.
 
 \subsection{Monte-Carlo Tree Search}
 \label{sub:mcts}
+
+%TODO this section feels disconnected from the rest. I suggest to connect it to the example and scenario-based reasoning
 
 Using Monte-Carlo methods for online planning is an active branch of research in artificial intelligence~\cf~\cite{browne2012survey}. {\it Monte-Carlo Tree Search} (MCTS)~\cite{coulom2007efficient,kocsis2006bandit} is a simulation-based best-first search technique for decision-making problems. MCTS has shown to improve performance in various domains such as games, planning, and scheduling~\cite{browne2012survey}. Often, these types of domains can be represented as a form of MDP or POMDP, and new research has shifted focus to adapting MCTS specifically to POMDP domains~\cite{silver2010monte,Feldman12BRUE}. 
 
@@ -383,6 +404,8 @@ i^* = argmax_{i \in I(p)}\left\{ Q(s,a) + C \sqrt{ \frac{\ln{n(s)}}{n(s, a)}}\ri
 \end{equation}
 where $n(s)$ and $n(s, a)$ are the visit counts of the current node and its child, respectively. $C$ is the exploration constant to tune. Commonly, the \emph{rollout policy} selects actions uniformly random. However, using heuristics or domain knowledge can greatly improve the quality of the recommended decisions~\cite{browne2012survey}.
 
+
+%TODO would be great if this example could be connected to the smuggler example
 \begin{figure}
 \begin{center}
  \includegraphics[width=.44\textwidth]{img/searchtree.png}
@@ -404,7 +427,11 @@ In the drug trafficking case, simulated actions by the smuggler are thus not inc
 \section{Discussion}
 \label{sec:discussion}
 
-To summarize the methods and models presented in the previous sections we discuss the expected challenges for future work in multi-agent decision-making in the drug trafficking domain.
+In this paper we discussed a generic framework by combining Dynamic Decision Networks, POMDPs and MCTS, to represent scenarios including explicit representation of the decision maker's decisions. With the help of this framework we can explicitly reason about sequential decisions based on the obtained evidence. Moreover, the framework allows to reason about sequential decisions under what-if exploration, where the decision maker can assume certain values of the scenario variables and estimate the best course of action. Moreover, such a system can offer decision makers the opportunity to explore the effects of different actions and circumstances on the success of an operation. Based on the defined models such a system can be used for other operations that require planning. Domains such as: search-and-rescue, maritime security or autonomous surveillance. Ultimately, the challenges faced should be confined to designing suitable models, rather than developing individual planning and exploration software tools for individual domains. This may require defining the semantics of the variables and states of the decision networks, which is a course for future work.
+
+
+
+% To summarize the methods and models presented in the previous sections we discuss the expected challenges for future work in multi-agent decision-making in the drug trafficking domain.
 
 The dynamic decision network described in Subsection~\ref{sub:dyn-dec-net} was translated into a POMDP as described in Section~\ref{sec:scenario-based-dm}. The general approach to generating decisions for large POMDPs was then described in Subsections~\ref{sub:mcts} and~\ref{sub:pomcts}. Based on the literature researched in these topics, we anticipate the following challenges when exploring these POMDPs in the drug trafficking case:
 \begin{itemize}
@@ -414,8 +441,7 @@ The dynamic decision network described in Subsection~\ref{sub:dyn-dec-net} was t
 \item A random rollout policy for the intercepting agents is insufficient. Due to the large directional freedom of the problem, randomly moving on a map will provide an extremely low chance of finding a rewarding state (\ie capturing the smuggler). Instead, during rollouts, agents should select actions using some heuristic policy. Another option may be to reward agents based on their distance to the smuggler after a finite horizon.
 \end{itemize}
 
-Based on the discussed techniques and challenges, we can define a generic solution to combining decision networks, POMDPs and MCTS for decision-making and scenario exploration in the drug trafficking domain. Such a system can offer decision makers the opportunity to explore the effects of different actions and circumstances on the success of an operation. Moreover, it allows the exploration of different scenarios to determined a robust course of action.
-Based on the defined models such a system can be used for other operations that require planning. Domains such as: search-and-rescue, maritime security or autonomous surveillance. Ultimately, the challenges faced should be confined to designing suitable models, rather than developing individual planning and exploration software tools for individual domains. This may require defining the semantics of the variables and states of the decision networks, which is a course for future work.
+% Based on the discussed techniques and challenges, we can define a generic solution to combining decision networks, POMDPs and MCTS for decision-making and scenario exploration in the drug trafficking domain. Such a system can offer decision makers the opportunity to explore the effects of different actions and circumstances on the success of an operation. Moreover, it allows the exploration of different scenarios to determined a robust course of action.
 
 \bibliographystyle{IEEEtran}
 \bibliography{tombib,BNbib}
