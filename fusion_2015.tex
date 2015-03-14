@@ -44,7 +44,7 @@ Generally scenario-based reasoning methods do not explicitly consider the decisi
 \end{abstract}
 
 \noindent
-{\bf Keywords: scenarios, situation assessment, decision making, causal models, causal processes, Bayesian networks, Monte Carlo Tree Search, particle filter, POMDP, Intel-based operations}
+{\bf Keywords: scenarios, situation assessment, decision making, causal models, causal processes, Bayesian networks, Monte-Carlo Tree Search, particle filter, POMDP, Intel-based operations}
 
 
 \IEEEpeerreviewmaketitle
@@ -67,7 +67,7 @@ To facilitate the discussion we consider an example from the maritime security d
 
 
 %TODO TOM: make sure this makes sense what I'm saying here, please rewrite
-Most real-world sequential decision problems are often intractable to solve exactly due to partial observability, i.e. the current state of the situation cannot be directly observed. For example, in the smuggling example the location of the smuggler is not directly observable. This means that the corresponding Dynamic Decision Network needs to be translated into a Partial Observable Markov Decision Process (POMDP) \cite{russell02bn}. In these cases approximate methods need to be used for the the estimation of the current state and also for reasoning about the sequence of future sequential decisions. In this paper we consider a particle filter for the estimation of the current state, while for finding the optimal sequence of future decisions we use Monte Carlo Tree Search (MCTS).
+Most real-world sequential decision problems are intractable to solve exactly due to partial observability, \ie the current state of the situation cannot be directly observed. For example, in the smuggling example the location of the smuggler is not directly observable. This means that the corresponding Dynamic Decision Network can be translated into a Partial Observable Markov Decision Process (POMDP) \cite{pomdp}. In these cases approximate methods need to be used for the the estimation of the current state and also for reasoning about the sequence of future sequential decisions. In this paper we consider a particle filter to the estimation of the current state, while using Monte-Carlo Tree Search (MCTS) to find the optimal sequence of future decisions.
 
 % In this paper we discuss the methods that are required to do scenario-based reasoning incorporating decisions explicitly in a decision support tool.
 
@@ -292,8 +292,10 @@ A Markov Decision Process (MDP)~\cite{bellman1957dynamic,mdp} describes synchron
 
 The agent's goal is to find a policy $\pi$ that maximizes the value function
 \begin{equation}
-V_{\pi}(s) = \R(s,\pi(s)) + \gamma\sum\limits_{s^\prime\in\S}\P\left(s^\prime\mid\pi(s),s\right)V_{\pi}(s^\prime).
+V_{\pi}(s) = \R(s,\pi(s)) + \gamma\sum\limits_{s^\prime\in\S}\P\left(s^\prime\mid\pi(s),s\right)V_{\pi}(s^\prime),
 \end{equation} 
+which is the value of the discounted utility of a given policy.
+
 By describing a problem as an MDP, the assumption is made that the agent can fully observe the world. However, in many real-world domains, the state of the world is not fully observable (as is the case in the drug smuggling example), and the agent cannot immediately determine the state it is in. To represent this uncertainty over the agent's current state and observations, the MDP model can be extended to a Partially Observable MDP (POMDP)~\cite{aastrom1965optimal,pomdp} such that: 
 
 \begin{itemize}
@@ -306,8 +308,7 @@ In order to maintain an internal belief state, the agent can only use its observ
 
 POMDPs are harder to solve exactly than MDPs, suffering from both the {\it curse of dimensionality} as well as the {\it curse of history}~\cite{pineau2006anytime}. Therefore, they require approximate methods to be used in real-world problems.
 
-In Section~\ref{sec:scenario-based-dm} we will describe a configuration of a POMDP in order to introduce an approach to sequential planning and decision-making under uncertainty in the smuggler use case. 
-
+In Section~\ref{sec:scenario-based-dm} we will describe a configuration of a POMDP for the smuggler use case, to introduce an approach to sequential planning and decision-making under uncertainty. 
 
 %TODO we need to say something about scenarios here. Text seems to depart a bit from scenario based reasoning. How does POMDP help in scenario-based reasoning?
 
@@ -320,21 +321,15 @@ In Section~\ref{sec:scenario-based-dm} we will describe a configuration of a POM
 %\end{figure}
 
 %TODO I liked the previous title better. We should avoid that is paper feels like an overview of planning under uncertainty methods. We should always connect to scenario to make the paper more coherent
-\section{POMDP for the Drug Trafficking Domain}
+\section{Scenario-based Decision-Making}
 \label{sec:scenario-based-dm}
 
 In Section~\ref{sec:scenarios-decision-network} models are used to describe a formal reasoning method about possible future states of a drug trafficking event. Based on these models, we can explore possible futures and strategies to create a robust plan of action. The goal of this section is to define the elements of the POMDP model as described in Subsection~\ref{sub:pomdp}, which we will use in Section~\ref{sec:ma-dec-mak} to establish and rank decisions.
 
-\subsection{Planning Under Uncertainty}
-\label{sub:plan-uncert}
+Based on the decision network depicted in Figure~\ref{fig:decision-graph} an exploration of possible plans should be generated to explore which course of action is the most likely to capture the smuggler. In this section, the individual elements of the POMDP are defined in order to use an algorithm to generate plans for the intercept vehicle. The state $\S$ represents the possible locations of the intercept vehicle $(LI_t)$. Moreover, we define a particle filter to map the agent's belief over the possible locations of the smuggler $(LS_t)$ in which the context of the problem has an influence on the location of the smuggler. Variables such as the expected destination $(D)$, refueling actions $(RA)$ and external factors such as the weather $(W)$ all influence the belief over the location of the smuggler. The actions $\A$ represent the intercept vehicle's decisions $(A)$. The agent receives a reward $R(s,a)$ when the smuggler is captured in the intercept area $(IA)$. This can be defined as the fact that the agent is in the direct vicinity of the smuggler. Lastly, observations $\mathcal{O}$ map to the evidence nodes $(VO_t), (RO_t), (SO_t)$ in the decision network.
 
-% FIXME I think this can be removed
-% To scope the definition of our problem, we make the assumption that the location of the intercept vehicle is known. Moreover, we assume that two-way communication with the agent is possible, such that commands can be sent, and observations received. The proposed methods can nonetheless be extended to environments where agents can not share their observations. In this case, a \emph{decentralized} POMDP (DEC-POMDP)~\cite{dec-pomdp,oliehoek2008optimal} model is to be defined.
-
-Based on the decision network depicted in Figure~\ref{fig:decision-graph} an exploration of possible plans should be generated to explore which course of action is the most likely to capture the smuggler. In this section, the individual elements of the POMDP are defined in order to use an algorithm to generate plans for the intercept vehicle. The state $\S$ represents the possible locations of the intercept vehicle $(LI_t)$. Moreover, we define a particle filter to map the agent's belief over the possible locations of the smuggler $(LS_t)$ in which the context of the problem has an influence on the location of the smuggler. Variables such as the expected destination $(D)$, refueling actions $(RA)$ and external factors such as the weather $(W)$ all influence the belief over the location of the smuggler. The actions $\A$ represent the intercept vehicle's decisions $(A)$. The agent receives a reward $R(s,a)$ only when the smuggler is captured {\red what about the intercept area?}. This can be defined as the fact that the agent is in the direct vicinity of the smuggler. Lastly, observations $\mathcal{O}$ map to the evidence nodes $(VO_t), (RO_t), (SO_t)$ in the decision network.
-
-%TODO I'm not sure how the intercept area (IA) variable is used. According to the DDN this is the only variable that should influence your action. The reward is based on LS, LI and IA, but how?
-
+%TODO I'm not sure how the intercept area (IA) variable is used. According to the DDN this is the only variable that should influence your action. The reward is based on LS, LI and IA, but how? 
+% IA is more of an abstraction, it could be removed without affecting how the system would work. Because you are interested in actually capturing the smuggler ie LS = LP
 
 The following subsections define an abstract model of the domain in which high-level decisions can be generated.
 
@@ -351,7 +346,6 @@ Similarly, the action space is factored based on the discretization of the state
 
 The space of observations $\mathcal{O}$, in the smuggler's case is small. The smuggler can be observed, or not observed at a location. We identify two types of observations:
 \begin{itemize}
-%\item Based on the sensor payload of an agent, an observation model describes its footprint, modeled as $(VO_t), (RO_t), (SO_t)$ in the BN
 \item Based on the type of sensor the observation model is modeled with $P(VO_t|LS_t), P(RO_t|LS_t), P(SO_t|LS_t)$.
 \item External evidence, such as a refueling action $(RA)$. These observations are used as evidence $\epsilon$ in the BN
 \end{itemize}
@@ -370,7 +364,7 @@ Given the current scenario it is possible to improve the PF's tracking performan
 \subsection{Planning With Multiple Agents}
 \label{sub:plan-mult-ag}
 
-As described, the definition of our POMDP can be extended to include decision-making by multiple agents. This results in an altered problem definition. Nonetheless, the models to be used can be trivially extended by considering joint actions and observations by the set of agents.
+As described in this section, the definition of the drug trafficking POMDP can be extended to include decision-making by multiple agents. This results in an altered problem definition. Nonetheless, the models to be used can be trivially extended by considering joint actions and observations by the set of agents.
 
 Locating and capturing the smuggler by multiple agents requires some form of centralized coordination. The team can be heterogeneous in the sense that different agents have different levels of autonomy, capabilities, and payloads. For example, we may have the availability of two UAV's with infrared sensors, and four armed, human operated patrol boats. Given this task force, several distinct but reliant tasks can be distinguished for individual agents:
 \begin{itemize}
@@ -380,20 +374,20 @@ Locating and capturing the smuggler by multiple agents requires some form of cen
 \end{itemize}
 Planning these tasks requires cooperation between the agents. Therefore, a joint strategy for the execution of such a plan, based on the uncertain knowledge provided by prior knowledge and observations may play a large role in the success of such missions. Moreover, exploring possible future scenario's based on the expected behavior of the smuggler may offer new insights for human operators.
 
-%TODO why do we have a seperate section? This is also about planning, as is the previous section. right?
+%TODO why do we have a seperate section? This is also about planning, as is the previous section. right? The previous section defined the POMDP, this one describes methods to solve POMDPs
 \section{Planning and Decision-Making}
 \label{sec:ma-dec-mak}
 
-Making decisions in uncertain situations is a complex strategic task. In circumstances where situational knowledge and observations are sparse it is hard for humans to predict and rank all possible outcomes in order to develop a robust plan. Therefore, using the described definition of the smuggler case as a POMDP, our goal is to find a joint {\red why joint?... there is only one intercept vehicle} strategy that minimizes the probability of escape for the smuggler. Online planning offers the capability of establishing a plan that (i) immediately generates an ongoing strategy, (ii) which improves over time, and (iii) can manage incoming observations, sudden constraints, and changing situations. 
+Making decisions in uncertain situations is a complex strategic task. In circumstances where situational knowledge and observations are sparse it is hard for humans to predict and rank all possible outcomes in order to develop a robust plan. Therefore, using the described definition of the smuggler case as a POMDP, our goal is to find a strategy that minimizes the probability of escape for the smuggler. Online planning offers the capability of establishing a plan that (i) immediately generates an ongoing strategy, (ii) which improves over time, and (iii) can manage incoming observations, sudden constraints, and changing situations. 
 
 Using a forward search technique, the current belief is used to form an approximation of the optimal value function. Generally, online planning algorithms for POMDPs use a point-based value iteration~\cite{pineau2006anytime,ross2008online}, generating and traversing a search tree in a heuristic best-first order. However, these techniques are only efficient if the POMDP is either compactly factored, or has a small state space. Moreover, these techniques cannot be interrupted to return a policy at anytime, rather, they require the search to be fully completed in order to return a policy. Lastly, introducing new knowledge such as new constraints or intelligence would require outright re-planning.
 
 \subsection{Monte-Carlo Tree Search}
 \label{sub:mcts}
 
-%TODO this section feels disconnected from the rest. I suggest to connect it to the example and scenario-based reasoning
+%TODO this section feels disconnected from the rest. I suggest to connect it to the example and scenario-based reasoning. No, this section is the same as the POMDP section, description of a method.
 
-Using Monte-Carlo methods for online planning is an active branch of research in artificial intelligence~\cf~\cite{browne2012survey}. {\it Monte-Carlo Tree Search} (MCTS)~\cite{coulom2007efficient,kocsis2006bandit} is a simulation-based best-first search technique for decision-making problems. MCTS has shown to improve performance in various domains such as games, planning, and scheduling~\cite{browne2012survey}. Often, these types of domains can be represented as a form of MDP or POMDP, and new research has shifted focus to adapting MCTS specifically to POMDP domains~\cite{silver2010monte,Feldman12BRUE}. 
+Using Monte-Carlo methods for online planning is an active branch of research in artificial intelligence~\cf~\cite{browne2012survey}. {\it Monte-Carlo Tree Search} (MCTS)~\cite{coulom2007efficient,kocsis2006bandit} is a simulation-based best-first search technique for decision-making problems. MCTS has shown to improve performance in various domains such as games, planning, and scheduling~\cite{browne2012survey}. Often, these types of domains can be represented as a form of MDP or POMDP, and recent research has focused to adapting MCTS specifically to such domains~\cite{silver2010monte,Feldman12BRUE}.
 
 In MCTS, nodes are evaluated based on the results of numerous simulations. As such, a generative model of the domain (\ie simulator) is required to sample possible future states. Instead of performing an exhaustive search, MCTS grows a search tree incrementally over time in a best-first order. As a result, the constructed tree can be queried to return an action at anytime. Every node in the tree maintains a visit count $n(s,a)$, and average sampled value $Q(s,a)$ for each action. Simulations are performed by sampling states in the tree from the root to a leaf, consequently growing the tree by \emph{expanding} the sampled leaf with a follow-up action. Each simulation consist of two parts, 1) the \emph{selection} step, where actions which are part of the tree are selected and simulated according to the {\it selection policy}, and 2) the \emph{rollout} step, for nodes currently outside the tree, where moves are played according to a \emph{rollout policy}. After each rollout, its result is backpropagated from the expanded leaf to the root, incrementing $n(s,a)$, and updating $Q(s,a)$ with the sampled result for each node along the selected path in the tree.
 
@@ -405,11 +399,11 @@ i^* = argmax_{i \in I(p)}\left\{ Q(s,a) + C \sqrt{ \frac{\ln{n(s)}}{n(s, a)}}\ri
 where $n(s)$ and $n(s, a)$ are the visit counts of the current node and its child, respectively. $C$ is the exploration constant to tune. Commonly, the \emph{rollout policy} selects actions uniformly random. However, using heuristics or domain knowledge can greatly improve the quality of the recommended decisions~\cite{browne2012survey}.
 
 
-%TODO would be great if this example could be connected to the smuggler example
+%TODO would be great if this example could be connected to the smuggler example. Too premature. We don't yet know the full details. This picture describes the technique, regardless of the application. 
 \begin{figure}
 \begin{center}
  \includegraphics[width=.44\textwidth]{img/searchtree.png}
- \caption{Example MCTS Search procedure with 3 actions and two observations. $a_i$ represent joint actions, $o_i$ represent joint observations. The labels describe the individual steps in a single iteration.}\label{fig:searchtree}
+ \caption{Example MCTS Search procedure with 3 actions and two observations. $a_i$ represent joint actions, $o_i$ represent (joint) observations. The labels describe the individual steps in a single iteration.}\label{fig:searchtree}
 \end{center}
 \end{figure}
 
@@ -429,10 +423,6 @@ In the drug trafficking case, simulated actions by the smuggler are thus not inc
 
 In this paper we discussed a generic framework by combining Dynamic Decision Networks, POMDPs and MCTS, to represent scenarios including explicit representation of the decision maker's decisions. With the help of this framework we can explicitly reason about sequential decisions based on the obtained evidence. Moreover, the framework allows to reason about sequential decisions under what-if exploration, where the decision maker can assume certain values of the scenario variables and estimate the best course of action. Moreover, such a system can offer decision makers the opportunity to explore the effects of different actions and circumstances on the success of an operation. Based on the defined models such a system can be used for other operations that require planning. Domains such as: search-and-rescue, maritime security or autonomous surveillance. Ultimately, the challenges faced should be confined to designing suitable models, rather than developing individual planning and exploration software tools for individual domains. This may require defining the semantics of the variables and states of the decision networks, which is a course for future work.
 
-
-
-% To summarize the methods and models presented in the previous sections we discuss the expected challenges for future work in multi-agent decision-making in the drug trafficking domain.
-
 The dynamic decision network described in Subsection~\ref{sub:dyn-dec-net} was translated into a POMDP as described in Section~\ref{sec:scenario-based-dm}. The general approach to generating decisions for large POMDPs was then described in Subsections~\ref{sub:mcts} and~\ref{sub:pomcts}. Based on the literature researched in these topics, we anticipate the following challenges when exploring these POMDPs in the drug trafficking case:
 \begin{itemize}
 \item Limited evidence may result in large uncertainty over the smuggler's location. As such, finding a plan that is guaranteed to intercept the smuggler may be infeasible. Deciding on realistic models of the situation, based on Intel and situational awareness may narrow down the possible locations of the smuggler.
@@ -440,8 +430,6 @@ The dynamic decision network described in Subsection~\ref{sub:dyn-dec-net} was t
 \item Based on a specific scenario, all possible routes the smuggler could follow need to be generated and considered. However, sufficient knowledge about the area of interest and the behavior of the smuggler is required.
 \item A random rollout policy for the intercepting agents is insufficient. Due to the large directional freedom of the problem, randomly moving on a map will provide an extremely low chance of finding a rewarding state (\ie capturing the smuggler). Instead, during rollouts, agents should select actions using some heuristic policy. Another option may be to reward agents based on their distance to the smuggler after a finite horizon.
 \end{itemize}
-
-% Based on the discussed techniques and challenges, we can define a generic solution to combining decision networks, POMDPs and MCTS for decision-making and scenario exploration in the drug trafficking domain. Such a system can offer decision makers the opportunity to explore the effects of different actions and circumstances on the success of an operation. Moreover, it allows the exploration of different scenarios to determined a robust course of action.
 
 \bibliographystyle{IEEEtran}
 \bibliography{tombib,BNbib}
