@@ -13,3 +13,5 @@ clean/img/causal-model-eps-converted-to.pdf
 *.pdf
 
 *.fdb_latexmk
+
+*.gz(busy)

@@ -228,7 +228,7 @@ A {\em decision network (DN)} (also influence diagram or decision graph \cite{ru
 The location of the intercept vehicle\footnote{In this section we assume there is only a single intercept vehicle} and the smuggler's go-fast constitute a state $s$ in a set of states $\S$ defining the smuggler's domain. However, due to partial observability of the current state, the decision maker (from this point on we refer to the decision maker as  agent) has to maintain a belief $P(\S = s \mid  a, \epsilon)$ over the possible states it might be in given an action $a$ and evidence $\epsilon$. The reason for this is that the position of the smuggler is not directly observable after an action $a$, but needs to be estimated from observations $\epsilon$, such as radar, sonar, visual observations or Intel about a possible destination or refueling location (see also causal model in Figure~\ref{fig:causal-model}). Since the agent does not know in which state it is in it needs to compute an expected utility based on the utility function $U(s)$ capturing the preferences of the decision maker:
 
 \begin{eqnarray}
- EU(a|\epsilon) = \sum_{s^\prime}\P(\S = s^\prime\mid a, \epsilon)U(s^\prime)
+ EU(a|\epsilon) = \sum_{s^\prime}P(\S = s^\prime\mid a, \epsilon)U(s^\prime)
 \end{eqnarray}
 
 With the help of the expected utility $EU(a|\epsilon)$ the best action $a^*$ can be computed with:
@@ -282,7 +282,7 @@ A Markov Decision Process (MDP)~\cite{bellman1957dynamic,mdp} describes synchron
 \begin{itemize}
 \item $\S$ is the set of states of the world. In the case of a \emph{factored} MDP, it is represented by a discrete set of state variables, described as a vector $\left(X_1,\ldots,X_n\right)$ where each variable $X_i$ can take on a value in its domain,
 \item $\mathcal{A}$ is the set of possible actions. In the case of a multi-agent problem $\mathcal{A}$ represents the joint actions $\A_{m} = \A_1\times\ldots\times\A_n$ of all $n$ agents under consideration,
-\item $\P:\S\times\mathcal{A}\to\P(s^\prime\mid a,s)$ is the state transition function, \ie the probability of moving to state $s'$ given that action $a$ was performed in state $s$,
+\item $\P:\S\times\mathcal{A}\to P(s^\prime\mid a,s)$ is the state transition function, \ie the probability of moving to state $s'$ given that action $a$ was performed in state $s$,
 \item $\R:\S\times\mathcal{A}\to\mathbb{R}$ is the reward function, which maps each state-action pair to a real reward,
 \item $\gamma$ is the discount factor, which prioritizes present over future rewards.
 \end{itemize}
@@ -290,9 +290,9 @@ A Markov Decision Process (MDP)~\cite{bellman1957dynamic,mdp} describes synchron
 
 %TODO TOM: is value function the same as utility function. This needs to made consistent throughout the text
 
-The agent's goal is to find a policy $\pi$ that maximizes the value function
+The agent's goal is to find a policy $\pi(s)$ that maximizes the value function
 \begin{equation}
-V_{\pi}(s) = \R(s,\pi(s)) + \gamma\sum\limits_{s^\prime\in\S}\P\left(s^\prime\mid\pi(s),s\right)V_{\pi}(s^\prime),
+V_{\pi}(s) = \R(s,\pi(s)) + \gamma\sum\limits_{s^\prime\in\S}P\left(s^\prime\mid\pi(s),s\right)V_{\pi}(s^\prime),
 \end{equation} 
 which is the value of the discounted utility of a given policy.
 
@@ -301,10 +301,10 @@ By describing a problem as an MDP, the assumption is made that the agent can ful
 \begin{itemize}
 \item $\S,\mathcal{A},\P,R,$ and $\gamma$ describe the MDP,
 \item $\mathcal{O}$ is the set of possible (joint) observations,
-\item $O:\S\times\mathcal{A}\to\P(o\mid s)$ is the probability of observing $o$ in state $s$. 
+\item $O:\S\times\mathcal{A}\to P(o\mid s)$ is the probability of observing $o$ in state $s$. 
 \end{itemize}
 
-In order to maintain an internal belief state, the agent can only use its observed \emph{history}. A history describes a sequence of actions and observations, $h_t = \{a_1, o_1, \ldots, a_t, o_t\}$. An agent maintains an internal {\it belief state} $\B = P(s_t\mid  h_t)$, in which the probability distribution over the possible states are summarized given the current history $h_t$. The agent's \emph{policy} $\pi(h,a)$ determines the probability distribution $P(a_{t+1}\mid h_t)$ over available actions given the history. The value function $V_{\pi}(h)$ is the {\it expected return} when following policy $\pi$, where the return $R_t = \sum\nolimits_{k=t}^{\infty} \gamma^{k−t}r_k$ is the total discounted reward received from time $t$. In any POMDP there is at least one optimal policy $\pi^*(h, a)$ with the optimal value.
+In order to maintain an internal belief state, the agent can only use its observed \emph{history}. A history describes a sequence of actions and observations, $h_t = \{a_1, o_1, \ldots, a_t, o_t\}$. An agent maintains an internal {\it belief state} $\B = P(s_t\mid  h_t)$, in which the probability distribution over the possible states are summarized given the current history $h_t$. The agent's \emph{policy} $\pi(h)$ determines the probability distribution $P(a_{t+1}\mid h_t)$ over available actions given the history. The value function $V_{\pi}(h)$ is the {\it expected value} when following policy $\pi(h)$, instead of over being defined as a value over states, $V_{\pi}(h)$ is defined over histories. In any POMDP there is at least one optimal policy $\pi^*(h, a)$ with the optimal value.
 
 POMDPs are harder to solve exactly than MDPs, suffering from both the {\it curse of dimensionality} as well as the {\it curse of history}~\cite{pineau2006anytime}. Therefore, they require approximate methods to be used in real-world problems.
 
@@ -338,11 +338,11 @@ The following subsections define an abstract model of the domain in which high-l
 
 Maritime security situations may play out over a sizable area. Based on the situation, the concerned region can span over dozens of kilometers. Planning on a (near-)continuous state space would soon become intractable based on the number of hidden locations for the smuggler and action spaces for the intercept vehicles. Therefore we propose a framework in which an area of interest is factored into discrete elements. Based on the surface-area and the required resolution of the mission, a region is selected on a geographical system that is divided into discrete cells of a desired resolution. Higher resolutions result in more fine-grained plan at the cost of computational complexity.
 
-The state represents the location of the intercept vehicle under consideration for the planner. The model can be extended to represent multiple agents, in which each agent $\psi_i\in\Psi$ occupies a single location defined by the underlying geographical area in which the scenario takes place.
+The state represents the location of the intercept vehicle and the smuggler for the planner. The model can be extended to represent multiple agents, in which each agent $\psi_i\in\Psi$ occupies a single location defined by the underlying geographical area in which the scenario takes place. Although the location of the smuggler is unknown, we still have a belief over his exact location and actions. Therefore it can be modeled similarly to the intercept vehicles but acts as part of the environment.
 
 Given a factored state space $S = \left(X_1, \ldots, X_n\right)$, the domain of each variable $X_i$ can be defined as a single agent. For example, the states of the variables $LS$ and $LI$ make up the state space. Each variable's domain is restricted based on the underlying geographic characteristics \ie boats can only occupy a location on water. Moreover, political borders and no-fly zones can further restrict the domain of each variable.
 
-Similarly, the action space is factored based on the discretization of the state space. Suppose the state space is factored into square grids, then the possible actions for agents consist of $a\in\left\{n, nw, w, sw, s, se, e, ne, \emptyset \right\}$ where $\emptyset$ represents taking no action (\ie waiting). Based on the speed of each agent, actions are performed in specific intervals, where each action relocates the agent to an adjacent cell. Using these atomic actions, a set of waypoints can be defined to represent a plan. Waypoints are generated by repeatedly selecting the same action until the plan requires movement in a new direction. For instance, an action sequence for a given agent $a_i: n, n, n, n, w, w, w$ can be transformed to two waypoints, the first four cells north, and the second three cells west of the first.
+Similarly, the action space is factored based on the discretization of the state space. Suppose the state space is factored into square grids, then the possible actions for an agent consist of $a\in\left\{n, nw, w, sw, s, se, e, ne, \emptyset \right\}$ where $\emptyset$ represents taking no action (\ie waiting). Based on the speed of each agent, actions are performed in specific intervals, where each action relocates the agent to an adjacent cell. Using these atomic actions, a set of waypoints can be defined to represent a plan. Waypoints are generated by repeatedly selecting the same action until the plan requires movement in a new direction. For instance, an action sequence for a given agent $a_i: n, n, n, n, w, w, w$ can be transformed to two waypoints, the first four cells north, and the second three cells west of the first.
 
 The space of observations $\mathcal{O}$, in the smuggler's case is small. The smuggler can be observed, or not observed at a location. We identify two types of observations:
 \begin{itemize}
@@ -361,20 +361,22 @@ A common technique for target tracking is Particle Filters (PF)~\cite{Blackman19
 Given the current scenario it is possible to improve the PF's tracking performance, by ruling out particles that - based on the scenario - cannot be correct~\cite{Claessens2015}. For instance, given the DDN in Figure~\ref{fig:ddn}, there are two variables that influence the location of the smuggler ($LS$): $W$ and $D$. Assume that at some moment after receiving a specific piece of Intel, the destination of the smuggler ($D$) becomes known. This information can be used to predict possible routes of the smuggler to this designated location. Consequently, a PF can be used to predict a smuggler's possible trajectory along that route.
 
 %TODO maybe this should be moved to the discussion.
-\subsection{Planning With Multiple Agents}
-\label{sub:plan-mult-ag}
+% I've moved it but it just feels like a weird amendment.
+% \subsection{Planning With Multiple Agents}
+% \label{sub:plan-mult-ag}
 
-As described in this section, the definition of the drug trafficking POMDP can be extended to include decision-making by multiple agents. This results in an altered problem definition. Nonetheless, the models to be used can be trivially extended by considering joint actions and observations by the set of agents.
+% As described in this section, the definition of the drug trafficking POMDP can be extended to include decision-making by multiple agents. This results in an altered problem definition. Nonetheless, the models to be used can be trivially extended by considering joint actions and observations by the set of agents.
 
-Locating and capturing the smuggler by multiple agents requires some form of centralized coordination. The team can be heterogeneous in the sense that different agents have different levels of autonomy, capabilities, and payloads. For example, we may have the availability of two UAV's with infrared sensors, and four armed, human operated patrol boats. Given this task force, several distinct but reliant tasks can be distinguished for individual agents:
-\begin{itemize}
-\item Locating the smuggler based on its most likely location and observations
-\item Tracking the location smuggler after is was located
-\item Capturing the smuggler by strategic positioning of patrol boats
-\end{itemize}
-Planning these tasks requires cooperation between the agents. Therefore, a joint strategy for the execution of such a plan, based on the uncertain knowledge provided by prior knowledge and observations may play a large role in the success of such missions. Moreover, exploring possible future scenario's based on the expected behavior of the smuggler may offer new insights for human operators.
+% Locating and capturing the smuggler by multiple agents requires some form of centralized coordination. The team can be heterogeneous in the sense that different agents have different levels of autonomy, capabilities, and payloads. For example, we may have the availability of two UAV's with infrared sensors, and four armed, human operated patrol boats. Given this task force, several distinct but reliant tasks can be distinguished for individual agents:
+% \begin{itemize}
+% \item Locating the smuggler based on its most likely location and observations
+% \item Tracking the location smuggler after is was located
+% \item Capturing the smuggler by strategic positioning of intercept vehicles
+% \end{itemize}
+% Planning these tasks requires cooperation between the agents. Therefore, a joint strategy for the execution of such a plan, based on the uncertain knowledge provided by prior knowledge and observations may play a large role in the success of such missions. Moreover, exploring possible future scenario's based on the expected behavior of the smuggler may offer new insights for human operators.
 
-%TODO why do we have a seperate section? This is also about planning, as is the previous section. right? The previous section defined the POMDP, this one describes methods to solve POMDPs
+%TODO why do we have a seperate section? This is also about planning, as is the previous section. right? 
+% The previous section defined the POMDP in the smuggler's case, this one describes methods to solve POMDPs
 \section{Planning and Decision-Making}
 \label{sec:ma-dec-mak}
 
@@ -399,11 +401,11 @@ i^* = argmax_{i \in I(p)}\left\{ Q(s,a) + C \sqrt{ \frac{\ln{n(s)}}{n(s, a)}}\ri
 where $n(s)$ and $n(s, a)$ are the visit counts of the current node and its child, respectively. $C$ is the exploration constant to tune. Commonly, the \emph{rollout policy} selects actions uniformly random. However, using heuristics or domain knowledge can greatly improve the quality of the recommended decisions~\cite{browne2012survey}.
 
 
-%TODO would be great if this example could be connected to the smuggler example. Too premature. We don't yet know the full details. This picture describes the technique, regardless of the application. 
+%TODO would be great if this example could be connected to the smuggler example. Too premature. We don't yet know the full details. 
 \begin{figure}
 \begin{center}
  \includegraphics[width=.44\textwidth]{img/searchtree.png}
- \caption{Example MCTS Search procedure with 3 actions and two observations. $a_i$ represent joint actions, $o_i$ represent (joint) observations. The labels describe the individual steps in a single iteration.}\label{fig:searchtree}
+ \caption{Example MCTS Search procedure with 3 actions and two observations. $a_i$ represent actions of the intercept vehicle(s), whereas $o_i$ represent observations. The labels describe the individual steps in a single iteration.}\label{fig:searchtree}
 \end{center}
 \end{figure}
 
@@ -426,6 +428,8 @@ In this paper we discussed a generic framework by combining Dynamic Decision Net
 The dynamic decision network described in Subsection~\ref{sub:dyn-dec-net} was translated into a POMDP as described in Section~\ref{sec:scenario-based-dm}. The general approach to generating decisions for large POMDPs was then described in Subsections~\ref{sub:mcts} and~\ref{sub:pomcts}. Based on the literature researched in these topics, we anticipate the following challenges when exploring these POMDPs in the drug trafficking case:
 \begin{itemize}
 \item Limited evidence may result in large uncertainty over the smuggler's location. As such, finding a plan that is guaranteed to intercept the smuggler may be infeasible. Deciding on realistic models of the situation, based on Intel and situational awareness may narrow down the possible locations of the smuggler.
+\item The definition of the drug trafficking POMDP can be extended to include decision-making by multiple agents. This results in an altered problem definition. Nonetheless, the models to be used can be trivially extended by considering joint actions and observations by the set of agents.
+\item Locating and capturing the smuggler by multiple agents requires some form of centralized coordination. The team can be heterogeneous in the sense that different agents have different levels of autonomy, capabilities, and payloads. For example, we may have the availability of two UAV's with infrared sensors, and four armed, human operated patrol boats.
 \item Considering multi-agent planning, the number of joint actions may be huge. For instance, considering the action space defined in Subsection~\ref{sub:problem-rep} with four agents, this results in a branching factor for action nodes of $\left\vert\A\right\vert=9^4=6561$. This problem can be countered by using heuristics in the search process, such as \emph{progressive widening}~\cite{chaslot2008progressive}. Another reduction can be achieved by removing both reversing \cite{realtime2014} and waiting from the search.
 \item Based on a specific scenario, all possible routes the smuggler could follow need to be generated and considered. However, sufficient knowledge about the area of interest and the behavior of the smuggler is required.
 \item A random rollout policy for the intercepting agents is insufficient. Due to the large directional freedom of the problem, randomly moving on a map will provide an extremely low chance of finding a rewarding state (\ie capturing the smuggler). Instead, during rollouts, agents should select actions using some heuristic policy. Another option may be to reward agents based on their distance to the smuggler after a finite horizon.
